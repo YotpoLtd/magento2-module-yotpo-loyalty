@@ -8,7 +8,7 @@ Magento 2 module for integration with Yotpo.
 Run the following command under your Magento 2 root dir:
 
 ```
-composer require yotpo/magento2-extension
+composer require yotpo/magento2-module-yotpo-loyalty
 php bin/magento setup:upgrade
 php bin/magento setup:di:compile
 php bin/magento setup:static-content:deploy
