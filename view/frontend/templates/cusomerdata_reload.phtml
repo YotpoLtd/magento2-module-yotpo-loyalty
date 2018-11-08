@@ -1,0 +1,24 @@
+<?php
+/**
+ * @var $block \Yotpo\Loyalty\Block\CustomerDataReload
+ */
+?>
+<?php
+    if (!$block->isForceCartReload()) {
+        return;
+    } else {
+        $block->setForceCartReload(0);
+    }
+?>
+
+<!-- Yotpo Loyalty - Reload customerData cart -->
+<script>
+    (function  () {
+        require([
+            "Magento_Customer/js/customer-data"
+        ],function(customerData) {
+            customerData.invalidate(['cart']);
+        });
+    })();
+</script>
+<!--/ Yotpo Loyalty - Reload customerData cart -->

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_order_save_before">
+        <observer name="yotpo_loyalty_sales_order_save_before" instance="Yotpo\Loyalty\Observer\OrderSaveBefore" />
+    </event>
+    <event name="sales_order_save_after">
+        <observer name="yotpo_loyalty_sales_order_save_after" instance="Yotpo\Loyalty\Observer\OrderSaveAfter" />
+    </event>
+    <event name="customer_save_before">
+        <observer name="yotpo_loyalty_customer_save_before" instance="Yotpo\Loyalty\Observer\CustomerSaveBefore" />
+    </event>
+    <event name="customer_save_after">
+        <observer name="yotpo_loyalty_customer_save_after" instance="Yotpo\Loyalty\Observer\CustomerSaveAfter" />
+    </event>
+</config>

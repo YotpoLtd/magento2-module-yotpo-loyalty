@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="before.body.end">
+            <block class="Yotpo\Loyalty\Block\Snippet" name="yotpo.loyalty.snippet" as="yotpo_loyalty_snippet" after="-" template="Yotpo_Loyalty::snippet.phtml" ifconfig="yotpo_loyalty/general_settings/active" />
+        </referenceContainer>
+    </body>
+</page>

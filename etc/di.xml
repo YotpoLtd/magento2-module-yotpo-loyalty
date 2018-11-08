@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<!-- API model-interface-->
+	<preference for="Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Cart\AddManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\CreateCouponManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\CreateCouponManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\CreateSubscriberManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\CreateSubscriberManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\CustomerManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\CustomerManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\CustomersManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\CustomersManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\DeleteCouponManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\DeleteCouponManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\OrderCountManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\OrderCountManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\OrderManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\OrderManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\OrdersManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\OrdersManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\TestManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\TestManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\ThirtyDayOrderVolumeManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\ThirtyDayOrderVolumeManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Session\CouponManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\CouponManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Session\GetCartManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\GetCartManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Session\RemoveCodeManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\RemoveCodeManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Session\SnippetManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\SnippetManagement"/>
+	<!--/ API model-interface-->
+
+	<type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        <plugin name="yotpo_loyalty_plugin_quote_itemtoorderitem" type="Yotpo\Loyalty\Plugin\Quote\ItemToOrderItem"/>
+    </type>
+</config>

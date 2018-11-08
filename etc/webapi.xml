@@ -1,0 +1,107 @@
+<?xml version="1.0" ?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+	<!-- swell/cart-->
+	<route method="GET" url="/V1/swell/cart/add">
+		<service class="Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterface" method="getAdd"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<!--/ swell/cart -->
+
+	<!-- swell/index -->
+	<route method="POST" url="/V1/swell/index/create_coupon">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\CreateCouponManagementInterface" method="postCreateCoupon"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="POST" url="/V1/swell/index/create_subscriber">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\CreateSubscriberManagementInterface" method="postCreateSubscriber"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/swell/index/customer">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\CustomerManagementInterface" method="getCustomer"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/swell/index/customers">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\CustomersManagementInterface" method="getCustomers"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="POST" url="/V1/swell/index/delete_coupon">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\DeleteCouponManagementInterface" method="postDeleteCoupon"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/swell/index/order_count">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\OrderCountManagementInterface" method="getOrderCount"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/swell/index/order">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\OrderManagementInterface" method="getOrder"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/swell/index/orders">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\OrdersManagementInterface" method="getOrders"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/swell/index/test">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\TestManagementInterface" method="getSuccess"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/swell/index/thirty_day_order_volume">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\ThirtyDayOrderVolumeManagementInterface" method="getThirtyDayOrderVolume"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<!--/ swell/index -->
+
+	<!-- swell/session -->
+	<route method="POST" url="/V1/swell/session/coupon">
+		<service class="Yotpo\Loyalty\Api\Swell\Session\CouponManagementInterface" method="postCoupon"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/swell/session/getcart">
+		<service class="Yotpo\Loyalty\Api\Swell\Session\GetCartManagementInterface" method="getGetCart"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="POST" url="/V1/swell/session/remove_code">
+		<service class="Yotpo\Loyalty\Api\Swell\Session\RemoveCodeManagementInterface" method="postRemoveCode"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/swell/session/savecart">
+		<service class="Yotpo\Loyalty\Api\Swell\Session\SavecartManagementInterface" method="getSavecart"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<route method="GET" url="/V1/swell/session/snippet">
+		<service class="Yotpo\Loyalty\Api\Swell\Session\SnippetManagementInterface" method="getSnippet"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
+	<!--/ swell/session -->
+</routes>

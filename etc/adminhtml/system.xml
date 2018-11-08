@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<tab id="yotpo" translate="label" sortOrder="51">
+            <label>Yotpo</label>
+		</tab>
+		<section id="yotpo_loyalty" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
+			<label>Loyalty Settings</label>
+			<tab>yotpo</tab>
+			<resource>Yotpo_Loyalty::config</resource>
+			<group id="general_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
+				<field id="swell_direct_login_link" translate="label comment" type="button" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Yotpo\Loyalty\Block\Adminhtml\System\Config\DirectLink</frontend_model>
+                </field>
+				<label>General Settings</label>
+				<field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+				<field id="debug_mode_active" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Debug Mode Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<tooltip>Enable debug mode in order to log all Yotpo processes (log file: var/log/system.log).</tooltip>
+                </field>
+				<field id="swell_guid" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>GUID</label>
+                </field>
+				<field id="swell_api_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>API Key</label>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+			</group>
+			<group id="sync_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
+				<label>Sync Settings (Advanced!)</label>
+				<field id="swell_sync_limit" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Swell Sync Limit</label>
+					<comment>WARNING: If you set this too high, it might be too heavy for your server, make sure it can handle it first (0 = no limit!).</comment>
+                </field>
+				<field id="swell_sync_max_tryouts" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Swell Sync Max-Tryouts</label>
+					<tooltip>In case something went wrong during the process, it'll retry until it reaches this number (0 = no limit!).</tooltip>
+                </field>
+				<field id="keep_yotpo_sync_queue" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+				   <label>Keep sync history...</label>
+				   <source_model>Yotpo\Loyalty\Model\Adminhtml\Source\KeepQueue</source_model>
+				   <tooltip>For how long should we keep old sent/failed items on the database (`yotpo_sync_queue`)?</tooltip>
+				</field>
+			</group>
+		</section>
+	</system>
+</config>

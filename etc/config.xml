@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <yotpo_loyalty>
+            <general_settings>
+                <active>1</active>
+                <debug_logging_active>0</debug_logging_active>
+            </general_settings>
+            <sync_settings>
+                <swell_sync_limit>10</swell_sync_limit>
+                <swell_sync_max_tryouts>5</swell_sync_max_tryouts>
+                <keep_yotpo_sync_queue>1_month</keep_yotpo_sync_queue>
+            </sync_settings>
+        </yotpo_loyalty>
+    </default>
+</config>

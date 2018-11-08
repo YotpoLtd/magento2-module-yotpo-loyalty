@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="yotpo_loyalty">
+        <job name="yotpo_sync_queue" instance="Yotpo\Loyalty\Cron\Jobs" method="processSyncQueue">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job name="yotpo_remove_old_sync_queue" instance="Yotpo\Loyalty\Cron\Jobs" method="removeOldSyncRecords">
+            <schedule>0 3 * * *</schedule>
+        </job>
+    </group>
+</config>
