@@ -11,11 +11,11 @@ class ApiRequest extends AbstractApi
             [
                 "api_key" => $this->_yotpoHelper->getSwellApiKey($scope, $scopeId),
                 "guid" => $this->_yotpoHelper->getSwellGuid($scope, $scopeId),
-                "root_api_url" => rtrim($this->_yotpoHelper->getBaseUrl($scopeId, $scope), "/") . "/rest/V1",
+                "root_api_url" => rtrim($this->_yotpoHelper->getBaseUrl($scope, $scopeId), "/") . "/rest/V1",
                 "version" => $this->_yotpoHelper->getMagentoVersion(),
                 "currency" => $this->_yotpoHelper->getDefaultCurrency($scope, $scopeId),
                 "id" => $this->_yotpoHelper->getDomain($scope, $scopeId),
-                "website" => $this->_yotpoHelper->getBaseUrl($scopeId, $scope)
+                "website" => $this->_yotpoHelper->getBaseUrl($scope, $scopeId)
             ]
         );
 
