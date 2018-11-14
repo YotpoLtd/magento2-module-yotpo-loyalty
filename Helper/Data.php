@@ -35,11 +35,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $_logger;
-
-    /**
      * @var \Magento\Store\Model\App\Emulation
      */
     protected $_appEmulation;
@@ -78,7 +73,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @param \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory $configCollectionFactory,
@@ -90,7 +84,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Psr\Log\LoggerInterface $logger,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Framework\Webapi\Rest\Request $request,
         \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory $configCollectionFactory,
@@ -101,7 +94,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         parent::__construct($context);
         $this->_objectManager = $objectManager;
         $this->_storeManager = $storeManager;
-        $this->_logger = $logger;
         $this->_appEmulation = $appEmulation;
         $this->_request = $request;
         $this->_configCollectionFactory = $configCollectionFactory;
