@@ -7,6 +7,7 @@ use Magento\Framework\Event\ObserverInterface;
 
 class Save implements ObserverInterface
 {
+    const SCOPE_DEFAULT = 'default';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -49,7 +50,7 @@ class Save implements ObserverInterface
             $scope = \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE;
         }
         if (!$scopeId) {
-            $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT;
+            $scope = self::SCOPE_DEFAULT;
         }
         $response = $this->_apiRequestHelper->setupRequest($scopeId, $scope);
         if ($response->getError()) {
