@@ -6,7 +6,9 @@
 				<resource id="Magento_Backend::stores">
 					<resource id="Magento_Backend::stores_settings">
 						<resource id="Magento_Config::config">
-							<resource id="Yotpo_Loyalty::config" title="Yotpo Loyalty" sortOrder="20" />
+							<resource id="Yotpo_Core::config" title="Yotpo" translate="title" sortOrder="80">
+                                <resource id="Yotpo_Loyalty::config" title="Loyalty Settings" sortOrder="30" />
+                            </resource>
 						</resource>
 					</resource>
 				</resource>
