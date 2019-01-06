@@ -1,9 +1,9 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <yotpo_loyalty>
             <general_settings>
-                <active>1</active>
+                <active>0</active>
                 <debug_logging_active>0</debug_logging_active>
             </general_settings>
             <sync_settings>
