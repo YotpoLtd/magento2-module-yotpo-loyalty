@@ -102,7 +102,7 @@ class DirectLink extends Field
         )->setData(
             [
                 'id' => 'swell_direct_login_link_button',
-                'label' => __('Login to Swell')
+                'label' => __('Log in to Swell')
             ]
         );
         if (!($guid = $this->getSwellGuid()) || !($apiKey = $this->getSwellApiKey())) {
