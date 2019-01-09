@@ -1,11 +1,8 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
 	<system>
-		<tab id="yotpo" translate="label" sortOrder="400">
-            <label><![CDATA[<span class='yotpo-icon'></span>Yotpo]]></label>
-		</tab>
-		<section id="yotpo_loyalty" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
-			<label>Loyalty Settings</label>
+		<section id="yotpo_loyalty" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" canRestore="1">
+			<label>Loyalty &amp; Rewards</label>
 			<tab>yotpo</tab>
 			<resource>Yotpo_Loyalty::config</resource>
 			<group id="general_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
@@ -31,10 +28,10 @@
                 </field>
 			</group>
 			<group id="sync_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
-				<label>Sync Settings (Advanced!)</label>
+				<label>Sync Settings (Advanced)</label>
 				<field id="swell_sync_limit" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Swell Sync Limit</label>
-					<comment>WARNING: If you set this too high, it might be too heavy for your server, make sure it can handle it first (0 = no limit!).</comment>
+					<comment>Note: Setting a high sync limit (or no limit) may result in a high server load (0=no limit).</comment>
                 </field>
 				<field id="swell_sync_max_tryouts" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Swell Sync Max-Tryouts</label>
