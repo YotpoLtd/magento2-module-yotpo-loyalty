@@ -19,7 +19,7 @@ class Schema extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
-    */
+     */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,

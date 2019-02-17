@@ -19,7 +19,7 @@ class ThirtyDayOrderVolumeManagement implements \Yotpo\Loyalty\Api\Swell\Index\T
      * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -45,7 +45,7 @@ class ThirtyDayOrderVolumeManagement implements \Yotpo\Loyalty\Api\Swell\Index\T
             $collection->addAttributeToFilter('state', ["in" => $orderStates]);
         }
 
-        $this->_yotpoHelper->sendApiJsonResponse([
+        return $this->_yotpoHelper->jsonEncode([
             "orders" => $collection->count()
         ]);
     }

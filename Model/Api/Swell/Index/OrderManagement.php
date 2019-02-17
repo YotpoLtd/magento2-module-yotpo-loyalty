@@ -25,7 +25,7 @@ class OrderManagement implements \Yotpo\Loyalty\Api\Swell\Index\OrderManagementI
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -50,6 +50,6 @@ class OrderManagement implements \Yotpo\Loyalty\Api\Swell\Index\OrderManagementI
             ->setPageSize(1);
 
         $response = (!$collection->count()) ? (object)[] : $this->_yotpoSchemaHelper->orderSchemaPrepare($collection->getFirstItem());
-        $this->_yotpoHelper->sendApiJsonResponse($response);
+        return $this->_yotpoHelper->jsonEncode($response);
     }
 }

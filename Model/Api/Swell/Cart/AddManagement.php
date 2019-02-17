@@ -49,7 +49,7 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Quote\Model\QuoteRepository\SaveHandler $quoteRepositorySaveHandler
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -94,7 +94,7 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
 
             $quote = $this->_quoteFactory->create()->load($quoteId);
             if (!$quote->getId()) {
-                $this->_yotpoHelper->sendApiJsonResponse([
+                return $this->_yotpoHelper->jsonEncode([
                     "error" => 'There is no quote with this quote_id'
                 ]);
             }
@@ -104,7 +104,7 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
             }
             $product = $this->_productRepository->get($sku);
             if (!$product->getId()) {
-                $this->_yotpoHelper->sendApiJsonResponse([
+                return $this->_yotpoHelper->jsonEncode([
                     "error" => 'There is no product with this SKU'
                 ]);
             }
@@ -143,22 +143,22 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
                 try {
                     $quote->setCouponCode($couponCode)->setTotalsCollectedFlag(false)->collectTotals()->save()->load($quoteId);
                 } catch (\Exception $e) {
-                    $this->_yotpoHelper->sendApiJsonResponse([
+                    return $this->_yotpoHelper->jsonEncode([
                         "success" => true,
                         "message" => "[Yotpo API - Add(ToCart) - WARNING] " . $e->getMessage()
                     ]);
                 }
             }
 
-            $this->_yotpoHelper->sendApiJsonResponse([
+            return $this->_yotpoHelper->jsonEncode([
                 "success" => true
             ]);
         } catch (\Exception $e) {
             $this->_yotpoHelper->log("[Yotpo API - Add(ToCart) - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
-            $this->_yotpoHelper->sendApiJsonResponse([
+            return $this->_yotpoHelper->jsonEncode([
                 "error" => 'An error has occurred trying to add item to cart'
             ]);
         }
-        $this->_yotpoHelper->sendApiJsonResponse([]);
+        return $this->_yotpoHelper->jsonEncode([]);
     }
 }

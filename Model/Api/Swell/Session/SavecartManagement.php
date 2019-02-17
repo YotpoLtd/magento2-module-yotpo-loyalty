@@ -24,7 +24,7 @@ class SavecartManagement implements \Yotpo\Loyalty\Api\Swell\Session\SavecartMan
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Checkout\Model\Session $checkoutSession
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
@@ -46,14 +46,14 @@ class SavecartManagement implements \Yotpo\Loyalty\Api\Swell\Session\SavecartMan
                 $quote->save();
                 $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
             }
-            $this->_yotpoHelper->sendApiJsonResponse($this->_yotpoSchemaHelper->quoteSchemaPrepare($quote));
+            return $this->_yotpoHelper->jsonEncode($this->_yotpoSchemaHelper->quoteSchemaPrepare($quote));
         } catch (\Exception $e) {
             $this->_yotpoHelper->log("[Yotpo API - Savecart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
-            $this->_yotpoHelper->sendApiJsonResponse([
+            return $this->_yotpoHelper->jsonEncode([
                 "error" => true
             ]);
         }
 
-        $this->_yotpoHelper->sendApiJsonResponse([]);
+        return $this->_yotpoHelper->jsonEncode([]);
     }
 }

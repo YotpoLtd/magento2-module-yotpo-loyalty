@@ -37,7 +37,7 @@ class CreateSubscriberManagement implements \Yotpo\Loyalty\Api\Swell\Index\Creat
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param \Magento\Newsletter\Model\Subscriber $subscriberModel
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -61,7 +61,7 @@ class CreateSubscriberManagement implements \Yotpo\Loyalty\Api\Swell\Index\Creat
     {
         try {
             if (!($email = $this->_yotpoHelper->getRequest()->getParam('email'))) {
-                $this->_yotpoHelper->sendApiJsonResponse([
+                return $this->_yotpoHelper->jsonEncode([
                     "error" => "`email` is a required field!"
                 ]);
             }
@@ -84,17 +84,17 @@ class CreateSubscriberManagement implements \Yotpo\Loyalty\Api\Swell\Index\Creat
                     $subscriber
                         ->setCustomerId($collection->getFirstItem()->getId())
                         ->save();
-                    $this->_yotpoHelper->sendApiJsonResponse($this->_yotpoSchemaHelper->customerSchemaPrepare($collection->getFirstItem()));
+                    return $this->_yotpoHelper->jsonEncode($this->_yotpoSchemaHelper->customerSchemaPrepare($collection->getFirstItem()));
                 } else {
-                    $this->_yotpoHelper->sendApiJsonResponse($subscriber->getData());
+                    return $this->_yotpoHelper->jsonEncode($subscriber->getData());
                 }
             }
         } catch (\Exception $e) {
             $this->_yotpoHelper->log("[Yotpo API - CreateSubscriber - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
-            $this->_yotpoHelper->sendApiJsonResponse([
+            return $this->_yotpoHelper->jsonEncode([
                 "error" => 'An error has occurred trying to subscribe ' . $email
             ]);
         }
-        $this->_yotpoHelper->sendApiJsonResponse([]);
+        return $this->_yotpoHelper->jsonEncode([]);
     }
 }

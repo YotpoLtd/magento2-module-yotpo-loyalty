@@ -13,7 +13,7 @@ class TestManagement implements \Yotpo\Loyalty\Api\Swell\Index\TestManagementInt
     /**
      * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper
@@ -27,7 +27,7 @@ class TestManagement implements \Yotpo\Loyalty\Api\Swell\Index\TestManagementInt
      */
     public function getSuccess()
     {
-        $this->_yotpoHelper->sendApiJsonResponse([
+        return $this->_yotpoHelper->jsonEncode([
             "success" => true
         ]);
     }

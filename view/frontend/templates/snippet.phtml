@@ -14,19 +14,26 @@
             'mage/storage'
         ],function($, storage) {
             $(document).ready(function() {
-                storage.get(
-                    '/rest/V1/swell/session/snippet'
-                ).done(function (response) {
-                    if(response){
-                        $("body").append(response);
-                    }
-                }).fail(function (response) {
-                    <?php if ($block->isDebugMode()): ?>
-                        console.error(response);
-                    <?php else: ?>
-                        console.error("Yotpo Error - Enable debug mode in order to see more details...");
+                try {
+                    storage.get(
+                        '/rest/V1/swell/session/snippet'
+                    ).done(function (response) {
+                        response = JSON.parse(response);
+                        if(!response.error && response.snippet){
+                            $("body").append(response.snippet);
+                        }else{
+                            throw response;
+                        }
+                    }).fail(function (response) {
+                        throw response;
+                    });
+                } catch (e) {
+                    <?php if ($block->isDebugMode()) : ?>
+                        console.error(e);
+                    <?php else : ?>
+                        console.error("Yotpo Loyalty Error - Enable debug mode in order to see more details...");
                     <?php endif; ?>
-                });
+                }
             });
         });
     })();

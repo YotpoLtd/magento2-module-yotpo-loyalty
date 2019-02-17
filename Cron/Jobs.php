@@ -71,7 +71,7 @@ class Jobs
      * @param \Yotpo\Loyalty\Model\QueueFactory $yotpoQueueFactory
      * @param \Yotpo\Loyalty\Helper\ApiRequest $apiRequestHelper
      * @param \Magento\Framework\Notification\NotifierInterface $notifierPool
-    */
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\State $appState,
@@ -200,10 +200,10 @@ class Jobs
             switch ($type) {
                 case 'error':
                     $this->_logger->error(print_r($message, true), $data);
-                break;
+                    break;
                 default:
                     $this->_logger->info(print_r($message, true), $data);
-                break;
+                    break;
             }
         }
         return $this;
@@ -346,16 +346,16 @@ class Jobs
                     switch ($keep) {
                         case '1_day':
                             $interval = "-1 day";
-                        break;
+                            break;
                         case '1_week':
                             $interval = "-1 week";
-                        break;
+                            break;
                         case '1_month':
                             $interval = "-1 month";
-                        break;
+                            break;
                         case '1_year':
                             $interval = "-1 year";
-                        break;
+                            break;
                         default:
                             return $this;
                         break;

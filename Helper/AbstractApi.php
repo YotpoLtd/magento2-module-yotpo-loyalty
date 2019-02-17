@@ -41,7 +41,7 @@ abstract class AbstractApi extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Lib\Http\Client\Curl $curl
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-    */
+     */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -147,8 +147,7 @@ abstract class AbstractApi extends \Magento\Framework\App\Helper\AbstractHelper
 
     protected function isOkResponse()
     {
-        if (
-            $this->getCurlStatus() === 200 ||
+        if ($this->getCurlStatus() === 200 ||
             (
                 $this->getCurlStatus() === 100 &&
                 is_array(($headers = $this->getCurlHeaders())) &&
