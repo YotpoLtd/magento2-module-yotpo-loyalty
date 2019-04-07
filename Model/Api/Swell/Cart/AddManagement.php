@@ -36,11 +36,6 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
     protected $_customerFactory;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository\SaveHandler
-     */
-    protected $_quoteRepositorySaveHandler;
-
-    /**
      * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
@@ -48,7 +43,6 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Quote\Model\QuoteRepository\SaveHandler $quoteRepositorySaveHandler
      */
     public function __construct(
         \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
@@ -57,8 +51,7 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Quote\Model\QuoteRepository\SaveHandler $quoteRepositorySaveHandler
+        \Magento\Customer\Model\CustomerFactory $customerFactory
     ) {
         //$swellApiGuard will be initialized from it's __construct
         $this->_yotpoHelper = $yotpoHelper;
@@ -67,7 +60,6 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
         $this->_quoteRepository = $quoteRepository;
         $this->_productRepository = $productRepository;
         $this->_customerFactory = $customerFactory;
-        $this->_quoteRepositorySaveHandler = $quoteRepositorySaveHandler;
     }
 
     /**
