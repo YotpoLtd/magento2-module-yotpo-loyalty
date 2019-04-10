@@ -13,7 +13,8 @@
     ],
     "require": {
         "php": ">=5.6",
-        "yotpo/magento2-module-yotpo-core": "*"
+        "yotpo/magento2-module-yotpo-core": "*",
+        "magento/framework": "101.* | 102.0.*"
     },
     "autoload": {
         "files": [

@@ -6,7 +6,7 @@
 			<tab>yotpo</tab>
 			<resource>Yotpo_Loyalty::config</resource>
 			<group id="general_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
-				<field id="swell_direct_login_link" translate="label comment" type="button" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+				<field id="swell_direct_login_link" translate="label" type="button" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Yotpo\Loyalty\Block\Adminhtml\System\Config\DirectLink</frontend_model>
                 </field>
 				<label>General Settings</label>
@@ -14,10 +14,10 @@
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-				<field id="debug_mode_active" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+				<field id="debug_mode_active" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Debug Mode Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-					<tooltip>Enable debug mode in order to log all Yotpo processes (log file: var/log/system.log).</tooltip>
+					<comment>Enable debug mode in order to log all Yotpo processes (log file: var/log/system.log).</comment>
                 </field>
 				<field id="swell_guid" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>GUID</label>
@@ -29,18 +29,18 @@
 			</group>
 			<group id="sync_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
 				<label>Sync Settings (Advanced)</label>
-				<field id="swell_sync_limit" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+				<field id="swell_sync_limit" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Swell Sync Limit</label>
 					<comment>Note: Setting a high sync limit (or no limit) may result in a high server load (0=no limit).</comment>
                 </field>
-				<field id="swell_sync_max_tryouts" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+				<field id="swell_sync_max_tryouts" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Swell Sync Max-Tryouts</label>
-					<tooltip>In case something went wrong during the process, it'll retry until it reaches this number (0 = no limit!).</tooltip>
+					<comment>In case something went wrong during the process, it'll retry until it reaches this number (0 = no limit!).</comment>
                 </field>
-				<field id="keep_yotpo_sync_queue" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+				<field id="keep_yotpo_sync_queue" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
 				   <label>Keep sync history...</label>
 				   <source_model>Yotpo\Loyalty\Model\Adminhtml\Source\KeepQueue</source_model>
-				   <tooltip>For how long should we keep old sent/failed items on the database (`yotpo_sync_queue`)?</tooltip>
+				   <comment>For how long should we keep old sent/failed items on the database (`yotpo_sync_queue`)?</comment>
 				</field>
 			</group>
 		</section>
