@@ -76,13 +76,13 @@ class UninstallCommand extends Command
      * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
-        Filesystem $filesystem,
-        ArrayInputFactory $arrayInputFactory,
-        ApplicationFactory $applicationFactory,
-        \Magento\Framework\Registry $registry,
-        \Yotpo\Loyalty\Helper\Data $yotpoHelper,
-        ResourceConnection $resourceConnection,
-        EavSetupFactory $eavSetupFactory
+        Filesystem\Proxy $filesystem,
+        ArrayInputFactory\Proxy $arrayInputFactory,
+        ApplicationFactory\Proxy $applicationFactory,
+        \Magento\Framework\Registry\Proxy $registry,
+        \Yotpo\Loyalty\Helper\Data\Proxy $yotpoHelper,
+        ResourceConnection\Proxy $resourceConnection,
+        EavSetupFactory\Proxy $eavSetupFactory
     ) {
         $this->_filesystem = $filesystem;
         $this->_arrayInputFactory = $arrayInputFactory;

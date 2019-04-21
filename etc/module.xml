@@ -3,6 +3,7 @@
 	<module name="Yotpo_Loyalty" setup_version="1.1.0">
         <sequence>
             <module name="Yotpo_Core" />
+			<module name="Magento_Catalog" />
         </sequence>
     </module>
 </config>
