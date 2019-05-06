@@ -175,7 +175,7 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
                 }
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo API - Savecart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - Savecart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
             if ($this->_yotpoHelper->isDebugMode()) {
                 $response = [
                     "error" => 1,

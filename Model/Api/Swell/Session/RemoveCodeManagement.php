@@ -41,6 +41,9 @@ class RemoveCodeManagement implements \Yotpo\Loyalty\Api\Swell\Session\RemoveCod
     public function postRemoveCode()
     {
         try {
+            if (!$this->_yotpoHelper->isEnabled()) {
+                throw new \Exception('The Yotpo Loyalty module has been disabled from store configuration.');
+            }
             $quote = $this->_checkoutSession->getQuote();
             if ($quote->getId()) {
                 $codesToRemove = $this->_yotpoHelper->getRequest()->getParam('swell_coupon_code_cancel');
@@ -59,7 +62,7 @@ class RemoveCodeManagement implements \Yotpo\Loyalty\Api\Swell\Session\RemoveCod
                 $quote->setCouponCode($couponCode)->setTotalsCollectedFlag(false)->collectTotals()->save();
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo API - RemoveCode - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - RemoveCode - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
             return $this->_yotpoHelper->jsonEncode([
                 "error" => true
             ]);

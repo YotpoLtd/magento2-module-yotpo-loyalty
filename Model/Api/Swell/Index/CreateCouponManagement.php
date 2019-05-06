@@ -102,7 +102,7 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
             //Make sure that the coupon code doesn't exist:
             $coupon = $this->_couponFactory->create()->loadByCode($code);
             if ($coupon && $coupon->getId()) {
-                $this->_yotpoHelper->log("[Yotpo API - CreateCoupon - ERROR] Coupon code '{$code}' already exists.", "error");
+                $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] Coupon code '{$code}' already exists.", "error");
                 return $this->_yotpoHelper->jsonEncode([
                     "error" => "An error has occurred trying to add coupon to cart: Coupon code '{$code}' already exists."
                 ]);
@@ -211,7 +211,7 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
                     $rule->save();
                     $rule = $this->_ruleFactory->create()->load($rule->getId());
                 } catch (\Exception $e) {
-                    $this->_yotpoHelper->log("[Yotpo API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
+                    $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
                     return $this->_yotpoHelper->jsonEncode([
                         "error" => 'An error has occurred trying create a new sales rule'
                     ]);
@@ -247,7 +247,7 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
                         }
                     }
                 } catch (\Exception $e) {
-                    $this->_yotpoHelper->log("[Yotpo API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
+                    $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
                     return $this->_yotpoHelper->jsonEncode([
                         "error" => 'An error has occurred trying to add coupon to cart'
                     ]);
@@ -257,13 +257,13 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
                 return $this->_yotpoHelper->jsonEncode($coupon->getData());
                 //=========================================================//
             } catch (\Exception $e) {
-                $this->_yotpoHelper->log("[Yotpo API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
+                $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
                 return $this->_yotpoHelper->jsonEncode([
                     "error" => 'An error has occurred trying create a new coupon'
                 ]);
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
             return $this->_yotpoHelper->jsonEncode([
                 "error" => 'An error has occurred trying create a new coupon'
             ]);

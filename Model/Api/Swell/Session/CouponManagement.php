@@ -41,6 +41,9 @@ class CouponManagement implements \Yotpo\Loyalty\Api\Swell\Session\CouponManagem
     public function postCoupon()
     {
         try {
+            if (!$this->_yotpoHelper->isEnabled()) {
+                throw new \Exception('The Yotpo Loyalty module has been disabled from store configuration.');
+            }
             $quote = $this->_checkoutSession->getQuote();
             if ($quote->getId()) {
                 $code = (string) $this->_yotpoHelper->getRequest()->getParam('coupon_code');
@@ -61,7 +64,7 @@ class CouponManagement implements \Yotpo\Loyalty\Api\Swell\Session\CouponManagem
                 $quote->setCouponCode($couponCode)->setTotalsCollectedFlag(false)->collectTotals()->save();
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo API - Coupon - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - Coupon - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
             return $this->_yotpoHelper->jsonEncode([
                 "error" => true
             ]);

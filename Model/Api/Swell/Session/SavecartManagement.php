@@ -41,6 +41,9 @@ class SavecartManagement implements \Yotpo\Loyalty\Api\Swell\Session\SavecartMan
     public function getSavecart()
     {
         try {
+            if (!$this->_yotpoHelper->isEnabled()) {
+                throw new \Exception('The Yotpo Loyalty module has been disabled from store configuration.');
+            }
             $quote = $this->_checkoutSession->getQuote();
             if ($quote->getId()) {
                 $quote->save();
@@ -48,7 +51,7 @@ class SavecartManagement implements \Yotpo\Loyalty\Api\Swell\Session\SavecartMan
             }
             return $this->_yotpoHelper->jsonEncode($this->_yotpoSchemaHelper->quoteSchemaPrepare($quote));
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo API - Savecart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - Savecart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
             return $this->_yotpoHelper->jsonEncode([
                 "error" => true
             ]);

@@ -41,10 +41,13 @@ class GetCartManagement implements \Yotpo\Loyalty\Api\Swell\Session\GetCartManag
     public function getGetCart()
     {
         try {
+            if (!$this->_yotpoHelper->isEnabled()) {
+                throw new \Exception('The Yotpo Loyalty module has been disabled from store configuration.');
+            }
             $quote = $this->_checkoutSession->getQuote();
             return $this->_yotpoHelper->jsonEncode($this->_yotpoSchemaHelper->quoteSchemaPrepare($quote));
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo API - GetCart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - GetCart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
             return $this->_yotpoHelper->jsonEncode([
                 "error" => true
             ]);
