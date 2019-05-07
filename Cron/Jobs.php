@@ -191,21 +191,17 @@ class Jobs
      */
     protected function _processOutput($message, $type = "info", $data = [])
     {
-        if ($this->_output instanceof OutputInterface) { //Output to terminal
+        if ($this->_output instanceof OutputInterface) {
+            //Output to terminal
             $this->_output->writeln('<' . $type . '>' . print_r($message, true) . '</' . $type . '>');
             if ($data) {
                 $this->_output->writeln('<comment>' . print_r($data, true) . '</comment>');
             }
-        } elseif ($this->_yotpoHelper->isDebugMode()) { //Log to system.log
-            switch ($type) {
-                case 'error':
-                    $this->_logger->error(print_r($message, true), $data);
-                    break;
-                default:
-                    $this->_logger->info(print_r($message, true), $data);
-                    break;
-            }
         }
+
+        //Log to var/log/system.log
+        $this->_yotpoHelper->log($message, $type, $data);
+
         return $this;
     }
 
@@ -276,6 +272,7 @@ class Jobs
     {
         try {
             if ($this->_yotpoHelper->isEnabled()) {
+                $this->_processOutput("Jobs::processSyncQueue() - [STARTED]", "info");
                 $this->updateMemoryLimit();
                 $this->setCrontabAreaCode();
 
@@ -321,10 +318,10 @@ class Jobs
                     $this->addAdminNotification("Yopto - An error occurred during the automated sync process!", $addAdminNotifications, 'critical');
                 }
 
-                $this->_processOutput("[processSyncQueue - DONE]");
+                $this->_processOutput("Jobs::processSyncQueue() - [DONE]", "info");
             }
         } catch (\Exception $e) {
-            $this->_processOutput('[ERROR] ' . $e->getMessage(), 'error', [$e]);
+            $this->_processOutput('Jobs::processSyncQueue() - [ERROR] ' . $e->getMessage(), 'error', [$e]);
         }
 
         return $this;
@@ -338,46 +335,52 @@ class Jobs
     public function removeOldSyncRecords()
     {
         try {
-            if ($this->_force) {
-                $this->_processOutput("Force option is enabled! Ignoring `keep_yotpo_sync_queue`.", 'comment');
-            }
-            if (($keep = $this->_yotpoHelper->getKeepYotpoSyncQueue()) !== 'forever' || $this->_force) {
-                if (!$this->_force) {
-                    switch ($keep) {
-                        case '1_day':
-                            $interval = "-1 day";
+            if ($this->_yotpoHelper->isEnabled()) {
+                $this->_processOutput("Jobs::removeOldSyncRecords() - [STARTED]", "info");
+
+                if ($this->_force) {
+                    $this->_processOutput("Force option is enabled! Ignoring `keep_yotpo_sync_queue`.", 'comment');
+                }
+                if (($keep = $this->_yotpoHelper->getKeepYotpoSyncQueue()) !== 'forever' || $this->_force) {
+                    if (!$this->_force) {
+                        switch ($keep) {
+                            case '1_day':
+                                $interval = "-1 day";
+                                break;
+                            case '1_week':
+                                $interval = "-1 week";
+                                break;
+                            case '1_month':
+                                $interval = "-1 month";
+                                break;
+                            case '1_year':
+                                $interval = "-1 year";
+                                break;
+                            default:
+                                return $this;
                             break;
-                        case '1_week':
-                            $interval = "-1 week";
-                            break;
-                        case '1_month':
-                            $interval = "-1 month";
-                            break;
-                        case '1_year':
-                            $interval = "-1 year";
-                            break;
-                        default:
-                            return $this;
-                        break;
+                        }
                     }
+
+                    $collection = $this->getYotpoQueueCollection()
+                        ->addFieldToSelect('*')
+                        ->addFieldToFilter(['sent', 'tryouts'], [
+                            ['eq' => 1],
+                            ['gteq' => $this->_swellSyncMaxTryouts]
+                        ]);
+                    if (!$this->_force) {
+                        $collection->addFieldToFilter('created_at', ['to' => date('Y-m-d', strtotime($interval))]);
+                    }
+
+                    $collectionCount = $collection->count();
+                    $this->_processOutput("Found {$collectionCount} items to delete...", 'comment');
+                    if ($collectionCount) {
+                        $collection->walk('delete');
+                    }
+                    $this->_processOutput("[SUCCESS]", 'comment');
                 }
 
-                $collection = $this->getYotpoQueueCollection()
-                    ->addFieldToSelect('*')
-                    ->addFieldToFilter(['sent', 'tryouts'], [
-                        ['eq' => 1],
-                        ['gteq' => $this->_swellSyncMaxTryouts]
-                    ]);
-                if (!$this->_force) {
-                    $collection->addFieldToFilter('created_at', ['to' => date('Y-m-d', strtotime($interval))]);
-                }
-
-                $collectionCount = $collection->count();
-                $this->_processOutput("Found {$collectionCount} items to delete...", 'comment');
-                if ($collectionCount) {
-                    $collection->walk('delete');
-                }
-                $this->_processOutput("[SUCCESS]", 'comment');
+                $this->_processOutput("Jobs::removeOldSyncRecords() - [DONE]", "info");
             }
         } catch (\Exception $e) {
             $this->_processOutput('[ERROR] ' . $e->getMessage(), 'error', [$e]);

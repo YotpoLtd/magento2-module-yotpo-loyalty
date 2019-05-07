@@ -402,15 +402,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_jsonHelper->jsonDecode($data);
     }
 
-    public function log($message, $type = "info", $data = [])
+    public function log($message, $type = "info", $data = [], $prefix = '[Yotpo_Loyalty Log] ')
     {
         if ($this->isDebugMode()) { //Log to system.log
             switch ($type) {
                 case 'error':
-                    $this->_logger->error(print_r($message, true), $data);
+                    $this->_logger->error(print_r($prefix, true) . print_r($message, true), $data);
                     break;
                 default:
-                    $this->_logger->info(print_r($message, true), $data);
+                    $this->_logger->info(print_r($prefix, true) . print_r($message, true), $data);
                     break;
             }
         }
