@@ -5,7 +5,7 @@
             <label><![CDATA[<span class='yotpo-icon'></span>Yotpo]]></label>
 		</tab>
 		<section id="yotpo_loyalty" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" canRestore="1">
-			<label>Loyalty &amp; Rewards</label>
+			<label>Loyalty &amp; Referrals</label>
 			<tab>yotpo</tab>
 			<resource>Yotpo_Loyalty::config</resource>
 			<group id="general_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
