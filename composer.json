@@ -2,7 +2,7 @@
     "name": "yotpo/magento2-module-yotpo-loyalty",
     "description": "Magento 2 module for integration with Yotpo",
     "type": "magento2-module",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "repositories": [{
         "type": "git",
         "url": "https://github.com/YotpoLtd/magento2-module-yotpo-loyalty"

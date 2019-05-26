@@ -6,11 +6,13 @@ use Composer\Console\ApplicationFactory;
 use Magento\Deploy\Model\Filesystem;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Registry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInputFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Yotpo\Loyalty\Helper\Data as YotpoHelper;
 
 class UninstallCommand extends Command
 {
@@ -69,28 +71,21 @@ class UninstallCommand extends Command
      * @param Filesystem $filesystem
      * @param ArrayInputFactory $arrayInputFactory
      * @param ApplicationFactory $applicationFactory
-     * @param \Magento\Framework\Registry $registry
-     * @param \Yotpo\Loyalty\Cron\Jobs $jobs
-     * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
-     * @param ResourceConnection $resourceConnection
-     * @param EavSetupFactory $eavSetupFactory
+     * @param Registry $registry
+     * @param YotpoHelper $yotpoHelper
      */
     public function __construct(
-        Filesystem\Proxy $filesystem,
-        ArrayInputFactory\Proxy $arrayInputFactory,
-        ApplicationFactory\Proxy $applicationFactory,
-        \Magento\Framework\Registry\Proxy $registry,
-        \Yotpo\Loyalty\Helper\Data\Proxy $yotpoHelper,
-        ResourceConnection\Proxy $resourceConnection,
-        EavSetupFactory\Proxy $eavSetupFactory
+        Filesystem $filesystem,
+        ArrayInputFactory $arrayInputFactory,
+        ApplicationFactory $applicationFactory,
+        Registry $registry,
+        YotpoHelper $yotpoHelper
     ) {
         $this->_filesystem = $filesystem;
         $this->_arrayInputFactory = $arrayInputFactory;
         $this->_applicationFactory = $applicationFactory;
         $this->_registry = $registry;
         $this->_yotpoHelper = $yotpoHelper;
-        $this->_resourceConnection = $resourceConnection;
-        $this->_eavSetupFactory = $eavSetupFactory;
         parent::__construct();
     }
 
@@ -109,10 +104,8 @@ class UninstallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->_yotpoHelper->isEnabled()) {
-            $output->writeln('<error>' . 'The Yotpo Loyalty module has been disabled from system configuration. Please enable it in order to run this command!' . '</error>');
-            return;
-        }
+        $this->_resourceConnection = $this->_yotpoHelper->getObjectManager()->get('\Magento\Framework\App\ResourceConnection');
+        $this->_eavSetupFactory = $this->_yotpoHelper->getObjectManager()->get('\Magento\Eav\Setup\EavSetupFactory');
 
         if (!$this->confirmQuestion(self::CONFIRM_MESSAGE, $input, $output)) {
             return;
