@@ -146,7 +146,7 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
                 "success" => true
             ]);
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo Loyalty API - Add(ToCart) - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - Add(ToCart) - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             return $this->_yotpoHelper->jsonEncode([
                 "error" => 'An error has occurred trying to add item to cart'
             ]);

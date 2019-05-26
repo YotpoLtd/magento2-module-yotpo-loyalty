@@ -47,7 +47,7 @@ class GetCartManagement implements \Yotpo\Loyalty\Api\Swell\Session\GetCartManag
             $quote = $this->_checkoutSession->getQuote();
             return $this->_yotpoHelper->jsonEncode($this->_yotpoSchemaHelper->quoteSchemaPrepare($quote));
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo Loyalty API - GetCart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - GetCart - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             return $this->_yotpoHelper->jsonEncode([
                 "error" => true
             ]);

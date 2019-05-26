@@ -64,7 +64,7 @@ class CouponManagement implements \Yotpo\Loyalty\Api\Swell\Session\CouponManagem
                 $quote->setCouponCode($couponCode)->setTotalsCollectedFlag(false)->collectTotals()->save();
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo Loyalty API - Coupon - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - Coupon - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             return $this->_yotpoHelper->jsonEncode([
                 "error" => true
             ]);

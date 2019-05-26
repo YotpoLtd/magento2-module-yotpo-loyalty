@@ -72,7 +72,7 @@ class Schema extends \Magento\Framework\App\Helper\AbstractHelper
         $orderData["api_key"] = $this->_yotpoHelper->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $order->getStoreId());
         $orderData["guid"] = $this->_yotpoHelper->getSwellGuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $order->getStoreId());
         $orderData["entity_type"] = "order";
-        if (!is_null($entityStatus)) {
+        if ($entityStatus !== null) {
             $orderData["entity_status"] = $entityStatus;
             $orderData["topic"] = "{$orderData['entity_type']}/{$entityStatus}";
         }

@@ -112,7 +112,6 @@ class UninstallCommand extends Command
         }
 
         $this->_registry->register('isYotpoResetCommand', true);
-        $this->updateMemoryLimit();
 
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
         $eavSetup = $this->_eavSetupFactory->create();
@@ -169,16 +168,5 @@ class UninstallCommand extends Command
             $this->_resourceConnection->getTableName('core_config_data'),
             "path LIKE '" . \Yotpo\Loyalty\Helper\Data::XML_PATH_ALL . "/%'"
         );
-    }
-
-    /**
-     * @return void
-     */
-    private function updateMemoryLimit()
-    {
-        if (function_exists('ini_set')) {
-            @ini_set('display_errors', 1);
-            @ini_set('memory_limit', '2048M');
-        }
     }
 }
