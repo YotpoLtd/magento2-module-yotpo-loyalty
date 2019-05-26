@@ -130,47 +130,60 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
      */
     public function getSnippet()
     {
+        $response = [
+            "error" => 0,
+            "snippet" => "",
+        ];
         try {
             if ($this->isEnabled()) {
                 if ($this->isForceCartReload()) {
-                    $this->setForceCartReload(0); ?>
-                    <!-- Yotpo Loyalty - Reload customerData cart -->
-                    <script>
-                        (function  () {
-                            require([
-                                "Magento_Customer/js/customer-data"
-                            ],function(customerData) {
-                                customerData.invalidate(['cart']);
-                            });
-                        })();
-                    </script>
-                    <!--/ Yotpo Loyalty - Reload customerData cart -->
-                    <?php
+                    $this->setForceCartReload(0);
+                    $response["snippet"] .= '
+                        <!-- Yotpo Loyalty - Reload customerData cart -->
+                        <script>
+                            (function  () {
+                                require([
+                                    "Magento_Customer/js/customer-data"
+                                ],function(customerData) {
+                                    customerData.invalidate(["cart"]);
+                                });
+                            })();
+                        </script>
+                        <!--/ Yotpo Loyalty - Reload customerData cart -->
+                    ';
                 }
                 if (($swellGuid = $this->getSwellGuid())) {
-                    ?>
-                    <!-- Yotpo Loyalty - Swell JS Snippet -->
-                    <div id="swell-customer-identification" style="display:none !important;"
-                        <?php if (($identificationData = $this->getCustomerIdentificationData())): ?>
+                    $response["snippet"] .= '
+                        <!-- Yotpo Loyalty - Swell JS Snippet -->
+                        <div id="swell-customer-identification" style="display:none !important;"
+                    ';
+                    if (($identificationData = $this->getCustomerIdentificationData())) {
+                        $response["snippet"] .= '
                             data-authenticated="true"
-                            data-email="<?php echo $identificationData->getEmail(); ?>"
-                            data-id="<?php echo $identificationData->getId(); ?>"
-                            <?php if (($groupCode = $identificationData->getGroupCode())): ?>
-                                data-tags="[<?php echo $groupCode; ?>]"
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    ></div>
-                    <script type="text/javascript" async src="https://cdn.swellrewards.com/loader/<?php echo $swellGuid; ?>.js"></script>
-                    <!--/ Yotpo Loyalty - Swell JS Snippet -->
-                    <?php
+                            data-email="' . $identificationData->getEmail() . '"
+                            data-id="' . $identificationData->getId() . '"
+                        ';
+                        if (($groupCode = $identificationData->getGroupCode())) {
+                            $response["snippet"] .= 'data-tags="[' . $groupCode . ']"';
+                        }
+                    }
+                    $response["snippet"] .= '
+                        ></div>
+                        <script type="text/javascript" async src="https://cdn.swellrewards.com/loader/' . $swellGuid . '.js"></script>
+                        <!--/ Yotpo Loyalty - Swell JS Snippet -->
+                    ';
                 }
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo API - Savecart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - Savecart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
             if ($this->_yotpoHelper->isDebugMode()) {
-                echo $e->getMessage();
+                $response = [
+                    "error" => 1,
+                    "message" => $e->getMessage(),
+                ];
             }
         }
-        die;
+
+        return $this->_yotpoHelper->jsonEncode($response);
     }
 }

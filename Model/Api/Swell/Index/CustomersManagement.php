@@ -25,7 +25,7 @@ class CustomersManagement implements \Yotpo\Loyalty\Api\Swell\Index\CustomersMan
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -59,7 +59,7 @@ class CustomersManagement implements \Yotpo\Loyalty\Api\Swell\Index\CustomersMan
         $collection->setPageSize($pageSize);
         $collection->setCurPage($page);
 
-        $this->_yotpoHelper->sendApiJsonResponse([
+        return $this->_yotpoHelper->jsonEncode([
             "customers" => $this->_yotpoSchemaHelper->customersSchemaPrepare($collection),
             "last_page" => $collection->getLastPageNumber(),
             "current_page" => $page,

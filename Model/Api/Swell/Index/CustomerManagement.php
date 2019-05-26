@@ -25,7 +25,7 @@ class CustomerManagement implements \Yotpo\Loyalty\Api\Swell\Index\CustomerManag
      * @param \Yotpo\Loyalty\Helper\Data $yo4tpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -57,6 +57,6 @@ class CustomerManagement implements \Yotpo\Loyalty\Api\Swell\Index\CustomerManag
         }
 
         $response = (!$collection->count()) ? (object)[] : $this->_yotpoSchemaHelper->customerSchemaPrepare($collection->getFirstItem());
-        $this->_yotpoHelper->sendApiJsonResponse($response);
+        return $this->_yotpoHelper->jsonEncode($response);
     }
 }

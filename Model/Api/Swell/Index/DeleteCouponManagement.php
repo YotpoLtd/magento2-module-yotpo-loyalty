@@ -24,7 +24,7 @@ class DeleteCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\DeleteCou
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -48,7 +48,7 @@ class DeleteCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\DeleteCou
             //===========================================================================================//
 
             if (!$couponId) {
-                $this->_yotpoHelper->sendApiJsonResponse([
+                return $this->_yotpoHelper->jsonEncode([
                     "error" => "`id` is a required field!"
                 ]);
             }
@@ -57,18 +57,18 @@ class DeleteCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\DeleteCou
             if ($coupon->getId() && $coupon->getRuleId()) {
                 $coupon->delete();
             } else {
-                $this->_yotpoHelper->sendApiJsonResponse([
+                return $this->_yotpoHelper->jsonEncode([
                     "success" => true,
                     "message" => 'There is no coupon with this id'
                 ]);
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo API - DeleteCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
-            $this->_yotpoHelper->sendApiJsonResponse([
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - DeleteCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            return $this->_yotpoHelper->jsonEncode([
                 "error" => 'An error has occurred while trying to delete coupon ID' . $couponId
             ]);
         }
-        $this->_yotpoHelper->sendApiJsonResponse([
+        return $this->_yotpoHelper->jsonEncode([
             "success" => true
         ]);
     }

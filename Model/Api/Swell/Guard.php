@@ -14,7 +14,7 @@ class Guard
 
     /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper
     ) {
@@ -22,7 +22,7 @@ class Guard
 
         if (!$this->_yotpoHelper->isEnabled()) {
             header('HTTP/1.0 403 Forbidden');
-            $this->_yotpoHelper->sendApiJsonResponse([
+            return $this->_yotpoHelper->jsonEncode([
                 "error" => 1,
                 "message" => "Access Denied!"
             ]);
@@ -30,7 +30,7 @@ class Guard
 
         if (!$this->isAuthorized()) {
             header('HTTP/1.0 401 Unauthorized');
-            $this->_yotpoHelper->sendApiJsonResponse([
+            return $this->_yotpoHelper->jsonEncode([
                 "error" => 1,
                 "message" => "Access Denied!"
             ]);

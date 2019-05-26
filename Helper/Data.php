@@ -70,9 +70,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_datetimeFactory;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_redirect;
+    protected $_jsonHelper;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
@@ -84,7 +84,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\App\ProductMetadataInterface $magentoFrameworkProductMetadata
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $datetimeFactory
-    */
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -94,7 +95,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory $configCollectionFactory,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\App\ProductMetadataInterface $magentoFrameworkProductMetadata,
-        \Magento\Framework\Stdlib\DateTime\DateTimeFactory $datetimeFactory
+        \Magento\Framework\Stdlib\DateTime\DateTimeFactory $datetimeFactory,
+        \Magento\Framework\Json\Helper\Data $jsonHelper
     ) {
         parent::__construct($context);
         $this->_objectManager = $objectManager;
@@ -106,6 +108,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_encryptor = $encryptor;
         $this->_magentoFrameworkProductMetadata = $magentoFrameworkProductMetadata;
         $this->_datetimeFactory = $datetimeFactory;
+        $this->_jsonHelper = $jsonHelper;
     }
 
     ///////////////////////////
@@ -150,14 +153,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getDatetimeFactory()
     {
         return $this->_datetimeFactory;
-    }
-
-    public function getRedirect()
-    {
-        if (is_null($this->_redirect)) {
-            $this->_redirect = $this->_objectManager->get('\Magento\Framework\App\Response\RedirectInterface');
-        }
-        return $this->_redirect;
     }
 
     ////////////
@@ -397,39 +392,36 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     //========================================================================//
 
-    public function sendApiJsonResponse($response)
+    public function jsonEncode($data)
     {
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        die;
+        return $this->_jsonHelper->jsonEncode($data);
     }
 
-    public function goBack()
+    public function jsonDecode($data)
     {
-        header("Location: " . $this->getRedirect()->getRefererUrl());
-        die;
+        return $this->_jsonHelper->jsonDecode($data);
     }
 
-    public function log($message, $type = "info", $data = [])
+    public function log($message, $type = "info", $data = [], $prefix = '[Yotpo_Loyalty Log] ')
     {
         if ($this->isDebugMode()) { //Log to system.log
             switch ($type) {
                 case 'error':
-                    $this->_logger->error(print_r($message, true), $data);
-                break;
+                    $this->_logger->error(print_r($prefix, true) . print_r($message, true), $data);
+                    break;
                 default:
-                    $this->_logger->info(print_r($message, true), $data);
-                break;
+                    $this->_logger->info(print_r($prefix, true) . print_r($message, true), $data);
+                    break;
             }
         }
         return $this;
     }
 
     /**
-    * UTF-8 aware parse_url() replacement.
-    * @return array
-    */
-    public function mb_parse_url($url, $component=-1)
+     * UTF-8 aware parse_url() replacement.
+     * @return array
+     */
+    public function mb_parse_url($url, $component = -1)
     {
         $enc_url = preg_replace_callback(
             '%[^:/@?&=#]+%usD',

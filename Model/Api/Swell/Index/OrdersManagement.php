@@ -25,7 +25,7 @@ class OrdersManagement implements \Yotpo\Loyalty\Api\Swell\Index\OrdersManagemen
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
-    */
+     */
     public function __construct(
         \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -64,7 +64,7 @@ class OrdersManagement implements \Yotpo\Loyalty\Api\Swell\Index\OrdersManagemen
         $collection->setPageSize($pageSize);
         $collection->setCurPage($page);
 
-        $this->_yotpoHelper->sendApiJsonResponse([
+        return $this->_yotpoHelper->jsonEncode([
             "orders" => $this->_yotpoSchemaHelper->ordersSchemaPrepare($collection),
             "last_page" => $collection->getLastPageNumber(),
             "current_page" => $page,

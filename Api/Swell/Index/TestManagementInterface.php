@@ -7,7 +7,7 @@ interface TestManagementInterface
 
     /**
      * GET for Success api
-     * @return string
+     * @return \Magento\Framework\Controller\ResultFactory
      */
     public function getSuccess();
 }
