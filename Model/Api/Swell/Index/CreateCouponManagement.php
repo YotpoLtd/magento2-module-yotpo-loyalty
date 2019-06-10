@@ -122,7 +122,7 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
                     $groupIds = $this->_customerGroupCollection->getAllIds();
                 }
 
-                if ($appliesToAnyOrAllAttributes) === null) {
+                if ($appliesToAnyOrAllAttributes === null) {
                     $appliesToAnyOrAllAttributes = 'all';
                 }
                 switch ($discountType) {
