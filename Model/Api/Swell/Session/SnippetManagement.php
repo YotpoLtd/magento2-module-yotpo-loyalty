@@ -69,7 +69,7 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
 
     protected function getCustomer()
     {
-        if (is_null($this->_customer)) {
+        if ($this->_customer === null) {
             if ($this->isCustomerLoggedIn()) {
                 $this->_customer = $this->_customerFactory->create()->load($this->_customerSession->getCustomer()->getId());
             }
@@ -79,7 +79,7 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
 
     protected function getCustomerGroupCode()
     {
-        if (is_null($this->_customerGroupCode)) {
+        if ($this->_customerGroupCode === null) {
             if (is_object($this->getCustomer())) {
                 $customerGroup = $this->_customerGroupFactory->create()->load($this->getCustomer()->getGroupId());
                 if ($customerGroup && $customerGroup->getCode()) {
@@ -175,7 +175,7 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
                 }
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo Loyalty API - Savecart - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - Savecart - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             if ($this->_yotpoHelper->isDebugMode()) {
                 $response = [
                     "error" => 1,

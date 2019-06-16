@@ -122,7 +122,7 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
                     $groupIds = $this->_customerGroupCollection->getAllIds();
                 }
 
-                if (is_null($appliesToAnyOrAllAttributes)) {
+                if ($appliesToAnyOrAllAttributes === null) {
                     $appliesToAnyOrAllAttributes = 'all';
                 }
                 switch ($discountType) {
@@ -211,7 +211,7 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
                     $rule->save();
                     $rule = $this->_ruleFactory->create()->load($rule->getId());
                 } catch (\Exception $e) {
-                    $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
+                    $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
                     return $this->_yotpoHelper->jsonEncode([
                         "error" => 'An error has occurred trying create a new sales rule'
                     ]);
@@ -247,7 +247,7 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
                         }
                     }
                 } catch (\Exception $e) {
-                    $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
+                    $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
                     return $this->_yotpoHelper->jsonEncode([
                         "error" => 'An error has occurred trying to add coupon to cart'
                     ]);
@@ -257,13 +257,13 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
                 return $this->_yotpoHelper->jsonEncode($coupon->getData());
                 //=========================================================//
             } catch (\Exception $e) {
-                $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
+                $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
                 return $this->_yotpoHelper->jsonEncode([
                     "error" => 'An error has occurred trying create a new coupon'
                 ]);
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . print_r($e->getTraceAsString(), true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateCoupon - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             return $this->_yotpoHelper->jsonEncode([
                 "error" => 'An error has occurred trying create a new coupon'
             ]);

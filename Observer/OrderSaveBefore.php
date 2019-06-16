@@ -58,7 +58,7 @@ class OrderSaveBefore implements ObserverInterface
                     }
                 }
             } catch (\Exception $e) {
-                $this->_yotpoHelper->log("[Yotpo - OrderSaveBefore - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+                $this->_yotpoHelper->log("[Yotpo - OrderSaveBefore - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             }
         }
     }

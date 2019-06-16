@@ -137,7 +137,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getRequest()
     {
-        if (is_null($this->_initializedRequestParams)) {
+        if ($this->_initializedRequestParams === null) {
             $this->_initializedRequestParams = true;
             $requestData = $this->_request->getRequestData();
             if ($requestData) {
@@ -161,8 +161,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getConfig($configPath, $scope = null, $scopeId = null, $skipCahce = false)
     {
-        $scope = (is_null($scope)) ? \Magento\Store\Model\ScopeInterface::SCOPE_STORE : $scope;
-        $scopeId = (is_null($scopeId)) ? $this->getStoreManager()->getStore()->getId() : $scopeId;
+        $scope = ($scope === null) ? \Magento\Store\Model\ScopeInterface::SCOPE_STORE : $scope;
+        $scopeId = ($scopeId === null) ? $this->getStoreManager()->getStore()->getId() : $scopeId;
         if ($skipCahce) {
             if ($scope === \Magento\Store\Model\ScopeInterface::SCOPE_STORE) {
                 $scope = \Magento\Store\Model\ScopeInterface::SCOPE_STORES;
@@ -300,13 +300,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getStoreBaseUrl($storeId = null)
     {
-        $storeId = (is_null($storeId)) ? $this->getCurrentStoreId() : $storeId;
+        $storeId = ($storeId === null) ? $this->getCurrentStoreId() : $storeId;
         return $this->getStoreManager()->getStore($storeId)->getBaseUrl();
     }
 
     public function getStoreWebsiteBaseUrl($storeId = null)
     {
-        $storeId = (is_null($storeId)) ? $this->getCurrentStoreId() : $storeId;
+        $storeId = ($storeId === null) ? $this->getCurrentStoreId() : $storeId;
         return $this->getStoreManager()->getStore($storeId)->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
     }
 
@@ -353,7 +353,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getStoreIdsBySwellApiKey($swellApiKey = null, $withDefault = false, $returnFirstId = false)
     {
         $return = [];
-        $swellApiKey = (is_null($swellApiKey)) ? $this->getRequest()->getParam("shared_secret") : (string)$swellApiKey;
+        $swellApiKey = ($swellApiKey === null) ? $this->getRequest()->getParam("shared_secret") : (string)$swellApiKey;
         $stores = $this->getStoreManager()->getStores($withDefault);
         foreach ($stores as $key => $store) {
             if ($swellApiKey === $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) {
@@ -371,7 +371,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getWebsiteIdsBySwellApiKey($swellApiKey = null, $withDefault = false)
     {
         $return = [];
-        $swellApiKey = (is_null($swellApiKey)) ? $this->getRequest()->getParam("shared_secret") : (string)$swellApiKey;
+        $swellApiKey = ($swellApiKey === null) ? $this->getRequest()->getParam("shared_secret") : (string)$swellApiKey;
         foreach ($this->getStoreManager()->getWebsites($withDefault) as $website) {
             if ($swellApiKey === $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, $website->getId())) {
                 $return[] = $website->getId();
@@ -407,10 +407,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if ($this->isDebugMode()) { //Log to system.log
             switch ($type) {
                 case 'error':
-                    $this->_logger->error(print_r($prefix, true) . print_r($message, true), $data);
+                    $this->_logger->error($prefix . json_encode($message), $data);
                     break;
                 default:
-                    $this->_logger->info(print_r($prefix, true) . print_r($message, true), $data);
+                    $this->_logger->info($prefix . json_encode($message), $data);
                     break;
             }
         }
@@ -488,7 +488,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function emulateAdminArea($storeId = null, $force = false)
     {
-        $storeId = (is_null($storeId)) ? $this->getDefaultStoreId() : $storeId;
+        $storeId = ($storeId === null) ? $this->getDefaultStoreId() : $storeId;
         $this->startEnvironmentEmulation($storeId, \Magento\Framework\App\Area::AREA_ADMINHTML, $force);
         return $this;
     }

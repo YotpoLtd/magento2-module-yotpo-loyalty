@@ -80,10 +80,10 @@ abstract class AbstractApi extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_curl->setHeaders([
             'Content-Type' => $contentType
         ]);
-        call_user_func_array([$this->_curl, strtolower($method)], [
+        $this->_curl->{strtolower($method)}(
             $this->getSwellApiUrl() . $apiEndpointPath,
             $params
-        ]);
+        );
 
         $this->_yotpoHelper->log("[Yotpo - AbstractApi::sendSwellRequest() - response]", "info", $this->prepareCurlResponseData());
 

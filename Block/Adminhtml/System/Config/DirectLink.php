@@ -70,9 +70,9 @@ class DirectLink extends Field
 
     public function getSwellGuid()
     {
-        if (!is_null($this->_storeId)) {
+        if ($this->_storeId !== null) {
             return $this->_yotpoHelper->getSwellGuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->_storeId);
-        } elseif (!is_null($this->_websiteId)) {
+        } elseif ($this->_websiteId !== null) {
             return $this->_yotpoHelper->getSwellGuid(\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, $this->_websiteId);
         } else {
             return $this->_yotpoHelper->getSwellGuid();
@@ -81,9 +81,9 @@ class DirectLink extends Field
 
     public function getSwellApiKey()
     {
-        if (!is_null($this->_storeId)) {
+        if ($this->_storeId !== null) {
             return $this->_yotpoHelper->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->_storeId);
-        } elseif (!is_null($this->_websiteId)) {
+        } elseif ($this->_websiteId !== null) {
             return $this->_yotpoHelper->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, $this->_websiteId);
         } else {
             return $this->_yotpoHelper->getSwellApiKey();

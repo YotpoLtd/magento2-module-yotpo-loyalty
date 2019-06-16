@@ -30,7 +30,7 @@
 					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
 			</group>
-			<group id="sync_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
+			<group id="sync_settings" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="10" translate="label" canRestore="1">
 				<label>Sync Settings (Advanced)</label>
 				<field id="swell_sync_limit" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Swell Sync Limit</label>

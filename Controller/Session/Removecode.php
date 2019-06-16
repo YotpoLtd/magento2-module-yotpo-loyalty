@@ -82,10 +82,10 @@ class Removecode extends Action
                     $quote->setCouponCode($couponCode)->setTotalsCollectedFlag(false)->collectTotals()->save();
                 }
             } else {
-                $this->_yotpoHelper->log("[Yotpo Loyalty Controller - Removecode - ERROR] The Yotpo Loyalty module has been disabled from store configuration.\n" . print_r($e, true), "error");
+                $this->_yotpoHelper->log("[Yotpo Loyalty Controller - Removecode - ERROR] The Yotpo Loyalty module has been disabled from store configuration.\n" . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo Loyalty Controller - Removecode - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty Controller - Removecode - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             $this->_messageManager->addError(__("An error occurred while trying to remove a coupon from cart."));
         }
 

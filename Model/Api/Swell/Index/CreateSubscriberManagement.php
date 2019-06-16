@@ -90,7 +90,7 @@ class CreateSubscriberManagement implements \Yotpo\Loyalty\Api\Swell\Index\Creat
                 }
             }
         } catch (\Exception $e) {
-            $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateSubscriber - ERROR] " . $e->getMessage() . "\n" . print_r($e, true), "error");
+            $this->_yotpoHelper->log("[Yotpo Loyalty API - CreateSubscriber - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             return $this->_yotpoHelper->jsonEncode([
                 "error" => 'An error has occurred trying to subscribe ' . $email
             ]);

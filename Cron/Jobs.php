@@ -10,8 +10,6 @@ class Jobs
 
     private $_force = false;
 
-    private $_memoryLimitUpdated = false;
-
     /**
      * @var Symfony\Component\Console\Output\OutputInterface
      */
@@ -99,7 +97,7 @@ class Jobs
 
     public function getYotpoQueueCollection()
     {
-        if (is_null($this->_yotpoQueueCollection)) {
+        if ($this->_yotpoQueueCollection === null) {
             $this->_yotpoQueueCollection = $this->_yotpoQueueFactory->create()->getCollection();
         }
         return $this->_yotpoQueueCollection;
@@ -115,7 +113,7 @@ class Jobs
         foreach ($config as $key => $val) {
             $method = $this->_yotpoHelper->strToCamelCase(strtolower($key), 'set');
             if (method_exists($this, $method)) {
-                call_user_func([$this, $method], $val);
+                $this->{$method}($val);
             }
         }
         return $this;
@@ -193,9 +191,9 @@ class Jobs
     {
         if ($this->_output instanceof OutputInterface) {
             //Output to terminal
-            $this->_output->writeln('<' . $type . '>' . print_r($message, true) . '</' . $type . '>');
+            $this->_output->writeln('<' . $type . '>' . json_encode($message) . '</' . $type . '>');
             if ($data) {
-                $this->_output->writeln('<comment>' . print_r($data, true) . '</comment>');
+                $this->_output->writeln('<comment>' . json_encode($data) . '</comment>');
             }
         }
 
@@ -207,7 +205,8 @@ class Jobs
 
     protected function addAdminNotification(string $title, $description = "", $type = 'critical')
     {
-        call_user_func_array([$this->_notifierPool, 'add' . ucfirst($type)], [$title, $description]);
+        $method = 'add' . ucfirst($type);
+        $this->_notifierPool->{$method}($title, $description);
         return $this;
     }
 
@@ -255,7 +254,7 @@ class Jobs
      */
     protected function _setCollectionLimit(\Magento\Framework\Data\Collection $collection)
     {
-        $limit = (!is_null($this->_limit)) ? (int)$this->_limit : $this->_swellSyncLimit;
+        $limit = ($this->_limit !== null) ? (int)$this->_limit : $this->_swellSyncLimit;
         $this->_processOutput("Limit is set to: " . (($limit>0) ? $limit : '0 (no-limit)'), 'comment');
         if ($limit) {
             $collection->setPageSize($limit);
@@ -273,7 +272,6 @@ class Jobs
         try {
             if ($this->_yotpoHelper->isEnabled()) {
                 $this->_processOutput("Jobs::processSyncQueue() - [STARTED]", "info");
-                $this->updateMemoryLimit();
                 $this->setCrontabAreaCode();
 
                 $collection = $this->getYotpoQueueCollection()->addFieldToSelect('*')->addFieldToFilter('sent', 0);
@@ -393,18 +391,6 @@ class Jobs
     /////////////
     // Helpers //
     /////////////
-
-    /**
-     * @return void
-     */
-    private function updateMemoryLimit()
-    {
-        if (!$this->_memoryLimitUpdated && function_exists('ini_set')) {
-            @ini_set('display_errors', 1);
-            @ini_set('memory_limit', '2048M');
-            $this->_memoryLimitUpdated = true;
-        }
-    }
 
     private function setAdminAreaCode()
     {

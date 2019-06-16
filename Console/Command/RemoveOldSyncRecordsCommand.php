@@ -109,7 +109,6 @@ class RemoveOldSyncRecordsCommand extends Command
         $this->_jobs = $this->_yotpoHelper->getObjectManager()->get('\Yotpo\Loyalty\Cron\Jobs');
 
         $this->_registry->register('isRemoveOldSyncRecordsCommand', true);
-        $this->updateMemoryLimit();
 
         try {
             $output->writeln('<info>' . 'Working on it (Imagine a spinning gif loager) ...' . '</info>');
@@ -126,17 +125,6 @@ class RemoveOldSyncRecordsCommand extends Command
             $output->writeln('<info>' . 'Done :)' . '</info>');
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
-        }
-    }
-
-    /**
-     * @return void
-     */
-    private function updateMemoryLimit()
-    {
-        if (function_exists('ini_set')) {
-            @ini_set('display_errors', 1);
-            @ini_set('memory_limit', '2048M');
         }
     }
 }
