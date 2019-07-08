@@ -313,7 +313,7 @@ class Jobs
 
                 if ($addAdminNotifications) {
                     $addAdminNotifications = "*If you enabled debug mode Yotpo - Loyalty Settings, you should see the details in the log file (var/log/system.log)" . $addAdminNotifications;
-                    $this->addAdminNotification("Yopto - An error occurred during the automated sync process!", $addAdminNotifications, 'critical');
+                    $this->addAdminNotification("Yopto - An error occurred during the automated sync process! (module: Yotpo_Loyalty)", $addAdminNotifications, 'critical');
                 }
 
                 $this->_processOutput("Jobs::processSyncQueue() - [DONE]", "info");

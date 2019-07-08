@@ -147,16 +147,6 @@ abstract class AbstractApi extends \Magento\Framework\App\Helper\AbstractHelper
 
     protected function isOkResponse()
     {
-        if ($this->getCurlStatus() === 200 ||
-            (
-                $this->getCurlStatus() === 100 &&
-                is_array(($headers = $this->getCurlHeaders())) &&
-                isset($headers['Status']) &&
-                $headers['Status'] === '200 OK'
-            )
-        ) {
-            return true;
-        }
-        return false;
+        return (($body = (array)$this->getCurlBody()) && isset($body['status']) && strtolower($body['status']) === 'ok') ? true : false;
     }
 }
