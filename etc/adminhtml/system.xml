@@ -17,7 +17,7 @@
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-				<field id="debug_mode_active" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+				<field id="debug_mode_active" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Debug Mode Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 					<comment>Enable debug mode in order to log all Yotpo processes (log file: var/log/system.log).</comment>

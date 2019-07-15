@@ -270,54 +270,52 @@ class Jobs
     public function processSyncQueue()
     {
         try {
-            if ($this->_yotpoHelper->isEnabled()) {
-                $this->_processOutput("Jobs::processSyncQueue() - [STARTED]", "info");
-                $this->setCrontabAreaCode();
+            $this->_processOutput("Jobs::processSyncQueue() - [STARTED]", "info");
+            $this->setCrontabAreaCode();
 
-                $collection = $this->getYotpoQueueCollection()->addFieldToSelect('*')->addFieldToFilter('sent', 0);
+            $collection = $this->getYotpoQueueCollection()->addFieldToSelect('*')->addFieldToFilter('sent', 0);
 
-                $this->_setCollectionTryoutsFilter($collection);
-                $collection->setOrder('created_at', 'asc');
-                $this->_setCollectionLimit($collection);
+            $this->_setCollectionTryoutsFilter($collection);
+            $collection->setOrder('created_at', 'asc');
+            $this->_setCollectionLimit($collection);
 
-                $collectionCount = $collection->count();
-                $this->_processOutput("Found {$collectionCount} queued items.", 'comment');
+            $collectionCount = $collection->count();
+            $this->_processOutput("Found {$collectionCount} queued items.", 'comment');
 
-                $addAdminNotifications = "";
-                $i = 0;
-                foreach ($collection as $item) {
-                    $i++;
-                    $this->_processOutput('== Processing ID: ' . $item->getId() . ' (' . $i . '/' . $collectionCount . ') ...', 'comment');
+            $addAdminNotifications = "";
+            $i = 0;
+            foreach ($collection as $item) {
+                $i++;
+                $this->_processOutput('== Processing ID: ' . $item->getId() . ' (' . $i . '/' . $collectionCount . ') ...', 'comment');
 
-                    try {
-                        $this->_processOutput('*** Entity Type: ' . $item->getEntityType() . "\n" . '*** Entity ID: ' . $item->getEntityId() . "\n" . '*** Entity Status: ' . $item->getEntityStatus() . "\n" . '*** Store ID: ' . $item->getStoreId(), 'comment');
-                        $response = $this->_apiRequestHelper->webhooksRequest($item->getPreparedSchema());
-                        $item->setResponse($response->getResponse())->setTryouts($item->getTryouts()+1);
-                        if ($response->getError()) {
-                            $this->_processOutput('== [ERROR] ' . $response->getMessage(), 'error', [$response]);
-                            $item->setHasErrors(1);
-                            if ($item->getTryouts() >= $this->_swellSyncMaxTryouts) {
-                                $addAdminNotifications .= ' | Queued Item ID: ' . $item->getId() . ', Entity Type: ' . $item->getEntityType() . ', Entity ID: ' . $item->getEntityId() . ', Entity Status: ' . $item->getEntityStatus() . ', Store ID: ' . $item->getStoreId();
-                            }
-                        } else {
-                            $this->_processOutput('== [SUCCESS] ' . $response->getMessage(), 'comment');
-                            $item->setHasErrors(0)->setSent(1)->setSentAt($this->_yotpoHelper->getCurrentDate());
+                try {
+                    $this->_processOutput('*** Entity Type: ' . $item->getEntityType() . "\n" . '*** Entity ID: ' . $item->getEntityId() . "\n" . '*** Entity Status: ' . $item->getEntityStatus() . "\n" . '*** Store ID: ' . $item->getStoreId(), 'comment');
+                    $response = $this->_apiRequestHelper->webhooksRequest($item->getPreparedSchema());
+                    $item->setResponse($response->getResponse())->setTryouts($item->getTryouts()+1);
+                    if ($response->getError()) {
+                        $this->_processOutput('== [ERROR] ' . $response->getMessage(), 'error', [$response]);
+                        $item->setHasErrors(1);
+                        if ($item->getTryouts() >= $this->_swellSyncMaxTryouts) {
+                            $addAdminNotifications .= ' | Queued Item ID: ' . $item->getId() . ', Entity Type: ' . $item->getEntityType() . ', Entity ID: ' . $item->getEntityId() . ', Entity Status: ' . $item->getEntityStatus() . ', Store ID: ' . $item->getStoreId();
                         }
-                        $item->save();
-                    } catch (\Exception $e) {
-                        $this->_processOutput('== [ERROR] ' . $e->getMessage(), 'error', [$e]);
+                    } else {
+                        $this->_processOutput('== [SUCCESS] ' . $response->getMessage(), 'comment');
+                        $item->setHasErrors(0)->setSent(1)->setSentAt($this->_yotpoHelper->getCurrentDate());
                     }
-
-                    $this->_processOutput('== Moving forward...', 'comment');
+                    $item->save();
+                } catch (\Exception $e) {
+                    $this->_processOutput('== [ERROR] ' . $e->getMessage(), 'error', [$e]);
                 }
 
-                if ($addAdminNotifications) {
-                    $addAdminNotifications = "*If you enabled debug mode Yotpo - Loyalty Settings, you should see the details in the log file (var/log/system.log)" . $addAdminNotifications;
-                    $this->addAdminNotification("Yopto - An error occurred during the automated sync process! (module: Yotpo_Loyalty)", $addAdminNotifications, 'critical');
-                }
-
-                $this->_processOutput("Jobs::processSyncQueue() - [DONE]", "info");
+                $this->_processOutput('== Moving forward...', 'comment');
             }
+
+            if ($addAdminNotifications) {
+                $addAdminNotifications = "*If you enabled debug mode Yotpo - Loyalty Settings, you should see the details in the log file (var/log/system.log)" . $addAdminNotifications;
+                $this->addAdminNotification("Yopto - An error occurred during the automated sync process! (module: Yotpo_Loyalty)", $addAdminNotifications, 'critical');
+            }
+
+            $this->_processOutput("Jobs::processSyncQueue() - [DONE]", "info");
         } catch (\Exception $e) {
             $this->_processOutput('Jobs::processSyncQueue() - [ERROR] ' . $e->getMessage(), 'error', [$e]);
         }
@@ -333,15 +331,14 @@ class Jobs
     public function removeOldSyncRecords()
     {
         try {
-            if ($this->_yotpoHelper->isEnabled()) {
-                $this->_processOutput("Jobs::removeOldSyncRecords() - [STARTED]", "info");
+            $this->_processOutput("Jobs::removeOldSyncRecords() - [STARTED]", "info");
 
-                if ($this->_force) {
-                    $this->_processOutput("Force option is enabled! Ignoring `keep_yotpo_sync_queue`.", 'comment');
-                }
-                if (($keep = $this->_yotpoHelper->getKeepYotpoSyncQueue()) !== 'forever' || $this->_force) {
-                    if (!$this->_force) {
-                        switch ($keep) {
+            if ($this->_force) {
+                $this->_processOutput("Force option is enabled! Ignoring `keep_yotpo_sync_queue`.", 'comment');
+            }
+            if (($keep = $this->_yotpoHelper->getKeepYotpoSyncQueue()) !== 'forever' || $this->_force) {
+                if (!$this->_force) {
+                    switch ($keep) {
                             case '1_day':
                                 $interval = "-1 day";
                                 break;
@@ -358,28 +355,27 @@ class Jobs
                                 return $this;
                             break;
                         }
-                    }
+                }
 
-                    $collection = $this->getYotpoQueueCollection()
+                $collection = $this->getYotpoQueueCollection()
                         ->addFieldToSelect('*')
                         ->addFieldToFilter(['sent', 'tryouts'], [
                             ['eq' => 1],
                             ['gteq' => $this->_swellSyncMaxTryouts]
                         ]);
-                    if (!$this->_force) {
-                        $collection->addFieldToFilter('created_at', ['to' => date('Y-m-d', strtotime($interval))]);
-                    }
-
-                    $collectionCount = $collection->count();
-                    $this->_processOutput("Found {$collectionCount} items to delete...", 'comment');
-                    if ($collectionCount) {
-                        $collection->walk('delete');
-                    }
-                    $this->_processOutput("[SUCCESS]", 'comment');
+                if (!$this->_force) {
+                    $collection->addFieldToFilter('created_at', ['to' => date('Y-m-d', strtotime($interval))]);
                 }
 
-                $this->_processOutput("Jobs::removeOldSyncRecords() - [DONE]", "info");
+                $collectionCount = $collection->count();
+                $this->_processOutput("Found {$collectionCount} items to delete...", 'comment');
+                if ($collectionCount) {
+                    $collection->walk('delete');
+                }
+                $this->_processOutput("[SUCCESS]", 'comment');
             }
+
+            $this->_processOutput("Jobs::removeOldSyncRecords() - [DONE]", "info");
         } catch (\Exception $e) {
             $this->_processOutput('[ERROR] ' . $e->getMessage(), 'error', [$e]);
             $this->addAdminNotification("Yopto - An error occurred during the automated removeOldSyncRecords process!", "*If you enabled debug mode Yotpo - Loyalty Settings, you should see the details in the log file (var/log/system.log)", 'critical');

@@ -6,13 +6,13 @@ use Composer\Console\ApplicationFactory;
 use Magento\Deploy\Model\Filesystem;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInputFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Yotpo\Loyalty\Helper\Data as YotpoHelper;
 
 class UninstallCommand extends Command
 {
@@ -52,9 +52,9 @@ class UninstallCommand extends Command
     protected $_registry;
 
     /**
-     * @param \Yotpo\Loyalty\Helper\Data
+     * @var ObjectManagerInterface
      */
-    protected $_yotpoHelper;
+    protected $_objectManager;
 
     /**
      * @param ResourceConnection
@@ -72,20 +72,20 @@ class UninstallCommand extends Command
      * @param ArrayInputFactory $arrayInputFactory
      * @param ApplicationFactory $applicationFactory
      * @param Registry $registry
-     * @param YotpoHelper $yotpoHelper
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         Filesystem $filesystem,
         ArrayInputFactory $arrayInputFactory,
         ApplicationFactory $applicationFactory,
         Registry $registry,
-        YotpoHelper $yotpoHelper
+        ObjectManagerInterface $objectManager
     ) {
         $this->_filesystem = $filesystem;
         $this->_arrayInputFactory = $arrayInputFactory;
         $this->_applicationFactory = $applicationFactory;
         $this->_registry = $registry;
-        $this->_yotpoHelper = $yotpoHelper;
+        $this->_objectManager = $objectManager;
         parent::__construct();
     }
 
@@ -104,8 +104,8 @@ class UninstallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->_resourceConnection = $this->_yotpoHelper->getObjectManager()->get('\Magento\Framework\App\ResourceConnection');
-        $this->_eavSetupFactory = $this->_yotpoHelper->getObjectManager()->get('\Magento\Eav\Setup\EavSetupFactory');
+        $this->_resourceConnection = $this->_objectManager->get('\Magento\Framework\App\ResourceConnection');
+        $this->_eavSetupFactory = $this->_objectManager->get('\Magento\Eav\Setup\EavSetupFactory');
 
         if (!$this->confirmQuestion(self::CONFIRM_MESSAGE, $input, $output)) {
             return;
