@@ -4,13 +4,13 @@ namespace Yotpo\Loyalty\Console\Command;
 
 use Composer\Console\ApplicationFactory;
 use Magento\Deploy\Model\Filesystem;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInputFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Yotpo\Loyalty\Helper\Data as YotpoHelper;
 
 /**
  * Yotpo - Remove Old Sync Records
@@ -46,9 +46,9 @@ class RemoveOldSyncRecordsCommand extends Command
     protected $_registry;
 
     /**
-     * @param \Yotpo\Loyalty\Helper\Data
+     * @var ObjectManagerInterface
      */
-    protected $_yotpoHelper;
+    protected $_objectManager;
 
     /**
      * @param \Yotpo\Loyalty\Cron\Jobs
@@ -61,20 +61,20 @@ class RemoveOldSyncRecordsCommand extends Command
      * @param ArrayInputFactory $arrayInputFactory
      * @param ApplicationFactory $applicationFactory
      * @param Registry $registry
-     * @param YotpoHelper $yotpoHelper
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         Filesystem $filesystem,
         ArrayInputFactory $arrayInputFactory,
         ApplicationFactory $applicationFactory,
         Registry $registry,
-        YotpoHelper $yotpoHelper
+        ObjectManagerInterface $objectManager
     ) {
         $this->_filesystem = $filesystem;
         $this->_arrayInputFactory = $arrayInputFactory;
         $this->_applicationFactory = $applicationFactory;
         $this->_registry = $registry;
-        $this->_yotpoHelper = $yotpoHelper;
+        $this->_objectManager = $objectManager;
         parent::__construct();
     }
 
@@ -101,13 +101,7 @@ class RemoveOldSyncRecordsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->_yotpoHelper->isEnabled()) {
-            $output->writeln('<error>' . 'The Yotpo Loyalty module has been disabled from system configuration. Please enable it in order to run this command!' . '</error>');
-            return;
-        }
-
-        $this->_jobs = $this->_yotpoHelper->getObjectManager()->get('\Yotpo\Loyalty\Cron\Jobs');
-
+        $this->_jobs = $this->_objectManager->get('\Yotpo\Loyalty\Cron\Jobs');
         $this->_registry->register('isRemoveOldSyncRecordsCommand', true);
 
         try {
