@@ -2,40 +2,27 @@
 
 namespace Yotpo\Loyalty\Model\Api\Swell\Index;
 
-class OrderManagement implements \Yotpo\Loyalty\Api\Swell\Index\OrderManagementInterface
+use Yotpo\Loyalty\Model\Api\Swell\AbstractSwell;
+
+class OrderManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Index\OrderManagementInterface
 {
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Data
-     */
-    protected $_yotpoHelper;
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Schema
-     */
-    protected $_yotpoSchemaHelper;
-
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_orderCollectionFactory;
 
     /**
-     * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      */
     public function __construct(
-        \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
     ) {
-        //$swellApiGuard will be initialized from it's __construct
-        $this->_yotpoHelper = $yotpoHelper;
-        $this->_yotpoSchemaHelper = $yotpoSchemaHelper;
         $this->_orderCollectionFactory = $orderCollectionFactory;
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
     /**
@@ -43,6 +30,12 @@ class OrderManagement implements \Yotpo\Loyalty\Api\Swell\Index\OrderManagementI
      */
     public function getOrder()
     {
+        if (!$this->isAuthorized()) {
+            return $this->_yotpoHelper->jsonEncode([
+                "error" => 1,
+                "message" => "Access Denied!"
+            ]);
+        }
         $collection = $this->_orderCollectionFactory->create()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter("entity_id", $this->_yotpoHelper->getRequest()->getParam('id'))

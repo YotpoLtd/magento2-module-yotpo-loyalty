@@ -2,24 +2,19 @@
 
 namespace Yotpo\Loyalty\Model\Api\Swell\Index;
 
-class TestManagement implements \Yotpo\Loyalty\Api\Swell\Index\TestManagementInterface
+use Yotpo\Loyalty\Model\Api\Swell\AbstractSwell;
+
+class TestManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Index\TestManagementInterface
 {
-
     /**
-     * @var \Yotpo\Loyalty\Helper\Data
-     */
-    protected $_yotpoHelper;
-
-    /**
-     * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
+     * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      */
     public function __construct(
-        \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
-        \Yotpo\Loyalty\Helper\Data $yotpoHelper
+        \Yotpo\Loyalty\Helper\Data $yotpoHelper,
+        \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
     ) {
-        //$swellApiGuard will be initialized from it's __construct
-        $this->_yotpoHelper = $yotpoHelper;
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
     /**
@@ -27,6 +22,12 @@ class TestManagement implements \Yotpo\Loyalty\Api\Swell\Index\TestManagementInt
      */
     public function getSuccess()
     {
+        if (!$this->isAuthorized()) {
+            return $this->_yotpoHelper->jsonEncode([
+                "error" => 1,
+                "message" => "Access Denied!"
+            ]);
+        }
         return $this->_yotpoHelper->jsonEncode([
             "success" => true
         ]);

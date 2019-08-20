@@ -2,12 +2,9 @@
 
 namespace Yotpo\Loyalty\Console\Command;
 
-use Composer\Console\ApplicationFactory;
-use Magento\Deploy\Model\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInputFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,27 +22,6 @@ class RemoveOldSyncRecordsCommand extends Command
     /**#@- */
 
     /**
-     * @var Magento\Deploy\Model\Filesystem
-     */
-    private $_filesystem;
-
-    /**
-     * @var ArrayInputFactory
-     * @deprecated
-     */
-    private $_arrayInputFactory;
-
-    /**
-     * @var ApplicationFactory
-     */
-    private $_applicationFactory;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $_registry;
-
-    /**
      * @var ObjectManagerInterface
      */
     protected $_objectManager;
@@ -57,23 +33,12 @@ class RemoveOldSyncRecordsCommand extends Command
 
     /**
      * @method __construct
-     * @param Filesystem $filesystem
-     * @param ArrayInputFactory $arrayInputFactory
-     * @param ApplicationFactory $applicationFactory
      * @param Registry $registry
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        Filesystem $filesystem,
-        ArrayInputFactory $arrayInputFactory,
-        ApplicationFactory $applicationFactory,
-        Registry $registry,
         ObjectManagerInterface $objectManager
     ) {
-        $this->_filesystem = $filesystem;
-        $this->_arrayInputFactory = $arrayInputFactory;
-        $this->_applicationFactory = $applicationFactory;
-        $this->_registry = $registry;
         $this->_objectManager = $objectManager;
         parent::__construct();
     }
@@ -102,7 +67,6 @@ class RemoveOldSyncRecordsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->_jobs = $this->_objectManager->get('\Yotpo\Loyalty\Cron\Jobs');
-        $this->_registry->register('isRemoveOldSyncRecordsCommand', true);
 
         try {
             $output->writeln('<info>' . 'Working on it (Imagine a spinning gif loager) ...' . '</info>');

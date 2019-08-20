@@ -2,7 +2,9 @@
 
 namespace Yotpo\Loyalty\Model\Api\Swell\Index;
 
-class DeleteCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\DeleteCouponManagementInterface
+use Yotpo\Loyalty\Model\Api\Swell\AbstractSwell;
+
+class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Index\DeleteCouponManagementInterface
 {
     /**
      * @var \Yotpo\Loyalty\Helper\Data
@@ -20,21 +22,17 @@ class DeleteCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\DeleteCou
     protected $_couponFactory;
 
     /**
-     * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      */
     public function __construct(
-        \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
         \Magento\SalesRule\Model\CouponFactory $couponFactory
     ) {
-        //$swellApiGuard will be initialized from it's __construct
-        $this->_yotpoHelper = $yotpoHelper;
-        $this->_yotpoSchemaHelper = $yotpoSchemaHelper;
         $this->_couponFactory = $couponFactory;
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
     /**
@@ -42,6 +40,12 @@ class DeleteCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\DeleteCou
      */
     public function postDeleteCoupon()
     {
+        if (!$this->isAuthorized()) {
+            return $this->_yotpoHelper->jsonEncode([
+                "error" => 1,
+                "message" => "Access Denied!"
+            ]);
+        }
         try {
             //Extract Request Params:
             $couponId = $this->_yotpoHelper->getRequest()->getParam('id');

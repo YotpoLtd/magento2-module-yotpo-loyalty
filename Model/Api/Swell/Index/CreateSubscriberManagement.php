@@ -2,19 +2,10 @@
 
 namespace Yotpo\Loyalty\Model\Api\Swell\Index;
 
-class CreateSubscriberManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateSubscriberManagementInterface
+use Yotpo\Loyalty\Model\Api\Swell\AbstractSwell;
+
+class CreateSubscriberManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Index\CreateSubscriberManagementInterface
 {
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Data
-     */
-    protected $_yotpoHelper;
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Schema
-     */
-    protected $_yotpoSchemaHelper;
-
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory
      */
@@ -31,7 +22,6 @@ class CreateSubscriberManagement implements \Yotpo\Loyalty\Api\Swell\Index\Creat
     protected $_subscriberModel;
 
     /**
-     * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory
@@ -39,19 +29,18 @@ class CreateSubscriberManagement implements \Yotpo\Loyalty\Api\Swell\Index\Creat
      * @param \Magento\Newsletter\Model\Subscriber $subscriberModel
      */
     public function __construct(
-        \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
         \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         \Magento\Newsletter\Model\Subscriber $subscriberModel
     ) {
-        //$swellApiGuard will be initialized from it's __construct
         $this->_yotpoHelper = $yotpoHelper;
         $this->_yotpoSchemaHelper = $yotpoSchemaHelper;
         $this->_customerCollectionFactory = $customerCollectionFactory;
         $this->_subscriberFactory = $subscriberFactory;
         $this->_subscriberModel = $subscriberModel;
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
     /**
@@ -59,6 +48,12 @@ class CreateSubscriberManagement implements \Yotpo\Loyalty\Api\Swell\Index\Creat
      */
     public function postCreateSubscriber()
     {
+        if (!$this->isAuthorized()) {
+            return $this->_yotpoHelper->jsonEncode([
+                "error" => 1,
+                "message" => "Access Denied!"
+            ]);
+        }
         try {
             if (!($email = $this->_yotpoHelper->getRequest()->getParam('email'))) {
                 return $this->_yotpoHelper->jsonEncode([

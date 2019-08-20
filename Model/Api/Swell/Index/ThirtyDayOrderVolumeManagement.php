@@ -2,32 +2,27 @@
 
 namespace Yotpo\Loyalty\Model\Api\Swell\Index;
 
-class ThirtyDayOrderVolumeManagement implements \Yotpo\Loyalty\Api\Swell\Index\ThirtyDayOrderVolumeManagementInterface
+use Yotpo\Loyalty\Model\Api\Swell\AbstractSwell;
+
+class ThirtyDayOrderVolumeManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Index\ThirtyDayOrderVolumeManagementInterface
 {
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Data
-     */
-    protected $_yotpoHelper;
-
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_orderCollectionFactory;
 
     /**
-     * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
+     * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      */
     public function __construct(
-        \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
+        \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
     ) {
-        //$swellApiGuard will be initialized from it's __construct
-        $this->_yotpoHelper = $yotpoHelper;
         $this->_orderCollectionFactory = $orderCollectionFactory;
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
     /**
@@ -35,6 +30,12 @@ class ThirtyDayOrderVolumeManagement implements \Yotpo\Loyalty\Api\Swell\Index\T
      */
     public function getThirtyDayOrderVolume()
     {
+        if (!$this->isAuthorized()) {
+            return $this->_yotpoHelper->jsonEncode([
+                "error" => 1,
+                "message" => "Access Denied!"
+            ]);
+        }
         $collection = $this->_orderCollectionFactory->create()
             ->addAttributeToSelect('entity_id')
             ->addAttributeToFilter("store_id", ["in" => $this->_yotpoHelper->getStoreIdsBySwellApiKey()])
