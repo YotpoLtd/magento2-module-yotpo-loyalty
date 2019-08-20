@@ -2,14 +2,10 @@
 
 namespace Yotpo\Loyalty\Console\Command;
 
-use Composer\Console\ApplicationFactory;
-use Magento\Deploy\Model\Filesystem;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Registry;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInputFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -28,29 +24,6 @@ class UninstallCommand extends Command
         "ALTER TABLE `quote_item` DROP IF EXISTS `swell_points_used`",
     ];
 
-    protected $_origStoreId;
-
-    /**
-     * @var Magento\Deploy\Model\Filesystem
-     */
-    private $_filesystem;
-
-    /**
-     * @var ArrayInputFactory
-     * @deprecated
-     */
-    private $_arrayInputFactory;
-
-    /**
-     * @var ApplicationFactory
-     */
-    private $_applicationFactory;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $_registry;
-
     /**
      * @var ObjectManagerInterface
      */
@@ -68,23 +41,11 @@ class UninstallCommand extends Command
 
     /**
      * @method __construct
-     * @param Filesystem $filesystem
-     * @param ArrayInputFactory $arrayInputFactory
-     * @param ApplicationFactory $applicationFactory
-     * @param Registry $registry
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        Filesystem $filesystem,
-        ArrayInputFactory $arrayInputFactory,
-        ApplicationFactory $applicationFactory,
-        Registry $registry,
         ObjectManagerInterface $objectManager
     ) {
-        $this->_filesystem = $filesystem;
-        $this->_arrayInputFactory = $arrayInputFactory;
-        $this->_applicationFactory = $applicationFactory;
-        $this->_registry = $registry;
         $this->_objectManager = $objectManager;
         parent::__construct();
     }
@@ -110,8 +71,6 @@ class UninstallCommand extends Command
         if (!$this->confirmQuestion(self::CONFIRM_MESSAGE, $input, $output)) {
             return;
         }
-
-        $this->_registry->register('isYotpoResetCommand', true);
 
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
         $eavSetup = $this->_eavSetupFactory->create();
