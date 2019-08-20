@@ -2,19 +2,10 @@
 
 namespace Yotpo\Loyalty\Model\Api\Swell\Cart;
 
-class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterface
+use Yotpo\Loyalty\Model\Api\Swell\AbstractSwell;
+
+class AddManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterface
 {
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Data
-     */
-    protected $_yotpoHelper;
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Schema
-     */
-    protected $_yotpoSchemaHelper;
-
     /**
      * @var \Magento\Quote\Model\QuoteFactory
      */
@@ -36,7 +27,6 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
     protected $_customerFactory;
 
     /**
-     * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
@@ -45,7 +35,6 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      */
     public function __construct(
-        \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
@@ -53,13 +42,11 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Customer\Model\CustomerFactory $customerFactory
     ) {
-        //$swellApiGuard will be initialized from it's __construct
-        $this->_yotpoHelper = $yotpoHelper;
-        $this->_yotpoSchemaHelper = $yotpoSchemaHelper;
         $this->_quoteFactory = $quoteFactory;
         $this->_quoteRepository = $quoteRepository;
         $this->_productRepository = $productRepository;
         $this->_customerFactory = $customerFactory;
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
     /**
@@ -67,6 +54,12 @@ class AddManagement implements \Yotpo\Loyalty\Api\Swell\Cart\AddManagementInterf
      */
     public function getAdd()
     {
+        if (!$this->isAuthorized()) {
+            return $this->_yotpoHelper->jsonEncode([
+                "error" => 1,
+                "message" => "Access Denied!"
+            ]);
+        }
         try {
             //Extract Request Params:
             $quoteId = intval($this->_yotpoHelper->getRequest()->getParam('quote_id'));

@@ -350,13 +350,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->getStoreManager()->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . trim($mediaPath, "/") . "/" . ltrim($filePath, "/");
     }
 
-    public function getStoreIdsBySwellApiKey($swellApiKey = null, $withDefault = false, $returnFirstId = false)
+    public function getStoreIdsBySwellApiKey($swellApiKey = null, $withDefault = false, $returnFirstId = false, $skipDisabled = true)
     {
         $return = [];
         $swellApiKey = ($swellApiKey === null) ? $this->getRequest()->getParam("shared_secret") : (string)$swellApiKey;
         $stores = $this->getStoreManager()->getStores($withDefault);
         foreach ($stores as $key => $store) {
-            if ($swellApiKey === $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) {
+            if ($this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()) && $swellApiKey === $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) {
                 $return[] = $store->getId();
             }
         }

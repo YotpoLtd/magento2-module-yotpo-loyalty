@@ -2,18 +2,10 @@
 
 namespace Yotpo\Loyalty\Model\Api\Swell\Index;
 
-class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCouponManagementInterface
+use Yotpo\Loyalty\Model\Api\Swell\AbstractSwell;
+
+class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Index\CreateCouponManagementInterface
 {
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Data
-     */
-    protected $_yotpoHelper;
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Schema
-     */
-    protected $_yotpoSchemaHelper;
 
     /**
      * @var \Magento\SalesRule\Model\Rule
@@ -41,7 +33,6 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
     protected $_customerGroupCollection;
 
     /**
-     * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\SalesRule\Model\Rule $ruleModel
@@ -51,7 +42,6 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
      * @param \Magento\Customer\Model\ResourceModel\Group\Collection
      */
     public function __construct(
-        \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
         \Magento\SalesRule\Model\Rule $ruleModel,
@@ -60,14 +50,12 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         \Magento\Customer\Model\ResourceModel\Group\Collection $customerGroupCollection
     ) {
-        //$swellApiGuard will be initialized from it's __construct
-        $this->_yotpoHelper = $yotpoHelper;
-        $this->_yotpoSchemaHelper = $yotpoSchemaHelper;
         $this->_ruleModel = $ruleModel;
         $this->_ruleFactory = $ruleFactory;
         $this->_couponFactory = $couponFactory;
         $this->_quoteFactory = $quoteFactory;
         $this->_customerGroupCollection = $customerGroupCollection;
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
     /**
@@ -75,6 +63,12 @@ class CreateCouponManagement implements \Yotpo\Loyalty\Api\Swell\Index\CreateCou
      */
     public function postCreateCoupon()
     {
+        if (!$this->isAuthorized()) {
+            return $this->_yotpoHelper->jsonEncode([
+                "error" => 1,
+                "message" => "Access Denied!"
+            ]);
+        }
         try {
             //Extract Request Params:
             $discountType = $this->_yotpoHelper->getRequest()->getParam('discount_type');

@@ -2,7 +2,7 @@
 
 namespace Yotpo\Loyalty\Model\Api\Swell;
 
-class Guard
+class AbstractSwell
 {
 
     /**
@@ -10,31 +10,23 @@ class Guard
      */
     protected $_yotpoHelper;
 
+    /**
+     * @var \Yotpo\Loyalty\Helper\Schema
+     */
+    protected $_yotpoSchemaHelper;
+
     protected $_storesId;
 
     /**
-     * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
+     * @param \Yotpo\Loyalty\Helper\Data   $yotpoHelper
+     * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      */
     public function __construct(
-        \Yotpo\Loyalty\Helper\Data $yotpoHelper
+        \Yotpo\Loyalty\Helper\Data $yotpoHelper,
+        \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
     ) {
         $this->_yotpoHelper = $yotpoHelper;
-
-        if (!$this->_yotpoHelper->isEnabled()) {
-            header('HTTP/1.0 403 Forbidden');
-            return $this->_yotpoHelper->jsonEncode([
-                "error" => 1,
-                "message" => "Access Denied!"
-            ]);
-        }
-
-        if (!$this->isAuthorized()) {
-            header('HTTP/1.0 401 Unauthorized');
-            return $this->_yotpoHelper->jsonEncode([
-                "error" => 1,
-                "message" => "Access Denied!"
-            ]);
-        }
+        $this->_yotpoSchemaHelper = $yotpoSchemaHelper;
     }
 
     /**

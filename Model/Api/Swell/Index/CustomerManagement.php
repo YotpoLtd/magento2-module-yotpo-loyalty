@@ -2,40 +2,27 @@
 
 namespace Yotpo\Loyalty\Model\Api\Swell\Index;
 
-class CustomerManagement implements \Yotpo\Loyalty\Api\Swell\Index\CustomerManagementInterface
+use Yotpo\Loyalty\Model\Api\Swell\AbstractSwell;
+
+class CustomerManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Index\CustomerManagementInterface
 {
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Data
-     */
-    protected $_yotpoHelper;
-
-    /**
-     * @var \Yotpo\Loyalty\Helper\Schema
-     */
-    protected $_yotpoSchemaHelper;
-
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory
      */
     protected $_customerCollectionFactory;
 
     /**
-     * @param \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard
-     * @param \Yotpo\Loyalty\Helper\Data $yo4tpoHelper
+     * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory
      */
     public function __construct(
-        \Yotpo\Loyalty\Model\Api\Swell\Guard $swellApiGuard,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
         \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory
     ) {
-        //$swellApiGuard will be initialized from it's __construct
-        $this->_yotpoHelper = $yotpoHelper;
-        $this->_yotpoSchemaHelper = $yotpoSchemaHelper;
         $this->_customerCollectionFactory = $customerCollectionFactory;
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
     /**
@@ -43,6 +30,12 @@ class CustomerManagement implements \Yotpo\Loyalty\Api\Swell\Index\CustomerManag
      */
     public function getCustomer()
     {
+        if (!$this->isAuthorized()) {
+            return $this->_yotpoHelper->jsonEncode([
+                "error" => 1,
+                "message" => "Access Denied!"
+            ]);
+        }
         $collection = $this->_customerCollectionFactory->create()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter("store_id", ["in" => $this->_yotpoHelper->getStoreIdsBySwellApiKey()])
