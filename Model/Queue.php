@@ -12,7 +12,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements \Magento\F
 
     protected function _construct()
     {
-        $this->_init('Yotpo\Loyalty\Model\ResourceModel\Queue');
+        $this->_init(\Yotpo\Loyalty\Model\ResourceModel\Queue::class);
     }
 
     public function getIdentities()

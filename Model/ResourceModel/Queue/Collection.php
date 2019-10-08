@@ -15,6 +15,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Yotpo\Loyalty\Model\Queue', 'Yotpo\Loyalty\Model\ResourceModel\Queue');
+        $this->_init(
+            \Yotpo\Loyalty\Model\Queue::class, 
+            \Yotpo\Loyalty\Model\ResourceModel\Queue::class
+        );
     }
 }
