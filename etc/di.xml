@@ -17,6 +17,16 @@
 	<preference for="Yotpo\Loyalty\Api\Swell\Session\RemoveCodeManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\RemoveCodeManagement"/>
 	<preference for="Yotpo\Loyalty\Api\Swell\Session\SnippetManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\SnippetManagement"/>
 	<!--/ API model-interface-->
+    
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="yotpo_loyalty_sync" xsi:type="object">Yotpo\Loyalty\Console\Command\SyncCommand</item>
+                <item name="yotpo_loyalty_remove_ord_records" xsi:type="object">Yotpo\Loyalty\Console\Command\RemoveOldSyncRecordsCommand</item>
+                <item name="yotpo_loyalty_uninstall" xsi:type="object">Yotpo\Loyalty\Console\Command\UninstallCommand</item>
+            </argument>
+        </arguments>
+    </type>
 
 	<type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="yotpo_loyalty_plugin_quote_itemtoorderitem" type="Yotpo\Loyalty\Plugin\Quote\ItemToOrderItem"/>
