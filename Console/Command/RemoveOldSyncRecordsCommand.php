@@ -66,7 +66,7 @@ class RemoveOldSyncRecordsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->_jobs = $this->_objectManager->get('\Yotpo\Loyalty\Cron\Jobs');
+        $this->_jobs = $this->_objectManager->get(\Yotpo\Loyalty\Cron\Jobs::class);
 
         try {
             $output->writeln('<info>' . 'Working on it (Imagine a spinning gif loager) ...' . '</info>');
