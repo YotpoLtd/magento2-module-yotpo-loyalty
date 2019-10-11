@@ -46,7 +46,7 @@ class OrderCountManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\S
         }
 
         return $this->_yotpoHelper->jsonEncode([
-            "orders" => $collection->count()
+            "orders" => $collection->getSize()
         ]);
     }
 }
