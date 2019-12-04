@@ -164,13 +164,13 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                     if (count($appliesToAttributes) > 0) {
                         $conditions = $actions = [];
                         $conditions["1"] = $actions["1"] = [
-                            "type" => "Magento\SalesRule\Model\Rule\Condition\Combine",
+                            "type" => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                             "aggregator" => $appliesToAnyOrAllAttributes,
                             "value" => 1,
                             "new_child" => ""
                         ];
                         $conditions["1--1"] = [
-                            "type" => "Magento\SalesRule\Model\Rule\Condition\Product\Found",
+                            "type" => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                             "aggregator" => $appliesToAnyOrAllAttributes,
                             "value" => 1,
                             "new_child" => ""
@@ -178,13 +178,13 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                         foreach ($appliesToAttributes as $index => $appliesToAttribute) {
                             $appliesToValue = $appliesToValues[$index];
                             $conditions["1--1--" . ($index+1)] = [
-                                "type" => "Magento\SalesRule\Model\Rule\Condition\Product",
+                                "type" => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                                 "attribute" => $appliesToAttribute,
                                 "operator" => "==",
                                 "value" => $appliesToValue
                             ];
                             $actions["1--" . ($index+1)] = [
-                                "type" => "Magento\SalesRule\Model\Rule\Condition\Product",
+                                "type" => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                                 "attribute" => $appliesToAttribute,
                                 "operator" => "==",
                                 "value" => $appliesToValue
