@@ -106,9 +106,9 @@ class DirectLink extends Field
             ]
         );
         if (!($guid = $this->getSwellGuid()) || !($apiKey = $this->getSwellApiKey())) {
-            $button->setOnClick("window.open('https://app.swellrewards.com/login','_blank');");
+            $button->setOnClick("window.open('https://loyalty.yotpo.com/login','_blank');");
         } else {
-            $button->setOnClick("window.open('https://app.swellrewards.com/login/{$guid}/{$apiKey}','_blank');");
+            $button->setOnClick("window.open('https://loyalty.yotpo.com/login/{$guid}/{$apiKey}','_blank');");
         }
 
         return $button->toHtml();
