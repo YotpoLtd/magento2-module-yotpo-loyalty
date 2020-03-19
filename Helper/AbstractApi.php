@@ -4,7 +4,7 @@ namespace Yotpo\Loyalty\Helper;
 
 abstract class AbstractApi extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const SWELL_API_PRODUCTION_URL = "https://app.swellrewards.com/magento/";
+    const SWELL_API_PRODUCTION_URL = "https://loyalty.yotpo.com/magento/";
 
     /**
      * @var \Yotpo\Loyalty\Helper\Data
