@@ -103,5 +103,11 @@
 			<resource ref="anonymous"/>
 		</resources>
 	</route>
+    <route method="GET" url="/V1/swell/session/loggedincustomer">
+        <service class="Yotpo\Loyalty\Api\Swell\Session\CustomerLoggedInInterface" method="getCustomerLoggedIn"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 	<!--/ swell/session -->
 </routes>

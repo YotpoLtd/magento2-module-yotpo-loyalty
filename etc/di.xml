@@ -16,7 +16,8 @@
 	<preference for="Yotpo\Loyalty\Api\Swell\Session\GetCartManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\GetCartManagement"/>
 	<preference for="Yotpo\Loyalty\Api\Swell\Session\RemoveCodeManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\RemoveCodeManagement"/>
 	<preference for="Yotpo\Loyalty\Api\Swell\Session\SnippetManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\SnippetManagement"/>
-	<!--/ API model-interface-->
+    <preference for="Yotpo\Loyalty\Api\Swell\Session\CustomerLoggedInInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\CustomerLoggedIn"/>
+    <!--/ API model-interface-->
 
 	<type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="yotpo_loyalty_plugin_quote_itemtoorderitem" type="Yotpo\Loyalty\Plugin\Quote\ItemToOrderItem"/>
