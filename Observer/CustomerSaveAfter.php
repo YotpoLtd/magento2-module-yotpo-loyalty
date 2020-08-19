@@ -60,25 +60,35 @@ class CustomerSaveAfter implements ObserverInterface
             try {
                 $customer = $observer->getEvent()->getCustomer();
 
-                if (!$this->_registry->registry("swell/customer/after")) {
-                    $this->_registry->register('swell/customer/after', true);
-                    $customerCreated = $this->_registry->registry("swell/customer/created");
-                    $emailUpdated = $customer->getData("email") != $this->_registry->registry("swell/customer/original/email");
-                    $groupUpdated = $customer->getData("group_id") != $this->_registry->registry("swell/customer/original/group_id");
-                    $customerUpdated = $emailUpdated || $groupUpdated;
+                $newEmail = $customer->getData("email");
+                $newGroup = $customer->getData("group_id");
 
-                    if ($customerCreated || $customerUpdated) {
-                        $entityStatus = $customerCreated ? "created" : "updated";
-                        $preparedData = $this->_yotpoSchemaHelper->customerSchemaPrepare($customer, $entityStatus);
-                        $queueItem = $this->_yotpoQueueFactory->create()
-                            ->setEntityType("customer")
-                            ->setEntityId($customer->getId())
-                            ->setEntityStatus($entityStatus)
-                            ->setStoreId($this->_yotpoHelper->getCurrentStoreId())
-                            ->setCreatedAt($this->_yotpoHelper->getCurrentDate())
-                            ->setPreparedSchema($preparedData)
-                            ->save();
-                    }
+                $customerCreated = $this->_registry->registry("swell/customer/created");
+                $emailUpdated = $newEmail != $this->_registry->registry("swell/customer/original/email");
+                $groupUpdated = $newGroup != $this->_registry->registry("swell/customer/original/group_id");
+                $customerUpdated = $emailUpdated || $groupUpdated;
+
+                if ($customerCreated || $customerUpdated) {
+                    $entityStatus = $customerCreated ? "created" : "updated";
+                    $preparedData = $this->_yotpoSchemaHelper->customerSchemaPrepare($customer, $entityStatus);
+                    $queueItem = $this->_yotpoQueueFactory->create()
+                        ->setEntityType("customer")
+                        ->setEntityId($customer->getId())
+                        ->setEntityStatus($entityStatus)
+                        ->setStoreId($this->_yotpoHelper->getCurrentStoreId())
+                        ->setCreatedAt($this->_yotpoHelper->getCurrentDate())
+                        ->setPreparedSchema($preparedData)
+                        ->save();
+                }
+
+                if ($customerCreated) {
+                    $this->_registry->unregister('swell/order/created');
+                }
+                if ($customerUpdated) {
+                    $this->_registry->unregister('swell/customer/original/email');
+                    $this->_registry->unregister('swell/customer/original/group_id');
+                    $this->_registry->register('swell/customer/original/email', $newEmail);
+                    $this->_registry->register('swell/customer/original/group_id', $newGroup);
                 }
             } catch (\Exception $e) {
                 $this->_yotpoHelper->log("[Yotpo - CustomerSaveAfter - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
