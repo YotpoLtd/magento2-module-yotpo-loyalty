@@ -41,26 +41,60 @@ class UpgradeData implements UpgradeDataInterface
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
         $eavSetup = $this->_eavSetupFactory->create(['setup' => $setup]);
 
-        if (version_compare($context->getVersion(), '0.1.1') < 0) {
-            $attributes = [
-                'swell_user_agent' => [
+        $salesConnection = $setup->getConnection('sales');
+        $checkoutConnection = $setup->getConnection('checkout');
+
+        $salesOrderTableName = $salesConnection->getTableName('sales_order');
+        $salesOrderItemTableName = $salesConnection->getTableName('sales_order_item');
+        $quoteItemTableName = $salesConnection->getTableName('quote_item');
+
+        $attributes = [
+            'swell_redemption_id' => [
+                'type'         => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'length'       => '11',
+                'label'        => 'Yotpo - Swell Redemption ID',
+                'comment'      => 'Yotpo - Swell Redemption ID',
+                'nullable'     => true,
+            ],
+            'swell_points_used' => [
+                'type'         => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'length'       => '11',
+                'label'        => 'Yotpo - Swell Points Used',
+                'comment'      => 'Yotpo - Swell Points Used',
+                'nullable'     => true,
+            ],
+        ];
+
+        foreach ($attributes as $code => $options) {
+            //Order Item
+            if (!$salesConnection->tableColumnExists($salesOrderItemTableName, $code)) {
+                $salesConnection->addColumn($salesOrderItemTableName, $code, $options);
+            }
+            //Cart Item
+            if (!$checkoutConnection->tableColumnExists($quoteItemTableName, $code)) {
+                $checkoutConnection->addColumn($quoteItemTableName, $code, $options);
+            }
+        }
+
+        if (!$salesConnection->tableColumnExists($salesOrderTableName, 'swell_user_agent')) {
+            $salesConnection->addColumn(
+                $salesOrderTableName,
+                'swell_user_agent',
+                [
                     'type'         => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length'       => 2000,
                     'label'        => 'Swell User-Agent',
                     'comment'      => 'Swell User-Agent',
                     'nullable'     => true,
-                ],
-            ];
-
-            foreach ($attributes as $code => $options) {
-                //Order
-                $setup->getConnection()->addColumn($setup->getTable('sales_order'), $code, $options);
-            }
+                ]
+            );
         }
 
-        if (version_compare($context->getVersion(), '0.3.0') < 0) {
-            $attributes = [
-                'yotpo_force_cart_reload' => [
+        if (!$eavSetup->getAttributeId(\Magento\Customer\Model\Customer::ENTITY, 'yotpo_force_cart_reload')) {
+            $eavSetup->addAttribute(
+                \Magento\Customer\Model\Customer::ENTITY,
+                'yotpo_force_cart_reload',
+                [
                     'type'           => 'int',
                     'label'          => 'Yotpo - force customerData cart reload',
                     'comment'        => 'Yotpo - force customerData cart reload',
@@ -74,12 +108,8 @@ class UpgradeData implements UpgradeDataInterface
                     'filterable'     => true,
                     'required'       => false,
                     'source'         => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class,
-                ],
-            ];
-            foreach ($attributes as $code => $options) {
-                //Customer
-                $eavSetup->addAttribute(\Magento\Customer\Model\Customer::ENTITY, $code, $options);
-            }
+                ]
+            );
         }
 
         $setup->endSetup();
