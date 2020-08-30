@@ -60,43 +60,53 @@ class OrderSaveAfter implements ObserverInterface
             try {
                 $order = $observer->getEvent()->getOrder();
 
-                if (!$this->_registry->registry("swell/order/after")) {
-                    $this->_registry->register('swell/order/after', true);
+                $originalState = $this->_registry->registry('swell/order/original/state');
+                $originalStatus = $this->_registry->registry('swell/order/original/status');
+                $originalTotalRefunded = $this->_registry->registry('swell/order/original/base_total_refunded');
+                $orderCreated = $this->_registry->registry('swell/order/created');
 
-                    $originalState = $this->_registry->registry('swell/order/original/state');
-                    $originalStatus = $this->_registry->registry('swell/order/original/status');
-                    $originalTotalRefunded = $this->_registry->registry('swell/order/original/base_total_refunded');
-                    $orderCreated = $this->_registry->registry('swell/order/created');
+                $newState = $order->getData("state");
+                $newStatus = $order->getData("status");
+                $newTotalRefunded = $order->getData("base_total_refunded");
 
-                    $newState = $order->getData("state");
-                    $newStatus = $order->getData("status");
-                    $newTotalRefunded = $order->getData("base_total_refunded");
+                $stateUpdated = isset($originalState) && $originalState != $newState;
+                $statusUpdated = isset($originalStatus) && $originalStatus != $newStatus;
+                $refundUpdated = isset($originalTotalRefunded) && $originalTotalRefunded != $newTotalRefunded;
+                $refundCreated = !isset($originalTotalRefunded) && isset($newTotalRefunded);
+                $orderUpdated = $stateUpdated || $statusUpdated;
+                $orderRefunded = $refundCreated || $refundUpdated;
 
-                    $stateUpdated = isset($originalState) && $originalState != $newState;
-                    $statusUpdated = isset($originalStatus) && $originalStatus != $newStatus;
-                    $refundUpdated = isset($originalTotalRefunded) && $originalTotalRefunded != $newTotalRefunded;
-                    $refundCreated = !isset($originalTotalRefunded) && isset($newTotalRefunded);
-                    $orderUpdated = $stateUpdated || $statusUpdated;
-                    $orderRefunded = $refundCreated || $refundUpdated;
-
-                    if ($orderCreated || $orderUpdated || $orderRefunded) {
-                        if ($orderCreated) {
-                            $entityStatus = "created";
-                        } elseif ($orderRefunded) {
-                            $entityStatus = "refunded";
-                        } elseif ($orderUpdated) {
-                            $entityStatus = "updated";
-                        }
-                        $preparedData = $this->_yotpoSchemaHelper->orderSchemaPrepare($order, $entityStatus);
-                        $queueItem = $this->_yotpoQueueFactory->create()
-                            ->setEntityType("order")
-                            ->setEntityId($order->getId())
-                            ->setEntityStatus($entityStatus)
-                            ->setStoreId($this->_yotpoHelper->getCurrentStoreId())
-                            ->setCreatedAt($this->_yotpoHelper->getCurrentDate())
-                            ->setPreparedSchema($preparedData)
-                            ->save();
+                if ($orderCreated || $orderUpdated || $orderRefunded) {
+                    if ($orderCreated) {
+                        $entityStatus = "created";
+                    } elseif ($orderRefunded) {
+                        $entityStatus = "refunded";
+                    } elseif ($orderUpdated) {
+                        $entityStatus = "updated";
                     }
+                    $preparedData = $this->_yotpoSchemaHelper->orderSchemaPrepare($order, $entityStatus);
+                    $queueItem = $this->_yotpoQueueFactory->create()
+                        ->setEntityType("order")
+                        ->setEntityId($order->getId())
+                        ->setEntityStatus($entityStatus)
+                        ->setStoreId($this->_yotpoHelper->getCurrentStoreId())
+                        ->setCreatedAt($this->_yotpoHelper->getCurrentDate())
+                        ->setPreparedSchema($preparedData)
+                        ->save();
+                }
+
+                if ($orderCreated) {
+                    $this->_registry->unregister('swell/order/created');
+                }
+                if ($orderRefunded) {
+                    $this->_registry->unregister('swell/order/original/base_total_refunded');
+                    $this->_registry->register('swell/order/original/base_total_refunded', $newTotalRefunded);
+                }
+                if ($orderUpdated) {
+                    $this->_registry->unregister('swell/order/original/state');
+                    $this->_registry->unregister('swell/order/original/status');
+                    $this->_registry->register('swell/order/original/state', $newState);
+                    $this->_registry->register('swell/order/original/status', $newStatus);
                 }
             } catch (\Exception $e) {
                 $this->_yotpoHelper->log("[Yotpo - OrderSaveAfter - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
