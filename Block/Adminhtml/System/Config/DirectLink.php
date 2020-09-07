@@ -102,7 +102,7 @@ class DirectLink extends Field
         )->setData(
             [
                 'id' => 'swell_direct_login_link_button',
-                'label' => __('Log in to Swell')
+                'label' => __('Login to Yotpo Loyalty')
             ]
         );
         if (!($guid = $this->getSwellGuid()) || !($apiKey = $this->getSwellApiKey())) {
