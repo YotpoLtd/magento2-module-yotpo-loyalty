@@ -16,12 +16,18 @@ class UninstallCommand extends Command
     const RESET_CONFIG_CONFIRM_MESSAGE = "<question>Do you want to also remove all Yotpo configurations (reset to default)? (y/n)[n]</question>\n";
 
     const SQL_QUERIES = [
-        "DELETE FROM `setup_module` WHERE `setup_module`.`module` = 'Yotpo_Loyalty'",
-        "ALTER TABLE `sales_order_item` DROP IF EXISTS `swell_redemption_id`",
-        "ALTER TABLE `sales_order_item` DROP IF EXISTS `swell_points_used`",
-        "ALTER TABLE `sales_order_item` DROP IF EXISTS `swell_user_agent`",
-        "ALTER TABLE `quote_item` DROP IF EXISTS `swell_redemption_id`",
-        "ALTER TABLE `quote_item` DROP IF EXISTS `swell_points_used`",
+        "default" => [
+            "DELETE FROM `setup_module` WHERE `setup_module`.`module` = 'Yotpo_Loyalty'",
+        ],
+        "sales" => [
+            "ALTER TABLE `sales_order_item` DROP IF EXISTS `swell_redemption_id`",
+            "ALTER TABLE `sales_order_item` DROP IF EXISTS `swell_points_used`",
+            "ALTER TABLE `sales_order` DROP IF EXISTS `swell_user_agent`",
+        ],
+        "checkout" => [
+            "ALTER TABLE `quote_item` DROP IF EXISTS `swell_redemption_id`",
+            "ALTER TABLE `quote_item` DROP IF EXISTS `swell_points_used`",
+        ],
     ];
 
     /**
@@ -89,11 +95,14 @@ class UninstallCommand extends Command
 
             $output->writeln('<info>' . 'Removing quote/order item fields ...' . '</info>');
 
-            foreach (self::SQL_QUERIES as $query) {
-                try {
-                    $this->_resourceConnection->getConnection()->query($query);
-                } catch (\Exception $e) {
-                    $output->writeln('<error>' . $e->getMessage() . '</error>');
+            foreach (self::SQL_QUERIES as $dbType => $queries) {
+                $_connection = ($dbType === 'default') ? $this->_resourceConnection->getConnection() : $this->_resourceConnection->getConnection($dbType);
+                foreach ($queries as $query) {
+                    try {
+                        $_connection->query($query);
+                    } catch (\Exception $e) {
+                        $output->writeln('<error>' . $e->getMessage() . '</error>');
+                    }
                 }
             }
 

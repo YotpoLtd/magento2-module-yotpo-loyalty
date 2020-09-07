@@ -19,7 +19,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->startSetup();
 
-        if (version_compare($context->getVersion(), '0.2.0') < 0) {
+        if (!$setup->getConnection()->isTableExists($setup->getTable('yotpo_sync_queue'))) {
             /**
             * Create table 'yotpo_sync_queue'
             */
