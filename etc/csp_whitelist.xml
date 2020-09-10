@@ -4,11 +4,16 @@
         <policy id="script-src">
             <values>
                 <value id="yotpo_main" type="host">yotpo.com</value>
+<<<<<<< HEAD
                 <value id="p_loyalty" type="host">p.yotpo.com</value>
                 <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
                 <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
                 <value id="yotpo_cdn-widget-assets" type="host">cdn-widget-assets.yotpo.com</value>
                 <value id="yotpo_cdn-widgetsrepository" type="host">cdn-widgetsrepository.yotpo.com</value>
+=======
+                <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
+                <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
+>>>>>>> v1.1.8: Added CSP whitelist
                 <value id="swellrewards_main" type="host">swellrewards.com</value>
                 <value id="swellrewards_cdn" type="host">cdn.swellrewards.com</value>
             </values>
@@ -16,11 +21,16 @@
         <policy id="connect-src">
             <values>
                 <value id="yotpo_main" type="host">yotpo.com</value>
+<<<<<<< HEAD
                 <value id="p_loyalty" type="host">p.yotpo.com</value>
                 <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
                 <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
                 <value id="yotpo_cdn-widget-assets" type="host">cdn-widget-assets.yotpo.com</value>
                 <value id="yotpo_cdn-widgetsrepository" type="host">cdn-widgetsrepository.yotpo.com</value>
+=======
+                <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
+                <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
+>>>>>>> v1.1.8: Added CSP whitelist
                 <value id="swellrewards_main" type="host">swellrewards.com</value>
                 <value id="swellrewards_cdn" type="host">cdn.swellrewards.com</value>
             </values>
@@ -28,11 +38,16 @@
         <policy id="frame-src">
             <values>
                 <value id="yotpo_main" type="host">yotpo.com</value>
+<<<<<<< HEAD
                 <value id="p_loyalty" type="host">p.yotpo.com</value>
                 <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
                 <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
                 <value id="yotpo_cdn-widget-assets" type="host">cdn-widget-assets.yotpo.com</value>
                 <value id="yotpo_cdn-widgetsrepository" type="host">cdn-widgetsrepository.yotpo.com</value>
+=======
+                <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
+                <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
+>>>>>>> v1.1.8: Added CSP whitelist
                 <value id="swellrewards_main" type="host">swellrewards.com</value>
                 <value id="swellrewards_cdn" type="host">cdn.swellrewards.com</value>
             </values>
@@ -40,11 +55,16 @@
         <policy id="form-action">
             <values>
                 <value id="yotpo_main" type="host">yotpo.com</value>
+<<<<<<< HEAD
                 <value id="p_loyalty" type="host">p.yotpo.com</value>
                 <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
                 <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
                 <value id="yotpo_cdn-widget-assets" type="host">cdn-widget-assets.yotpo.com</value>
                 <value id="yotpo_cdn-widgetsrepository" type="host">cdn-widgetsrepository.yotpo.com</value>
+=======
+                <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
+                <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
+>>>>>>> v1.1.8: Added CSP whitelist
                 <value id="swellrewards_main" type="host">swellrewards.com</value>
                 <value id="swellrewards_cdn" type="host">cdn.swellrewards.com</value>
             </values>
@@ -52,11 +72,16 @@
         <policy id="img-src">
             <values>
                 <value id="yotpo_main" type="host">yotpo.com</value>
+<<<<<<< HEAD
                 <value id="p_loyalty" type="host">p.yotpo.com</value>
                 <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
                 <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
                 <value id="yotpo_cdn-widget-assets" type="host">cdn-widget-assets.yotpo.com</value>
                 <value id="yotpo_cdn-widgetsrepository" type="host">cdn-widgetsrepository.yotpo.com</value>
+=======
+                <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
+                <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
+>>>>>>> v1.1.8: Added CSP whitelist
                 <value id="swellrewards_main" type="host">swellrewards.com</value>
                 <value id="swellrewards_cdn" type="host">cdn.swellrewards.com</value>
             </values>
@@ -64,6 +89,7 @@
         <policy id="style-src">
             <values>
                 <value id="yotpo_main" type="host">yotpo.com</value>
+<<<<<<< HEAD
                 <value id="p_loyalty" type="host">p.yotpo.com</value>
                 <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
                 <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
@@ -80,6 +106,12 @@
                 <value id="use_fontawesome" type="host">use.fontawesome.com</value>
                 <value id="maxcdn_bootstrapcdn" type="host">maxcdn.bootstrapcdn.com</value>
                 <value id="fonts_gstatic" type="host">fonts.gstatic.com</value>
+=======
+                <value id="yotpo_loyalty" type="host">loyalty.yotpo.com</value>
+                <value id="yotpo_cdn-swell-assets" type="host">cdn-swell-assets.yotpo.com</value>
+                <value id="swellrewards_main" type="host">swellrewards.com</value>
+                <value id="swellrewards_cdn" type="host">cdn.swellrewards.com</value>
+>>>>>>> v1.1.8: Added CSP whitelist
             </values>
         </policy>
     </policies>

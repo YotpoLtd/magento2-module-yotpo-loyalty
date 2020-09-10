@@ -2,7 +2,11 @@
     "name": "yotpo/magento2-module-yotpo-loyalty",
     "description": "Magento 2 module for integration with Yotpo",
     "type": "magento2-module",
+<<<<<<< HEAD
     "version": "1.2.0",
+=======
+    "version": "1.1.8",
+>>>>>>> v1.1.8: Added CSP whitelist
     "repositories": [{
         "type": "git",
         "url": "https://github.com/YotpoLtd/magento2-module-yotpo-loyalty"
