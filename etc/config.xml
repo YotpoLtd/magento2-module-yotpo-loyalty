@@ -12,5 +12,15 @@
                 <keep_yotpo_sync_queue>1_month</keep_yotpo_sync_queue>
             </sync_settings>
         </yotpo_loyalty>
+        <csp>
+            <mode>
+                <storefront>
+                    <report_only>1</report_only>
+                </storefront>
+                <admin>
+                    <report_only>1</report_only>
+                </admin>
+            </mode>
+        </csp>
     </default>
 </config>
