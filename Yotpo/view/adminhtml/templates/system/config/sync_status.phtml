@@ -1,0 +1,11 @@
+<?php
+/**
+ * @var $block \Yotpo\Yotpo\Block\Adminhtml\System\Config\Form\Field\SyncStatus
+ */
+$status = $block->getStatus();
+?>
+<!-- Yotpo Sync Status -->
+<div><?= $block->escapeHtml(__('Sync progress: %1', $status['total_orders_synced'] . '/' . $status['total_orders'])) ?></div>
+<div><?= $block->escapeHtml(__('Last sync date: %1', $status['last_sync_date'])) ?></div>
+<div><?= $block->escapeHtml(__('Total orders synced with Yotpo: %1', $status['total_orders_synced_all'])) ?></div>
+<!--/ Yotpo Sync Status -->
