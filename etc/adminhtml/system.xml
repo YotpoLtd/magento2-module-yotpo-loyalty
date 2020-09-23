@@ -46,6 +46,13 @@
 				   <comment>For how long should we keep old sent/failed items on the database (`yotpo_sync_queue`)?</comment>
 				</field>
 			</group>
+			<group id="sync_advanced" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="10" translate="label" canRestore="1">
+				<label>Advanced</label>
+				<field id="swell_instance_id" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1" placeholder="Swell instance ID">
+					<label>Checkout Variable Instance Id</label>
+					<comment>Your Swell Instance ID</comment>
+				</field>
+			</group>
 		</section>
 	</system>
 </config>
