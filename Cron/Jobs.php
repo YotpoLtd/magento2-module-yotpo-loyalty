@@ -16,11 +16,6 @@ class Jobs
     protected $_output;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $_logger;
-
-    /**
      * @var \Magento\Framework\App\State
      */
     protected $_appState;
@@ -62,7 +57,6 @@ class Jobs
     protected $_swellSyncMaxTryouts = 5;
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Registry $registry
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
@@ -71,7 +65,6 @@ class Jobs
      * @param \Magento\Framework\Notification\NotifierInterface $notifierPool
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Registry $registry,
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -79,7 +72,6 @@ class Jobs
         \Yotpo\Loyalty\Helper\ApiRequest $apiRequestHelper,
         \Magento\Framework\Notification\NotifierInterface $notifierPool
     ) {
-        $this->_logger = $logger;
         $this->_appState = $appState;
         $this->_registry = $registry;
         $this->_yotpoHelper = $yotpoHelper;
