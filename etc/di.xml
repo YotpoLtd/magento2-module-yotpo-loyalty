@@ -7,6 +7,7 @@
 	<preference for="Yotpo\Loyalty\Api\Swell\Index\CustomerManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\CustomerManagement"/>
 	<preference for="Yotpo\Loyalty\Api\Swell\Index\CustomersManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\CustomersManagement"/>
 	<preference for="Yotpo\Loyalty\Api\Swell\Index\DeleteCouponManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\DeleteCouponManagement"/>
+	<preference for="Yotpo\Loyalty\Api\Swell\Index\DeleteRuleManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\DeleteRuleManagement"/>
 	<preference for="Yotpo\Loyalty\Api\Swell\Index\OrderCountManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\OrderCountManagement"/>
 	<preference for="Yotpo\Loyalty\Api\Swell\Index\OrderManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\OrderManagement"/>
 	<preference for="Yotpo\Loyalty\Api\Swell\Index\OrdersManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Index\OrdersManagement"/>

@@ -40,6 +40,12 @@
 			<resource ref="anonymous"/>
 		</resources>
 	</route>
+	<route method="POST" url="/V1/swell/index/delete_rule">
+		<service class="Yotpo\Loyalty\Api\Swell\Index\DeleteRuleManagementInterface" method="postDeleteRule"/>
+		<resources>
+			<resource ref="anonymous"/>
+		</resources>
+	</route>
 	<route method="GET" url="/V1/swell/index/order_count">
 		<service class="Yotpo\Loyalty\Api\Swell\Index\OrderCountManagementInterface" method="getOrderCount"/>
 		<resources>
