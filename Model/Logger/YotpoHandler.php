@@ -15,5 +15,5 @@ class YotpoHandler extends \Magento\Framework\Logger\Handler\Base
      * File name
      * @var string
      */
-    protected $fileName = '/var/log/yotpo_yotpo.log';
+    protected $fileName = '/var/log/yotpo_loyalty.log';
 }
