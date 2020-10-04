@@ -164,7 +164,7 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
                             data-id="' . $identificationData->getId() . '"
                         ';
                         if (($groupCode = $identificationData->getGroupCode())) {
-                            $response["snippet"] .= 'data-tags="[' . $groupCode . ']"';
+                            $response["snippet"] .= 'data-tags="[&#34;' . $groupCode . '&#34;]"';
                         }
                     }
                     $response["snippet"] .= '
