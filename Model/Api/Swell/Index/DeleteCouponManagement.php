@@ -79,12 +79,13 @@ class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
 
             foreach ($couponIds as $couponId) {
                 try {
-                    $ruleId = $coupon->getRuleId();
                     $coupon = $this->_couponFactory->create()->load($couponId);
+                    $ruleId = $coupon->getRuleId();
                     if ($coupon->getId() && $coupon->getRuleId()) {
                         $coupon->delete();
                         $response["data"][$couponId] = [
-                            "success" => true
+                            "success" => true,
+                            "rule_id" => $ruleId,
                         ];
                     } else {
                         $response["data"][$couponId] = [
@@ -94,7 +95,7 @@ class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                     }
                     $response["data"][$couponId]["rule_deleted"] = false;
                     if ($ruleId && $deleteRule) {
-                        $rule = $this->_couponFactory->create()->load($ruleId);
+                        $rule = $this->_ruleFactory->create()->load($ruleId);
                         if ($rule->getId() && $rule->getRuleId()) {
                             $rule->delete();
                             $response["data"][$couponId]["rule_deleted"] = true;

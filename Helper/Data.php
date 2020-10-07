@@ -16,6 +16,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_SWELL_SYNC_LIMIT = "yotpo_loyalty/sync_settings/swell_sync_limit";
     const XML_PATH_SWELL_SYNC_MAX_TRYOUTS = "yotpo_loyalty/sync_settings/swell_sync_max_tryouts";
     const XML_PATH_KEEP_YOTPO_SYNC_QUEUE = "yotpo_loyalty/sync_settings/keep_yotpo_sync_queue";
+    //= Advanced
+    const XML_PATH_SWELL_INSTANCE_ID = "yotpo_loyalty/advanced/swell_instance_id";
+    const XML_PATH_DELETE_USED_COUPONS = "yotpo_loyalty/advanced/delete_used_coupons";
     //= Others
     const XML_PATH_CURRENCY_OPTIONS_DEFAULT = "currency/options/default";
     const XML_PATH_SECURE_BASE_URL = "web/secure/base_url";
@@ -227,6 +230,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getKeepYotpoSyncQueue($scope = null, $scopeId = null, $skipCahce = false)
     {
         return (string) $this->getConfig(self::XML_PATH_KEEP_YOTPO_SYNC_QUEUE, $scope, $scopeId, $skipCahce);
+    }
+
+    public function getSwellInstanceId($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        return (string) $this->getConfig(self::XML_PATH_SWELL_INSTANCE_ID, $scope, $scopeId, $skipCahce);
+    }
+
+    public function getDeleteUsedCoupons($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        return (int) $this->getConfig(self::XML_PATH_DELETE_USED_COUPONS, $scope, $scopeId, $skipCahce);
     }
 
     public function getDefaultCurrency($scope = null, $scopeId = null, $skipCahce = false)
