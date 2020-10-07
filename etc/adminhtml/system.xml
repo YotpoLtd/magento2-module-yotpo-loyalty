@@ -4,11 +4,11 @@
 		<tab id="yotpo" translate="label" sortOrder="400">
             <label><![CDATA[<span class='yotpo-icon'></span>Yotpo]]></label>
 		</tab>
-		<section id="yotpo_loyalty" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label" canRestore="1">
+		<section id="yotpo_loyalty" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20" translate="label">
 			<label>Loyalty &amp; Referrals</label>
 			<tab>yotpo</tab>
 			<resource>Yotpo_Loyalty::config</resource>
-			<group id="general_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" canRestore="1">
+			<group id="general_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
 				<field id="swell_direct_login_link" translate="label" type="button" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <frontend_model>Yotpo\Loyalty\Block\Adminhtml\System\Config\DirectLink</frontend_model>
                 </field>
@@ -30,7 +30,7 @@
 					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
 			</group>
-			<group id="sync_settings" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="10" translate="label" canRestore="1">
+			<group id="sync_settings" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="10" translate="label">
 				<label>Sync Settings (Advanced)</label>
 				<field id="swell_sync_limit" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Sync Limit</label>
@@ -46,11 +46,16 @@
 				   <comment>For how long should we keep old sent/failed items on the database (`yotpo_sync_queue`)?</comment>
 				</field>
 			</group>
-			<group id="sync_advanced" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="10" translate="label" canRestore="1">
+			<group id="advanced" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="20" translate="label">
 				<label>Advanced</label>
-				<field id="swell_instance_id" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1" placeholder="Swell instance ID">
+				<field id="swell_instance_id" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
 					<label>Checkout Variable Instance Id</label>
 					<comment>Your Swell Instance ID</comment>
+				</field>
+				<field id="delete_used_coupons" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+					<label>Delete used coupons</label>
+					<comment>Your Swell Instance ID</comment>
+					<source_model>Yotpo\Loyalty\Model\Adminhtml\Source\DeleteUsedCoupons</source_model>
 				</field>
 			</group>
 		</section>

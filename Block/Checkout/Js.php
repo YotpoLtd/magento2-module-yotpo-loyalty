@@ -9,23 +9,21 @@ class Js extends \Magento\Framework\View\Element\Template
 {
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \Yotpo\Loyalty\Helper\Data
      */
-    protected $_scopeConfig;
+    protected $_yotpoHelper;
 
     /**
-     * Js constructor.
+     * @method __construct
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param array $data
+     * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        array $data = [])
-    {
-        parent::__construct($context, $data);
-        $this->_scopeConfig = $scopeConfig;
+        \Yotpo\Loyalty\Helper\Data $yotpoHelper
+    ) {
+        parent::__construct($context);
+        $this->_yotpoHelper = $yotpoHelper;
     }
 
     /**
@@ -33,7 +31,7 @@ class Js extends \Magento\Framework\View\Element\Template
      */
     public function getGuid()
     {
-        return $this->_scopeConfig->getValue("yotpo_loyalty/general_settings/swell_guid");
+        return $this->_yotpoHelper->getSwellGuid();
     }
 
     /**
@@ -41,6 +39,6 @@ class Js extends \Magento\Framework\View\Element\Template
      */
     public function getInstanceId()
     {
-        return $this->_scopeConfig->getValue("yotpo_loyalty/sync_advanced/swell_instance_id");
+        return $this->_yotpoHelper->getSwellInstanceId();
     }
 }

@@ -15,7 +15,8 @@ class ApiRequest extends AbstractApi
                 "version" => $this->_yotpoHelper->getMagentoVersion(),
                 "currency" => $this->_yotpoHelper->getDefaultCurrency($scope, $scopeId),
                 "id" => $this->_yotpoHelper->getDomain($scope, $scopeId),
-                "website" => $this->_yotpoHelper->getBaseUrl($scope, $scopeId)
+                "website" => $this->_yotpoHelper->getBaseUrl($scope, $scopeId),
+                "delete_used_coupons" => $this->_yotpoHelper->getDeleteUsedCoupons($scope, $scopeId),
             ]
         );
 
