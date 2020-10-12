@@ -34,15 +34,15 @@ class CustomerSaveBefore implements ObserverInterface
     {
         if ($this->_yotpoHelper->isEnabled()) {
             try {
-                $customer = $observer->getEvent()->getCustomer();
-
                 if (!$this->_registry->registry("swell/customer/before")) {
                     $this->_registry->register('swell/customer/before', true);
+                    $customer = $observer->getEvent()->getCustomer();
                     if ($customer->isObjectNew()) {
                         $this->_registry->register('swell/customer/created', true);
                     } else {
-                        $this->_registry->register('swell/customer/original/email', $customer->getOrigData("email"));
-                        $this->_registry->register('swell/customer/original/group_id', $customer->getOrigData("group_id"));
+                        $customerId = $order->getId();
+                        $this->_registry->register('swell/customer/original/email/id' . $customerId, $customer->getOrigData("email"));
+                        $this->_registry->register('swell/customer/original/group_id/id' . $customerId, $customer->getOrigData("group_id"));
                     }
                 }
             } catch (\Exception $e) {

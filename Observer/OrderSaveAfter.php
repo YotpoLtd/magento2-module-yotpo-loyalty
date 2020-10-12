@@ -51,10 +51,11 @@ class OrderSaveAfter implements ObserverInterface
         if ($this->_yotpoHelper->isEnabled()) {
             try {
                 $order = $observer->getEvent()->getOrder();
+                $orderId = $order->getId();
 
-                $originalState = $this->_registry->registry('swell/order/original/state');
-                $originalStatus = $this->_registry->registry('swell/order/original/status');
-                $originalTotalRefunded = $this->_registry->registry('swell/order/original/base_total_refunded');
+                $originalState = $this->_registry->registry('swell/order/original/state/id' . $orderId);
+                $originalStatus = $this->_registry->registry('swell/order/original/status/id' . $orderId);
+                $originalTotalRefunded = $this->_registry->registry('swell/order/original/base_total_refunded/id' . $orderId);
                 $orderCreated = $this->_registry->registry('swell/order/created');
 
                 $newState = $order->getData("state");
@@ -87,18 +88,21 @@ class OrderSaveAfter implements ObserverInterface
                         ->save();
                 }
 
+                if ($this->_registry->registry('swell/order/before')) {
+                    $this->_registry->unregister('swell/order/before');
+                }
                 if ($orderCreated) {
                     $this->_registry->unregister('swell/order/created');
                 }
                 if ($orderRefunded) {
-                    $this->_registry->unregister('swell/order/original/base_total_refunded');
-                    $this->_registry->register('swell/order/original/base_total_refunded', $newTotalRefunded);
+                    $this->_registry->unregister('swell/order/original/base_total_refunded/id' . $orderId);
+                    $this->_registry->register('swell/order/original/base_total_refunded/id' . $orderId, $newTotalRefunded);
                 }
                 if ($orderUpdated) {
-                    $this->_registry->unregister('swell/order/original/state');
-                    $this->_registry->unregister('swell/order/original/status');
-                    $this->_registry->register('swell/order/original/state', $newState);
-                    $this->_registry->register('swell/order/original/status', $newStatus);
+                    $this->_registry->unregister('swell/order/original/state/id' . $orderId);
+                    $this->_registry->unregister('swell/order/original/status/id' . $orderId);
+                    $this->_registry->register('swell/order/original/state/id' . $orderId, $newState);
+                    $this->_registry->register('swell/order/original/status/id' . $orderId, $newStatus);
                 }
             } catch (\Exception $e) {
                 $this->_yotpoHelper->log("[Yotpo - OrderSaveAfter - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
