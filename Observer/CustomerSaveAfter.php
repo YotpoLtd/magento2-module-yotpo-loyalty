@@ -52,12 +52,13 @@ class CustomerSaveAfter implements ObserverInterface
             try {
                 $customer = $observer->getEvent()->getCustomer();
 
+                $customerId = $customer->getId();
                 $newEmail = $customer->getData("email");
                 $newGroup = $customer->getData("group_id");
 
-                $customerCreated = $this->_registry->registry("swell/customer/created");
-                $emailUpdated = $newEmail != $this->_registry->registry("swell/customer/original/email");
-                $groupUpdated = $newGroup != $this->_registry->registry("swell/customer/original/group_id");
+                $customerCreated = $this->_registry->registry('swell/customer/created');
+                $emailUpdated = $newEmail != $this->_registry->registry('swell/customer/original/email/id' . $customerId);
+                $groupUpdated = $newGroup != $this->_registry->registry('swell/customer/original/group_id/id' . $customerId);
                 $customerUpdated = $emailUpdated || $groupUpdated;
 
                 if ($customerCreated || $customerUpdated) {
@@ -73,8 +74,11 @@ class CustomerSaveAfter implements ObserverInterface
                         ->save();
                 }
 
+                if ($this->_registry->registry('swell/customer/before')) {
+                    $this->_registry->unregister('swell/customer/before');
+                }
                 if ($customerCreated) {
-                    $this->_registry->unregister('swell/order/created');
+                    $this->_registry->unregister('swell/customer/created');
                 }
                 if ($customerUpdated) {
                     $this->_registry->unregister('swell/customer/original/email');
