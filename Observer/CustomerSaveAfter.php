@@ -23,11 +23,6 @@ class CustomerSaveAfter implements ObserverInterface
     protected $_yotpoQueueFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $_logger;
-
-    /**
      * @var \Magento\Framework\Registry
      */
     protected $_registry;
@@ -37,20 +32,17 @@ class CustomerSaveAfter implements ObserverInterface
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Yotpo\Loyalty\Model\QueueFactory $yotpoQueueFactory
-     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
         \Yotpo\Loyalty\Model\QueueFactory $yotpoQueueFactory,
-        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Registry $registry
     ) {
         $this->_yotpoHelper = $yotpoHelper;
         $this->_yotpoSchemaHelper = $yotpoSchemaHelper;
         $this->_yotpoQueueFactory = $yotpoQueueFactory;
-        $this->_logger = $logger;
         $this->_registry = $registry;
     }
 
@@ -60,12 +52,13 @@ class CustomerSaveAfter implements ObserverInterface
             try {
                 $customer = $observer->getEvent()->getCustomer();
 
+                $customerId = $customer->getId();
                 $newEmail = $customer->getData("email");
                 $newGroup = $customer->getData("group_id");
 
-                $customerCreated = $this->_registry->registry("swell/customer/created");
-                $emailUpdated = $newEmail != $this->_registry->registry("swell/customer/original/email");
-                $groupUpdated = $newGroup != $this->_registry->registry("swell/customer/original/group_id");
+                $customerCreated = $this->_registry->registry('swell/customer/created');
+                $emailUpdated = $newEmail != $this->_registry->registry('swell/customer/original/email/id' . $customerId);
+                $groupUpdated = $newGroup != $this->_registry->registry('swell/customer/original/group_id/id' . $customerId);
                 $customerUpdated = $emailUpdated || $groupUpdated;
 
                 if ($customerCreated || $customerUpdated) {
@@ -81,8 +74,11 @@ class CustomerSaveAfter implements ObserverInterface
                         ->save();
                 }
 
+                if ($this->_registry->registry('swell/customer/before')) {
+                    $this->_registry->unregister('swell/customer/before');
+                }
                 if ($customerCreated) {
-                    $this->_registry->unregister('swell/order/created');
+                    $this->_registry->unregister('swell/customer/created');
                 }
                 if ($customerUpdated) {
                     $this->_registry->unregister('swell/customer/original/email');
