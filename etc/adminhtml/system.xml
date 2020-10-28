@@ -50,11 +50,10 @@
 				<label>Advanced</label>
 				<field id="swell_instance_id" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
 					<label>Checkout Variable Instance Id</label>
-					<comment>Your Swell Instance ID</comment>
+					<comment>Your checkout module instance id</comment>
 				</field>
 				<field id="delete_used_coupons" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
-					<label>Delete used coupons</label>
-					<comment>Your Swell Instance ID</comment>
+					<label>Delete used coupons and price rules</label>
 					<source_model>Yotpo\Loyalty\Model\Adminhtml\Source\DeleteUsedCoupons</source_model>
 				</field>
 			</group>
