@@ -13,11 +13,6 @@ class CustomerSaveBefore implements ObserverInterface
     protected $_yotpoHelper;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $_logger;
-
-    /**
      * @var \Magento\Framework\Registry
      */
     protected $_registry;
@@ -25,16 +20,13 @@ class CustomerSaveBefore implements ObserverInterface
     /**
      * @method __construct
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
-     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
-        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Registry $registry
     ) {
         $this->_yotpoHelper = $yotpoHelper;
-        $this->_logger = $logger;
         $this->_registry = $registry;
     }
 
@@ -42,15 +34,15 @@ class CustomerSaveBefore implements ObserverInterface
     {
         if ($this->_yotpoHelper->isEnabled()) {
             try {
-                $customer = $observer->getEvent()->getCustomer();
-
                 if (!$this->_registry->registry("swell/customer/before")) {
                     $this->_registry->register('swell/customer/before', true);
+                    $customer = $observer->getEvent()->getCustomer();
                     if ($customer->isObjectNew()) {
                         $this->_registry->register('swell/customer/created', true);
                     } else {
-                        $this->_registry->register('swell/customer/original/email', $customer->getOrigData("email"));
-                        $this->_registry->register('swell/customer/original/group_id', $customer->getOrigData("group_id"));
+                        $customerId = $order->getId();
+                        $this->_registry->register('swell/customer/original/email/id' . $customerId, $customer->getOrigData("email"));
+                        $this->_registry->register('swell/customer/original/group_id/id' . $customerId, $customer->getOrigData("group_id"));
                     }
                 }
             } catch (\Exception $e) {
