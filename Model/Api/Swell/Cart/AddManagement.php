@@ -27,12 +27,18 @@ class AddManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Ca
     protected $_customerFactory;
 
     /**
+     * @var Magento\Quote\Model\Quote\ItemFactory
+     */
+    protected $_itemFactory;
+
+    /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Quote\Model\Quote\ItemFactory $itemFactory
      */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
@@ -40,12 +46,14 @@ class AddManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Ca
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Customer\Model\CustomerFactory $customerFactory
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Quote\Model\Quote\ItemFactory $itemFactory
     ) {
         $this->_quoteFactory = $quoteFactory;
         $this->_quoteRepository = $quoteRepository;
         $this->_productRepository = $productRepository;
         $this->_customerFactory = $customerFactory;
+        $this->_itemFactory = $itemFactory;
         parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
@@ -94,22 +102,16 @@ class AddManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Ca
                 ]);
             }
 
-            $request = new \Magento\Framework\DataObject([
-                'product' => $product->getId(),
-                'qty' => $qty,
-                'custom_price' => $price,
-                'original_custom_price' => $price,
-                'swell_redemption_id' => $redemptionId,
-                'swell_points_used' => $pointsUsed
-            ]);
-            $quoteItem = $quote->addProduct($product, $request);
+            $quoteItem = $this->_itemFactory->create();
             $quoteItem
                 ->setCustomPrice($price)
                 ->setOriginalCustomPrice($price)
                 ->setSwellRedemptionId($redemptionId)
                 ->setSwellPointsUsed($pointsUsed)
-                ->save();
+                ->setQty(1)
+                ->setProduct($product);
 
+            $quote->addItem($quoteItem);
             $quote->save();
             $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
 
