@@ -18,7 +18,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * @var EavSetupFactory
      */
-    private $_eavSetupFactory;
+    private $eavSetupFactory;
 
     /**
      * Init
@@ -28,7 +28,7 @@ class UpgradeData implements UpgradeDataInterface
     public function __construct(
         EavSetupFactory $eavSetupFactory
     ) {
-        $this->_eavSetupFactory = $eavSetupFactory;
+        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
@@ -39,7 +39,7 @@ class UpgradeData implements UpgradeDataInterface
         $setup->startSetup();
 
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-        $eavSetup = $this->_eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 
         $salesConnection = $setup->getConnection('sales');
         $checkoutConnection = $setup->getConnection('checkout');
@@ -63,6 +63,15 @@ class UpgradeData implements UpgradeDataInterface
                 'comment'      => 'Yotpo - Swell Points Used',
                 'nullable'     => true,
             ],
+            'swell_added_item' => [
+                'type'         => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'length'       => '1',
+                'label'        => 'Yotpo - Swell Points Used',
+                'comment'      => 'Yotpo - Swell Points Used',
+                'nullable'     => true,
+                'unsigned'     => true,
+                'default'      => '0',
+            ],
         ];
 
         foreach ($attributes as $code => $options) {
@@ -70,7 +79,7 @@ class UpgradeData implements UpgradeDataInterface
             if (!$salesConnection->tableColumnExists($salesOrderItemTableName, $code)) {
                 $salesConnection->addColumn($salesOrderItemTableName, $code, $options);
             }
-            //Cart Item
+            //Quote Item
             if (!$checkoutConnection->tableColumnExists($quoteItemTableName, $code)) {
                 $checkoutConnection->addColumn($quoteItemTableName, $code, $options);
             }

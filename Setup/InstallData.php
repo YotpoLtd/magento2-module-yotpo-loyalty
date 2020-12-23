@@ -58,6 +58,15 @@ class InstallData implements InstallDataInterface
                 'comment'      => 'Yotpo - Swell Points Used',
                 'nullable'     => true,
             ],
+            'swell_added_item' => [
+                'type'         => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'length'       => '1',
+                'label'        => 'Yotpo - Swell Points Used',
+                'comment'      => 'Yotpo - Swell Points Used',
+                'nullable'     => true,
+                'unsigned'     => true,
+                'default'      => '0',
+            ],
         ];
 
         foreach ($attributes as $code => $options) {
