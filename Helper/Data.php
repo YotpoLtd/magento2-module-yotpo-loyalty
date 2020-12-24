@@ -16,6 +16,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_SWELL_SYNC_LIMIT = "yotpo_loyalty/sync_settings/swell_sync_limit";
     const XML_PATH_SWELL_SYNC_MAX_TRYOUTS = "yotpo_loyalty/sync_settings/swell_sync_max_tryouts";
     const XML_PATH_KEEP_YOTPO_SYNC_QUEUE = "yotpo_loyalty/sync_settings/keep_yotpo_sync_queue";
+    //= Advanced
+    const XML_PATH_SWELL_INSTANCE_ID = "yotpo_loyalty/advanced/swell_instance_id";
+    const XML_PATH_DELETE_USED_COUPONS = "yotpo_loyalty/advanced/delete_used_coupons";
     //= Others
     const XML_PATH_CURRENCY_OPTIONS_DEFAULT = "currency/options/default";
     const XML_PATH_SECURE_BASE_URL = "web/secure/base_url";
@@ -75,6 +78,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_jsonHelper;
 
     /**
+     * @var \Yotpo\Loyalty\Model\Logger
+     */
+    protected $_yotpoLogger;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -85,6 +93,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\ProductMetadataInterface $magentoFrameworkProductMetadata
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $datetimeFactory
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Yotpo\Loyalty\Model\Logger $yotpoLogger
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -96,7 +105,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\App\ProductMetadataInterface $magentoFrameworkProductMetadata,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $datetimeFactory,
-        \Magento\Framework\Json\Helper\Data $jsonHelper
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        \Yotpo\Loyalty\Model\Logger $yotpoLogger
     ) {
         parent::__construct($context);
         $this->_objectManager = $objectManager;
@@ -109,6 +119,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_magentoFrameworkProductMetadata = $magentoFrameworkProductMetadata;
         $this->_datetimeFactory = $datetimeFactory;
         $this->_jsonHelper = $jsonHelper;
+        $this->_yotpoLogger = $yotpoLogger;
     }
 
     ///////////////////////////
@@ -219,6 +230,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getKeepYotpoSyncQueue($scope = null, $scopeId = null, $skipCahce = false)
     {
         return (string) $this->getConfig(self::XML_PATH_KEEP_YOTPO_SYNC_QUEUE, $scope, $scopeId, $skipCahce);
+    }
+
+    public function getSwellInstanceId($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        return (string) $this->getConfig(self::XML_PATH_SWELL_INSTANCE_ID, $scope, $scopeId, $skipCahce);
+    }
+
+    public function getDeleteUsedCoupons($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        return (int) $this->getConfig(self::XML_PATH_DELETE_USED_COUPONS, $scope, $scopeId, $skipCahce);
     }
 
     public function getDefaultCurrency($scope = null, $scopeId = null, $skipCahce = false)
@@ -402,17 +423,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_jsonHelper->jsonDecode($data);
     }
 
-    public function log($message, $type = "info", $data = [], $prefix = '[Yotpo_Loyalty Log] ')
+    public function log($message, $type = "debug", $data = [], $prefix = '[Yotpo_Loyalty Log] ')
     {
-        if ($this->isDebugMode()) { //Log to system.log
+        if ($type !== 'debug' || $this->isDebugMode()) {
             switch ($type) {
                 case 'error':
                     $this->_logger->error($prefix . json_encode($message), $data);
                     break;
-                default:
+                case 'info':
                     $this->_logger->info($prefix . json_encode($message), $data);
                     break;
+                case 'debug':
+                default:
+                    $this->_logger->debug($prefix . json_encode($message), $data);
+                    break;
             }
+            $this->_yotpoLogger->info($prefix . json_encode($message), $data);
         }
         return $this;
     }

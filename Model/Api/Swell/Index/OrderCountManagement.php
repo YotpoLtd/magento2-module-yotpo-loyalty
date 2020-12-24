@@ -12,16 +12,24 @@ class OrderCountManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\S
     protected $_orderCollectionFactory;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
+     */
+    protected $_dateTimeFactory;
+
+    /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
+     * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateTimeFactory
      */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
-        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
+        \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateTimeFactory
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
+        $this->_dateTimeFactory = $dateTimeFactory;
         parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
@@ -45,8 +53,17 @@ class OrderCountManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\S
             $collection->addAttributeToFilter('state', ["in" => $orderStates]);
         }
 
+        $createdAtFrom = strtotime($this->_yotpoHelper->getRequest()->getParam('created_at_from'));
+        if (!empty($createdAtFrom)) {
+            $collection->addAttributeToFilter('created_at', ["gteq" => $this->_dateTimeFactory->create()->gmtDate('Y-m-d H:i:s', $createdAtFrom)]);
+        }
+        $createdAtTo = strtotime($this->_yotpoHelper->getRequest()->getParam('created_at_to'));
+        if (!empty($createdAtTo)) {
+            $collection->addAttributeToFilter('created_at', ["lteq" => $this->_dateTimeFactory->create()->gmtDate('Y-m-d H:i:s', $createdAtTo)]);
+        }
+
         return $this->_yotpoHelper->jsonEncode([
-            "orders" => $collection->count()
+            "orders" => $collection->getSize()
         ]);
     }
 }

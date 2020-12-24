@@ -98,17 +98,17 @@ class DirectLink extends Field
     public function getButtonHtml()
     {
         $button = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
                 'id' => 'swell_direct_login_link_button',
-                'label' => __('Log in to Swell')
+                'label' => __('Login to Yotpo Loyalty')
             ]
         );
         if (!($guid = $this->getSwellGuid()) || !($apiKey = $this->getSwellApiKey())) {
-            $button->setOnClick("window.open('https://app.swellrewards.com/login','_blank');");
+            $button->setOnClick("window.open('https://loyalty.yotpo.com/login','_blank');");
         } else {
-            $button->setOnClick("window.open('https://app.swellrewards.com/login/{$guid}/{$apiKey}','_blank');");
+            $button->setOnClick("window.open('https://loyalty.yotpo.com/login/{$guid}/{$apiKey}','_blank');");
         }
 
         return $button->toHtml();
