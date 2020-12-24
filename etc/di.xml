@@ -23,6 +23,10 @@
         <plugin name="yotpo_loyalty_plugin_quote_itemtoorderitem" type="Yotpo\Loyalty\Plugin\Quote\ItemToOrderItem"/>
     </type>
 
+	<type name="Magento\Checkout\Model\Cart">
+        <plugin name="yotpo_loyalty_plugin_checkout_model_cart" type="Yotpo\Loyalty\Plugin\Checkout\Model\Cart"/>
+    </type>
+
 	<!-- Logger -->
 	<type name="Yotpo\Loyalty\Model\Logger\YotpoHandler">
 		<arguments>

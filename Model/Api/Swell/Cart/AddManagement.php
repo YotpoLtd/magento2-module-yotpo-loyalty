@@ -108,6 +108,7 @@ class AddManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Ca
                 ->setOriginalCustomPrice($price)
                 ->setSwellRedemptionId($redemptionId)
                 ->setSwellPointsUsed($pointsUsed)
+                ->setSwellAddedItem(1)
                 ->setQty(1)
                 ->setProduct($product);
 
