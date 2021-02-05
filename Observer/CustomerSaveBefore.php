@@ -40,7 +40,7 @@ class CustomerSaveBefore implements ObserverInterface
                     if ($customer->isObjectNew()) {
                         $this->_registry->register('swell/customer/created', true);
                     } else {
-                        $customerId = $order->getId();
+                        $customerId = $customer->getId();
                         $this->_registry->register('swell/customer/original/email/id' . $customerId, $customer->getOrigData("email"));
                         $this->_registry->register('swell/customer/original/group_id/id' . $customerId, $customer->getOrigData("group_id"));
                     }
