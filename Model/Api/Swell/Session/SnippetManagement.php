@@ -57,6 +57,11 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
         return $this->_yotpoHelper->getSwellGuid();
     }
 
+    public function getSwellApiKey()
+    {
+        return $this->_yotpoHelper->getSwellApiKey();
+    }
+
     protected function isCustomerLoggedIn()
     {
         return $this->_customerSession->isLoggedIn();
@@ -152,7 +157,7 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
                         <!--/ Yotpo Loyalty - Reload customerData cart -->
                     ';
                 }
-                if (($swellGuid = $this->getSwellGuid())) {
+                if (($swellGuid = $this->getSwellGuid()) && ($swellApiKey = $this->getSwellApiKey())) {
                     $response["snippet"] .= '
                         <!-- Yotpo Loyalty - Swell JS Snippet -->
                         <div id="swell-customer-identification" style="display:none !important;"
@@ -162,6 +167,7 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
                             data-authenticated="true"
                             data-email="' . $identificationData->getEmail() . '"
                             data-id="' . $identificationData->getId() . '"
+                            data-token="' . hash('sha256', $identificationData->getEmail() . $swellApiKey) . '"
                         ';
                         if (($groupCode = $identificationData->getGroupCode())) {
                             $response["snippet"] .= 'data-tags="[&#34;' . $groupCode . '&#34;]"';
