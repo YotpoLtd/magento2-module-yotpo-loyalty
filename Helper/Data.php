@@ -393,12 +393,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $return = [];
         $swellApiKey = ($swellApiKey === null) ? $this->getRequest()->getParam("shared_secret") : (string)$swellApiKey;
-        foreach ($this->getStoreManager()->getWebsites($withDefault) as $website) {
-            if ($swellApiKey === $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, $website->getId())) {
-                $return[] = $website->getId();
+        $stores = $this->getStoreManager()->getStores($withDefault);
+        foreach ($stores as $key => $store) {
+            if ($this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()) && $swellApiKey === $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) {
+                $return["_" . $store->getWebsiteId()] = $store->getWebsiteId();
             }
         }
-        return $return;
+        return array_values($return);
     }
 
     public function getMagentoVersion()
