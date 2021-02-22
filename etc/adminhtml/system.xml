@@ -30,7 +30,7 @@
 					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
 			</group>
-			<group id="sync_settings" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="10" translate="label">
+			<group id="sync_settings" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="20" translate="label">
 				<label>Sync Settings (Advanced)</label>
 				<field id="swell_sync_limit" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Sync Limit</label>
@@ -46,9 +46,9 @@
 				   <comment>For how long should we keep old sent/failed items on the database (`yotpo_sync_queue`)?</comment>
 				</field>
 			</group>
-			<group id="advanced" showInDefault="1" showInStore="0" showInWebsite="0" sortOrder="20" translate="label">
+			<group id="advanced" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="30" translate="label">
 				<label>Advanced</label>
-				<field id="swell_instance_id" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+				<field id="swell_instance_id" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
 					<label>Checkout Variable Instance Id</label>
 					<comment>Your checkout module instance id</comment>
 				</field>
