@@ -161,8 +161,9 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                         $ruleData['uses_per_customer'] = 1;
                     }
 
+                    $conditions = $actions = [];
+
                     if (count($appliesToAttributes) > 0) {
-                        $conditions = $actions = [];
                         $conditions["1"] = $actions["1"] = [
                             "type" => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                             "aggregator" => $appliesToAnyOrAllAttributes,
@@ -190,6 +191,24 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                                 "value" => $appliesToValue
                             ];
                         }
+                    }
+
+                    if ($cartGreaterThanCents !== null) {
+                        $index = 1;
+                        for ($i=1; $i < 200; $i++) {
+                            if (!isset($conditions["1--" . $index])) {
+                                $conditions["1--" . $index] = [
+                                    "type" => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+                                    "attribute" => 'base_subtotal',
+                                    "operator" => '>',
+                                    "value" => $cartGreaterThanCents
+                                ];
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($conditions || $actions) {
                         $ruleData['conditions'] = $conditions;
                         $ruleData['actions'] = $actions;
                     }
