@@ -83,7 +83,7 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
             $usageLimit = $this->_yotpoHelper->getRequest()->getParam('usage_limit');
             $oncePerCustomer = $this->_yotpoHelper->getRequest()->getParam('once_per_customer');
             $freeShippingLessThanCents = $this->_yotpoHelper->getRequest()->getParam('free_shipping_less_than_cents');
-            $cartGreaterThanCents = $this->_yotpoHelper->getRequest()->getParam('cart_greater_than_cents');
+            $cartGreaterThan = $this->_yotpoHelper->getRequest()->getParam('cart_greater_than');
             $quoteId = $this->_yotpoHelper->getRequest()->getParam('quote_id');
             //===========================================================================================//
 
@@ -193,7 +193,7 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                         }
                     }
 
-                    if ($cartGreaterThanCents !== null) {
+                    if ($cartGreaterThan !== null) {
                         $index = 1;
                         for ($i=1; $i < 200; $i++) {
                             if (!isset($conditions["1--" . $index])) {
@@ -201,7 +201,7 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                                     "type" => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                                     "attribute" => 'base_subtotal',
                                     "operator" => '>',
-                                    "value" => $cartGreaterThanCents
+                                    "value" => $cartGreaterThan
                                 ];
                                 break;
                             }
