@@ -163,13 +163,16 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
 
                     $conditions = $actions = [];
 
-                    if (count($appliesToAttributes) > 0) {
+                    if (count($appliesToAttributes) || $cartGreaterThan !== null) {
                         $conditions["1"] = $actions["1"] = [
                             "type" => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
-                            "aggregator" => $appliesToAnyOrAllAttributes,
+                            "aggregator" => 'all',
                             "value" => 1,
                             "new_child" => ""
                         ];
+                    }
+
+                    if (count($appliesToAttributes)) {
                         $conditions["1--1"] = [
                             "type" => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                             "aggregator" => $appliesToAnyOrAllAttributes,
