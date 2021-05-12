@@ -199,8 +199,8 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                     if ($cartGreaterThan !== null) {
                         $index = 1;
                         for ($i=1; $i < 200; $i++) {
-                            if (!isset($conditions["1--" . $index])) {
-                                $conditions["1--" . $index] = [
+                            if (!isset($conditions["1--" . $i])) {
+                                $conditions["1--" . $i] = [
                                     "type" => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                                     "attribute" => 'base_subtotal',
                                     "operator" => '>',
