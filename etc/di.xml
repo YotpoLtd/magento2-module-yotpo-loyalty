@@ -27,6 +27,10 @@
         <plugin name="yotpo_loyalty_plugin_quote_itemprocessor" type="Yotpo\Loyalty\Plugin\Quote\ItemProcessor"/>
     </type>
 
+	<type name="Magento\Quote\Model\Quote\Item">
+        <plugin name="yotpo_loyalty_plugin_quote_item" type="Yotpo\Loyalty\Plugin\Quote\Item"/>
+    </type>
+
 	<type name="Magento\Checkout\Model\Cart">
         <plugin name="yotpo_loyalty_plugin_checkout_model_cart" type="Yotpo\Loyalty\Plugin\Checkout\Model\Cart"/>
     </type>
