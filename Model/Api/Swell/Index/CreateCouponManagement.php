@@ -83,7 +83,7 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
             $usageLimit = $this->_yotpoHelper->getRequest()->getParam('usage_limit');
             $oncePerCustomer = $this->_yotpoHelper->getRequest()->getParam('once_per_customer');
             $freeShippingLessThanCents = $this->_yotpoHelper->getRequest()->getParam('free_shipping_less_than_cents');
-            $cartGreaterThanCents = $this->_yotpoHelper->getRequest()->getParam('cart_greater_than_cents');
+            $cartGreaterThan = $this->_yotpoHelper->getRequest()->getParam('cart_greater_than');
             $quoteId = $this->_yotpoHelper->getRequest()->getParam('quote_id');
             //===========================================================================================//
 
@@ -161,14 +161,18 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                         $ruleData['uses_per_customer'] = 1;
                     }
 
-                    if (count($appliesToAttributes) > 0) {
-                        $conditions = $actions = [];
+                    $conditions = $actions = [];
+
+                    if (count($appliesToAttributes) || $cartGreaterThan !== null) {
                         $conditions["1"] = $actions["1"] = [
                             "type" => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
-                            "aggregator" => $appliesToAnyOrAllAttributes,
+                            "aggregator" => 'all',
                             "value" => 1,
                             "new_child" => ""
                         ];
+                    }
+
+                    if (count($appliesToAttributes)) {
                         $conditions["1--1"] = [
                             "type" => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
                             "aggregator" => $appliesToAnyOrAllAttributes,
@@ -190,6 +194,24 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                                 "value" => $appliesToValue
                             ];
                         }
+                    }
+
+                    if ($cartGreaterThan !== null) {
+                        $index = 1;
+                        for ($i=1; $i < 200; $i++) {
+                            if (!isset($conditions["1--" . $i])) {
+                                $conditions["1--" . $i] = [
+                                    "type" => \Magento\SalesRule\Model\Rule\Condition\Address::class,
+                                    "attribute" => 'base_subtotal',
+                                    "operator" => '>',
+                                    "value" => $cartGreaterThan
+                                ];
+                                break;
+                            }
+                        }
+                    }
+
+                    if ($conditions || $actions) {
                         $ruleData['conditions'] = $conditions;
                         $ruleData['actions'] = $actions;
                     }
