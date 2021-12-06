@@ -11,12 +11,13 @@
     (function  () {
         require([
             "jquery",
-            'mage/storage'
-        ],function($, storage) {
+            'mage/storage',
+            'mage/url'
+        ],function($, storage, url) {
             $(document).ready(function() {
                 try {
                     storage.get(
-                        '/rest/V1/swell/session/snippet'
+                        url.build('rest/V1/swell/session/snippet')
                     ).done(function (response) {
                         response = JSON.parse(response);
                         if(!response.error && response.snippet){
