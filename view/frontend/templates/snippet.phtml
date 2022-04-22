@@ -16,8 +16,7 @@
         ],function($, storage, url) {
             $(document).ready(function() {
                 try {
-                    storage.get(
-                        url.build('rest/V1/swell/session/snippet')
+                    storage.get( <?= $block->getSwellSessionSnippetApiUrl() ?>
                     ).done(function (response) {
                         response = JSON.parse(response);
                         if(!response.error && response.snippet){
