@@ -89,7 +89,8 @@ class Schema extends \Magento\Framework\App\Helper\AbstractHelper
                 foreach ($creditMemo->getAllItems() as $creditMemoItem) { //get all credit memo items if needed
                     $_creditMemoData['items'] = $creditMemoItem->getData();
                 }
-                $creditMemoData[] = $_creditMemoData;            }
+                $creditMemoData[] = $_creditMemoData;            
+            }
         } catch (\Exception $e) {
             //Ignore errors
         }
