@@ -27,19 +27,35 @@ class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
     protected $_ruleFactory;
 
     /**
+     * @var Magento\Quote\Api\CartRepositoryInterface
+     */
+    protected $_cartRepositoryInterface;
+
+    /**
+     * @var Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    protected $_searchCriteriaBuilder;
+
+    /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
-     * @param \Magento\SalesRule\Model\RuleFactory $couponFactory
+     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
+     * @param \Magento\Quote\Api\CartRepositoryInterface $_cartRepositoryInterface
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $_searchCriteriaBuilder
      */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory
+        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
+        \Magento\Quote\Api\CartRepositoryInterface $_cartRepositoryInterface,
+        \Magento\Framework\Api\SearchCriteriaBuilder $_searchCriteriaBuilder
     ) {
         $this->_couponFactory = $couponFactory;
         $this->_ruleFactory = $ruleFactory;
+        $this->_cartRepositoryInterface = $_cartRepositoryInterface;
+        $this->_searchCriteriaBuilder = $_searchCriteriaBuilder;
         parent::__construct($yotpoHelper, $yotpoSchemaHelper);
     }
 
@@ -80,6 +96,14 @@ class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
             foreach ($couponIds as $couponId) {
                 try {
                     $coupon = $this->_couponFactory->create()->load($couponId);
+                    $quotes = $this->getQuotesByCouponId($coupon->getCode());
+                    if ($quotes) {
+                        foreach ($quotes as $quote) {
+                            $quote->setCouponCode('')
+                                ->collectTotals()
+                                ->save();
+                        }
+                    }
                     $ruleId = $coupon->getRuleId();
                     if ($coupon->getId() && $coupon->getRuleId()) {
                         $coupon->delete();
@@ -120,5 +144,20 @@ class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
         }
 
         return $this->_yotpoHelper->jsonEncode($response);
+    }
+
+    /**
+     * @param $couponCode
+     * @return false|\Magento\Quote\Api\Data\CartInterface[]
+     */
+    public function getQuotesByCouponId($couponCode)
+    {
+        if (!empty($couponCode)) {
+            $searchCriteria = $this->_searchCriteriaBuilder->addFilter('coupon_code', $couponCode,'eq')->create();
+            $quotes = $this->_cartRepositoryInterface->getList($searchCriteria)->getItems();
+            return $quotes;
+        } else {
+            return false;
+        }
     }
 }
