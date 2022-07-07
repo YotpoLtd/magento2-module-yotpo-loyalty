@@ -56,6 +56,9 @@
 					<label>Delete used coupons and price rules</label>
 					<source_model>Yotpo\Loyalty\Model\Adminhtml\Source\DeleteUsedCoupons</source_model>
 				</field>
+				<field id="swell_merchant_info_confirm" translate="label" type="button" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+					<frontend_model>Yotpo\Loyalty\Block\Adminhtml\System\Config\MerchantInfoConfirm</frontend_model>
+				</field>
 			</group>
 		</section>
 	</system>
