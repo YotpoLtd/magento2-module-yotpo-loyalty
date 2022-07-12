@@ -1,0 +1,93 @@
+<?php
+
+/* @var $block \Yotpo\Loyalty\Block\Adminhtml\System\Config\MerchantInfoConfirm */
+
+?>
+<!-- Yotpo Loyalty - Merchant Info Confirm -->
+<script>
+    (function  () {
+        require([
+            'jquery',
+            'mage/storage',
+            'Magento_Ui/js/modal/confirm',
+            'Magento_Ui/js/modal/alert'
+        ],function($, storage, confirmation, alert) {
+            $(document).ready(function() {
+                document.getElementById("save")
+                    .addEventListener("click", function(event){
+                        event.preventDefault();
+                        event.stopImmediatePropagation();
+                        var saved_guid = '<?= $block->getSwellGuid() ?>';
+                        var guid = $('input#yotpo_loyalty_general_settings_swell_guid').val();
+                        var api_key = $('input#yotpo_loyalty_general_settings_swell_api_key').val();
+                        if(
+                            (!guid || guid === saved_guid) &&
+                            (!api_key || api_key.trim() === '******')
+                        ){
+                            $('#config-edit-form').trigger('save');
+                            return true;
+                        }
+                        try {
+                            jQuery("body").trigger('processStart');
+                            $.getJSON(
+                                '<?= $block->getMerchantInfoApiUrl() ?>',
+                                {
+                                    api_key: api_key,
+                                    guid: guid,
+                                    root_api_url: '<?= $block->getRootApiUrl() ?>',
+                                })
+                                .done(function( data ) {
+                                    $("body").trigger('processStop');
+                                    var content = $("<div>" +
+                                        "<div>" + $.mage.__("This is the Loyalty & Referrals account that will be integrated with your Adobe Commerce admin:") + "</div>" +
+                                        "<br>" +
+                                        '<div style="color:#6d6966;">' +
+                                            '<div><b>' + $.mage.__("Merchant ID: ") + "</b>" + data.merchant_id + "</div>" +
+                                            "<div><b>" + $.mage.__("Admin Name: ") + "</b>" + data.admin_name + "</div>" +
+                                            "<div><b>" + $.mage.__("Website URL: ") + "</b>" +  data.website_url + "</div>" +
+                                        "</div>" +
+                                    "</div>");
+                                    confirmation({
+                                        title: $.mage.__('Confirm Yotpo Loyalty & Referrals admin account'),
+                                        content: content,
+                                        buttons: [{
+                                            text: $.mage.__('Cancel'),
+                                            class: 'action-secondary action-dismiss',
+                                            click: function (event) {
+                                                this.closeModal(event);
+                                            }
+                                        }, {
+                                            text: $.mage.__('Confirm'),
+                                            class: 'action-primary action-accept',
+                                            click: function (event) {
+                                                this.closeModal(event, true);
+                                            }
+                                        }],
+                                        actions: {
+                                            confirm: function(){
+                                                $('#config-edit-form').trigger('save');
+                                                return true;
+                                            },
+                                            cancel: function(){
+                                                return false;
+                                            }
+                                        }
+                                    });
+                                })
+                                .fail(function( jqxhr, textStatus, error ) {
+                                    $("body").trigger('processStop');
+                                    alert({
+                                        title: $.mage.__('ERROR'),
+                                        content: '<div class="message message-error error"><div data-ui-id="messages-message-error">' + $.mage.__('Error while trying to get merchant info from Yotpo:') + '<br>' + $.mage.__(String(jqxhr.responseJSON ? jqxhr.responseJSON.error_message : 'Unknown Error')) + '</div></div>'
+                                    });
+                                });
+                        } catch (e) {
+                            console.error(e);
+                        }
+                        return false;
+                    }, true);
+            });
+        });
+    })();
+</script>
+<!--/ Yotpo Loyalty - Merchant Info Confirm -->
