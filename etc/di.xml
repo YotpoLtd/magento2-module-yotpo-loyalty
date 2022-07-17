@@ -19,21 +19,33 @@
 	<preference for="Yotpo\Loyalty\Api\Swell\Session\SnippetManagementInterface" type="Yotpo\Loyalty\Model\Api\Swell\Session\SnippetManagement"/>
 	<!--/ API model-interface -->
 
+	<!-- CLI Commands -->
+	<type name="Magento\Framework\Console\CommandList">
+		<arguments>
+			<argument name="commands" xsi:type="array">
+				<item name="yotpo_loyalty_remove_old_sync_records" xsi:type="object">Yotpo\Loyalty\Console\Command\RemoveOldSyncRecordsCommand</item>
+				<item name="yotpo_loyalty_sync" xsi:type="object">Yotpo\Loyalty\Console\Command\SyncCommand</item>
+				<item name="yotpo_loyalty_uninstall" xsi:type="object">Yotpo\Loyalty\Console\Command\UninstallCommand</item>
+			</argument>
+		</arguments>
+	</type>
+	<!--/ CLI Commands -->
+
 	<type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
-        <plugin name="yotpo_loyalty_plugin_quote_itemtoorderitem" type="Yotpo\Loyalty\Plugin\Quote\ItemToOrderItem"/>
-    </type>
+		<plugin name="yotpo_loyalty_plugin_quote_itemtoorderitem" type="Yotpo\Loyalty\Plugin\Quote\ItemToOrderItem"/>
+	</type>
 
 	<type name="Magento\Quote\Model\Quote\Item\Processor">
-        <plugin name="yotpo_loyalty_plugin_quote_itemprocessor" type="Yotpo\Loyalty\Plugin\Quote\ItemProcessor"/>
-    </type>
+		<plugin name="yotpo_loyalty_plugin_quote_itemprocessor" type="Yotpo\Loyalty\Plugin\Quote\ItemProcessor"/>
+	</type>
 
 	<type name="Magento\Quote\Model\Quote\Item">
-        <plugin name="yotpo_loyalty_plugin_quote_item" type="Yotpo\Loyalty\Plugin\Quote\Item"/>
-    </type>
+		<plugin name="yotpo_loyalty_plugin_quote_item" type="Yotpo\Loyalty\Plugin\Quote\Item"/>
+	</type>
 
 	<type name="Magento\Checkout\Model\Cart">
-        <plugin name="yotpo_loyalty_plugin_checkout_model_cart" type="Yotpo\Loyalty\Plugin\Checkout\Model\Cart"/>
-    </type>
+		<plugin name="yotpo_loyalty_plugin_checkout_model_cart" type="Yotpo\Loyalty\Plugin\Checkout\Model\Cart"/>
+	</type>
 
 	<!-- Logger -->
 	<type name="Yotpo\Loyalty\Model\Logger\YotpoHandler">
@@ -44,7 +56,7 @@
 	<type name="Yotpo\Loyalty\Model\Logger">
 		<arguments>
 			<argument name="name" xsi:type="string">yotpoLoyaltyLogger</argument>
-			<argument name="handlers"  xsi:type="array">
+			<argument name="handlers" xsi:type="array">
 				<item name="system" xsi:type="object">Yotpo\Loyalty\Model\Logger\YotpoHandler</item>
 			</argument>
 		</arguments>
