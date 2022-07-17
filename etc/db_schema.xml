@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="yotpo_sync_queue" resource="default" engine="innodb" comment="Yotpo Sync Queue">
+        <column xsi:type="int" name="queue_id" unsigned="true" nullable="false" identity="true" comment="Queue ID"/>
+        <column xsi:type="varchar" name="entity_type" length="20" nullable="true" comment="Entity Type"/>
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="true" default="0" comment="Entity ID"/>
+        <column xsi:type="varchar" name="entity_status" length="30" nullable="true" comment="Entity Status"/>
+        <column xsi:type="int" name="store_id" unsigned="true" nullable="true" default="0" comment="Store ID"/>
+        <column xsi:type="text" name="prepared_schema" nullable="true" comment="Prepared Schema"/>
+        <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column xsi:type="datetime" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <column xsi:type="smallint" name="sent" unsigned="true" nullable="false" default="0" comment="Sent"/>
+        <column xsi:type="datetime" name="sent_at" nullable="true" comment="Sent At"/>
+        <column xsi:type="text" name="response" nullable="true" comment="Response"/>
+        <column xsi:type="smallint" name="has_errors" unsigned="true" nullable="false" default="0" comment="Has Errors"/>
+        <column xsi:type="int" name="tryouts" unsigned="true" nullable="true" default="0" comment="Tryouts"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="queue_id"/>
+        </constraint>
+    </table>
+    <table name="sales_order" resource="sales" comment="Sales Flat Order">
+        <column xsi:type="int" name="swell_redemption_id" nullable="true" comment="Yotpo - Swell Redemption ID"/>
+        <column xsi:type="int" name="swell_points_used" nullable="true" comment="Yotpo - Swell Points Used"/>
+        <column xsi:type="smallint" name="swell_added_item" nullable="true" unsigned="true" default="0" comment="Yotpo - Swell Added Item"/>
+        <column xsi:type="text" name="swell_user_agent" nullable="true" comment="Yotpo - Swell User-Agent"/>
+    </table>
+    <table name="sales_order_item" resource="sales" comment="Sales Flat Order Item">
+        <column xsi:type="int" name="swell_redemption_id" nullable="true" comment="Yotpo - Swell Redemption ID"/>
+        <column xsi:type="int" name="swell_points_used" nullable="true" comment="Yotpo - Swell Points Used"/>
+        <column xsi:type="smallint" name="swell_added_item" nullable="true" unsigned="true" default="0" comment="Yotpo - Swell Added Item"/>
+    </table>
+    <table name="quote_item" resource="checkout" comment="Sales Flat Quote Item">
+        <column xsi:type="int" name="swell_redemption_id" nullable="true" comment="Yotpo - Swell Redemption ID"/>
+        <column xsi:type="int" name="swell_points_used" nullable="true" comment="Yotpo - Swell Points Used"/>
+        <column xsi:type="smallint" name="swell_added_item" nullable="true" unsigned="true" default="0" comment="Yotpo - Swell Added Item"/>
+    </table>
+</schema>
