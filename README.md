@@ -35,4 +35,4 @@ https://www.yotpo.com/
 
 Copyright © 2018 Yotpo. All rights reserved.  
 
-![Yotpo Logo](https://yap.yotpo.com/assets/images/logo_login.png)
+![Yotpo Logo](https://loyalty-app.yotpo.com/assets/loyalty-sidebar.svg)
