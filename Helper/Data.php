@@ -2,111 +2,133 @@
 
 namespace Yotpo\Loyalty\Helper;
 
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\App\Emulation;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory as ConfigCollectionFactory;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Yotpo\Loyalty\Model\Logger as YotpoLogger;
+
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const MODULE_NAME = 'Yotpo_Loyalty';
+    public const MODULE_NAME = 'Yotpo_Loyalty';
 
     //= General Settings
-    const XML_PATH_ALL = "yotpo_loyalty";
-    const XML_PATH_ENABLED = "yotpo_loyalty/general_settings/active";
-    const XML_PATH_DEBUG_MODE_ENABLED = "yotpo_loyalty/general_settings/debug_mode_active";
-    const XML_PATH_SWELL_GUID = "yotpo_loyalty/general_settings/swell_guid";
-    const XML_PATH_SWELL_API_KEY = "yotpo_loyalty/general_settings/swell_api_key";
+    public const XML_PATH_ALL = "yotpo_loyalty";
+    public const XML_PATH_ENABLED = "yotpo_loyalty/general_settings/active";
+    public const XML_PATH_DEBUG_MODE_ENABLED = "yotpo_loyalty/general_settings/debug_mode_active";
+    public const XML_PATH_SWELL_GUID = "yotpo_loyalty/general_settings/swell_guid";
+    public const XML_PATH_SWELL_API_KEY = "yotpo_loyalty/general_settings/swell_api_key";
     //= Sync Settings
-    const XML_PATH_SWELL_SYNC_LIMIT = "yotpo_loyalty/sync_settings/swell_sync_limit";
-    const XML_PATH_SWELL_SYNC_MAX_TRYOUTS = "yotpo_loyalty/sync_settings/swell_sync_max_tryouts";
-    const XML_PATH_KEEP_YOTPO_SYNC_QUEUE = "yotpo_loyalty/sync_settings/keep_yotpo_sync_queue";
+    public const XML_PATH_SWELL_SYNC_LIMIT = "yotpo_loyalty/sync_settings/swell_sync_limit";
+    public const XML_PATH_SWELL_SYNC_MAX_TRYOUTS = "yotpo_loyalty/sync_settings/swell_sync_max_tryouts";
+    public const XML_PATH_KEEP_YOTPO_SYNC_QUEUE = "yotpo_loyalty/sync_settings/keep_yotpo_sync_queue";
     //= Advanced
-    const XML_PATH_SWELL_INSTANCE_ID = "yotpo_loyalty/advanced/swell_instance_id";
-    const XML_PATH_DELETE_USED_COUPONS = "yotpo_loyalty/advanced/delete_used_coupons";
+    public const XML_PATH_SWELL_INSTANCE_ID = "yotpo_loyalty/advanced/swell_instance_id";
+    public const XML_PATH_DELETE_USED_COUPONS = "yotpo_loyalty/advanced/delete_used_coupons";
     //= Others
-    const XML_PATH_CURRENCY_OPTIONS_DEFAULT = "currency/options/default";
-    const XML_PATH_SECURE_BASE_URL = "web/secure/base_url";
-    const XML_PATH_UNSECURE_BASE_URL = "web/unsecure/base_url";
-    const XML_PATH_USE_SECURE_IN_FRONTEND = "web/secure/use_in_frontend";
+    public const XML_PATH_CURRENCY_OPTIONS_DEFAULT = "currency/options/default";
+    public const XML_PATH_SECURE_BASE_URL = "web/secure/base_url";
+    public const XML_PATH_UNSECURE_BASE_URL = "web/unsecure/base_url";
+    public const XML_PATH_USE_SECURE_IN_FRONTEND = "web/secure/use_in_frontend";
 
     protected $_initializedRequestParams;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @var \Magento\Store\Model\App\Emulation
+     * @var Emulation
      */
     protected $_appEmulation;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Request
+     * @var Request
      */
     protected $_request;
 
     /**
-     * @var \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory
+     * @var ConfigCollectionFactory
      */
     protected $_configCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @var EncryptorInterface
      */
     protected $_encryptor;
 
     /**
-     * @var \Magento\Framework\App\ProductMetadataInterface
+     * @var ProductMetadataInterface
      */
     protected $_magentoFrameworkProductMetadata;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
+     * @var ModuleListInterface
+     */
+    private $_moduleList;
+
+    /**
+     * @var DateTimeFactory
      */
     protected $_datetimeFactory;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var JsonHelper
      */
     protected $_jsonHelper;
 
     /**
-     * @var \Yotpo\Loyalty\Model\Logger
+     * @var YotpoLogger
      */
     protected $_yotpoLogger;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Store\Model\App\Emulation $appEmulation
-     * @param \Magento\Framework\Webapi\Rest\Request $request
-     * @param \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory $configCollectionFactory,
-     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\App\ProductMetadataInterface $magentoFrameworkProductMetadata
-     * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $datetimeFactory
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param \Yotpo\Loyalty\Model\Logger $yotpoLogger
+     * @method __construct
+     * @param  Context                  $context
+     * @param  ObjectManagerInterface   $objectManager
+     * @param  StoreManagerInterface    $storeManager
+     * @param  Emulation                $appEmulation
+     * @param  Request                  $request
+     * @param  ConfigCollectionFactory  $configCollectionFactory
+     * @param  EncryptorInterface       $encryptor
+     * @param  ProductMetadataInterface $magentoFrameworkProductMetadata
+     * @param  ModuleListInterface      $moduleList
+     * @param  DateTimeFactory          $datetimeFactory
+     * @param  JsonHelper               $jsonHelper
+     * @param  YotpoLogger              $yotpoLogger
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Store\Model\App\Emulation $appEmulation,
-        \Magento\Framework\Webapi\Rest\Request $request,
-        \Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory $configCollectionFactory,
-        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\App\ProductMetadataInterface $magentoFrameworkProductMetadata,
-        \Magento\Framework\Stdlib\DateTime\DateTimeFactory $datetimeFactory,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        \Yotpo\Loyalty\Model\Logger $yotpoLogger
+        Context $context,
+        ObjectManagerInterface $objectManager,
+        StoreManagerInterface $storeManager,
+        Emulation $appEmulation,
+        Request $request,
+        ConfigCollectionFactory $configCollectionFactory,
+        EncryptorInterface $encryptor,
+        ProductMetadataInterface $magentoFrameworkProductMetadata,
+        ModuleListInterface $moduleList,
+        DateTimeFactory $datetimeFactory,
+        JsonHelper $jsonHelper,
+        YotpoLogger $yotpoLogger
     ) {
         parent::__construct($context);
         $this->_objectManager = $objectManager;
@@ -117,6 +139,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_configCollectionFactory = $configCollectionFactory;
         $this->_encryptor = $encryptor;
         $this->_magentoFrameworkProductMetadata = $magentoFrameworkProductMetadata;
+        $this->_moduleList = $moduleList;
         $this->_datetimeFactory = $datetimeFactory;
         $this->_jsonHelper = $jsonHelper;
         $this->_yotpoLogger = $yotpoLogger;
@@ -405,6 +428,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getMagentoVersion()
     {
         return $this->_magentoFrameworkProductMetadata->getVersion();
+    }
+
+    public function getModuleVersion()
+    {
+        return $this->_moduleList->getOne(self::MODULE_NAME)['setup_version'];
     }
 
     public function getStoreDefaultCurrency($storeId = null)
