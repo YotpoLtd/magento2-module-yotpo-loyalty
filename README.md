@@ -18,9 +18,8 @@ php bin/magento cache:flush
 ```
 
 ## Install manually under app/code
-1. Download & place the contents of [Yotpo's Core Module](https://github.com/YotpoLtd/magento2-module-yotpo-core) under {YOUR-MAGENTO2-ROOT-DIR}/app/code/Yotpo/Core.
-2. Download & place the contents of this repository under {YOUR-MAGENTO2-ROOT-DIR}/app/code/Yotpo/Loyalty  
-3. Run the following commands under your Magento 2 root dir:
+1. Download & place the contents of this repository under {YOUR-MAGENTO2-ROOT-DIR}/app/code/Yotpo/Loyalty  
+2. Run the following commands under your Magento 2 root dir:
 ```
 php bin/magento maintenance:enable
 php bin/magento setup:upgrade
