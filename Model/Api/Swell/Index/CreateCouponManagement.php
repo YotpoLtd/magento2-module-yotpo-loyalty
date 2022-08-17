@@ -6,7 +6,6 @@ use Yotpo\Loyalty\Model\Api\Swell\AbstractSwell;
 
 class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Index\CreateCouponManagementInterface
 {
-
     /**
      * @var \Magento\SalesRule\Model\Rule
      */
@@ -76,10 +75,10 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
             $name = $this->_yotpoHelper->getRequest()->getParam('name');
             $thirdPartyId = $this->_yotpoHelper->getRequest()->getParam('third_party_id');
             $value = $this->_yotpoHelper->getRequest()->getParam('value');
-            $appliesToAttributes = $this->_yotpoHelper->getRequest()->getParam('applies_to_attributes');
-            $appliesToValues = $this->_yotpoHelper->getRequest()->getParam('applies_to_values');
+            $appliesToAttributes = $this->_yotpoHelper->getRequest()->getParam('applies_to_attributes', '');
+            $appliesToValues = $this->_yotpoHelper->getRequest()->getParam('applies_to_values', '');
             $appliesToAnyOrAllAttributes = $this->_yotpoHelper->getRequest()->getParam('applies_to_any_or_all_attributes');
-            $groupIds = $this->_yotpoHelper->getRequest()->getParam('group_ids');
+            $groupIds = $this->_yotpoHelper->getRequest()->getParam('group_ids', '');
             $usageLimit = $this->_yotpoHelper->getRequest()->getParam('usage_limit');
             $oncePerCustomer = $this->_yotpoHelper->getRequest()->getParam('once_per_customer');
             $freeShippingLessThanCents = $this->_yotpoHelper->getRequest()->getParam('free_shipping_less_than_cents');
@@ -108,9 +107,9 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                 $rule = $this->_ruleFactory->create()->load($thirdPartyId);
             } else {
                 //Prepare Rule Params
-                $appliesToAttributes = (is_array($appliesToAttributes)) ? array_values(array_filter($appliesToAttributes, 'strlen')) : array_values(array_filter(explode(",", $appliesToAttributes), 'strlen'));
-                $appliesToValues = (is_array($appliesToValues)) ? array_values(array_filter($appliesToValues, 'strlen')) : array_values(array_filter(explode(",", $appliesToValues), 'strlen'));
-                $groupIds = (is_array($groupIds)) ? array_filter($groupIds, 'strlen') : array_filter(explode(",", $groupIds), 'strlen');
+                $appliesToAttributes = (is_array($appliesToAttributes)) ? array_values(array_filter($appliesToAttributes, 'strlen')) : array_values(array_filter(explode(",", (string)$appliesToAttributes), 'strlen'));
+                $appliesToValues = (is_array($appliesToValues)) ? array_values(array_filter($appliesToValues, 'strlen')) : array_values(array_filter(explode(",", (string)$appliesToValues), 'strlen'));
+                $groupIds = (is_array($groupIds)) ? array_filter($groupIds, 'strlen') : array_filter(explode(",", (string)$groupIds), 'strlen');
 
                 if (!$groupIds) {
                     $groupIds = $this->_customerGroupCollection->getAllIds();

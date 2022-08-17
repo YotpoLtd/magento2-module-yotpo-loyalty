@@ -48,7 +48,7 @@ class OrderCountManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\S
             ->addAttributeToSelect('entity_id')
             ->addAttributeToFilter("store_id", ["in" => $this->_yotpoHelper->getStoreIdsBySwellApiKey()]);
 
-        $orderStates = array_filter(explode(',', $this->_yotpoHelper->getRequest()->getParam('state')));
+        $orderStates = array_filter(explode(',', $this->_yotpoHelper->getRequest()->getParam('state', '')));
         if (!empty($orderStates)) {
             $collection->addAttributeToFilter('state', ["in" => $orderStates]);
         }
