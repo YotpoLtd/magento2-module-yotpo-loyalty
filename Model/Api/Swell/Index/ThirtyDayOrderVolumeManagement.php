@@ -41,7 +41,7 @@ class ThirtyDayOrderVolumeManagement extends AbstractSwell implements \Yotpo\Loy
             ->addAttributeToFilter("store_id", ["in" => $this->_yotpoHelper->getStoreIdsBySwellApiKey()])
             ->addAttributeToFilter('created_at', ['from' => date('Y-m-d', strtotime("-30 day"))]);
 
-        $orderStates = array_filter(explode(',', $this->_yotpoHelper->getRequest()->getParam('state')));
+        $orderStates = array_filter(explode(',', $this->_yotpoHelper->getRequest()->getParam('state', '')));
         if (!empty($orderStates)) {
             $collection->addAttributeToFilter('state', ["in" => $orderStates]);
         }

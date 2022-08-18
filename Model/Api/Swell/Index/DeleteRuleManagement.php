@@ -54,7 +54,7 @@ class DeleteRuleManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\S
             ];
 
             //Extract Request Params:
-            $ruleIds = $this->_yotpoHelper->getRequest()->getParam('id');
+            $ruleIds = $this->_yotpoHelper->getRequest()->getParam('id', '');
             if (!(is_array($ruleIds) || is_object($ruleIds))) {
                 $ruleIds = explode(",", $ruleIds);
             }

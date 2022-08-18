@@ -78,7 +78,7 @@ class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
             ];
 
             //Extract Request Params:
-            $couponIds = $this->_yotpoHelper->getRequest()->getParam('id');
+            $couponIds = $this->_yotpoHelper->getRequest()->getParam('id', '');
             if (!(is_array($couponIds) || is_object($couponIds))) {
                 $couponIds = explode(",", $couponIds);
             }
@@ -153,7 +153,7 @@ class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
     public function getQuotesByCouponId($couponCode)
     {
         if (!empty($couponCode)) {
-            $searchCriteria = $this->_searchCriteriaBuilder->addFilter('coupon_code', $couponCode,'eq')->create();
+            $searchCriteria = $this->_searchCriteriaBuilder->addFilter('coupon_code', $couponCode, 'eq')->create();
             $quotes = $this->_cartRepositoryInterface->getList($searchCriteria)->getItems();
             return $quotes;
         } else {

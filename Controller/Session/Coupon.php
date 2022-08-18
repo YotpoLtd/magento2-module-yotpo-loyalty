@@ -66,13 +66,13 @@ class Coupon extends Action
             if ($this->_yotpoHelper->isEnabled()) {
                 $quote = $this->_checkoutSession->getQuote();
                 if ($quote->getId()) {
-                    $code = (string) $this->getRequest()->getParam('coupon_code');
-                    $codesToRemove = $this->getRequest()->getParam('swell_coupon_codes');
-                    $existingCodes = $quote->getData("coupon_code");
+                    $code = (string) $this->getRequest()->getParam('coupon_code', '');
+                    $codesToRemove = $this->getRequest()->getParam('swell_coupon_codes', '');
+                    $existingCodes = (string) $quote->getData("coupon_code");
                     $couponCodes = [$code];
 
                     if (isset($codesToRemove) && isset($existingCodes)) {
-                        $codesToRemove = (is_array($codesToRemove)) ? $codesToRemove : explode(",", strtoupper((string)$codesToRemove));
+                        $codesToRemove = (is_array($codesToRemove)) ? $codesToRemove : explode(",", strtoupper($codesToRemove));
                         $existingCodes = explode(",", strtoupper($existingCodes));
                         foreach ($existingCodes as $existingCode) {
                             if (!in_array($existingCode, $codesToRemove)) {
