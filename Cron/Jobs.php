@@ -189,7 +189,7 @@ class Jobs
             }
         }
 
-        //Log to var/log/system.log
+        //Log to var/log/yotpo_loyalty.log
         $this->_yotpoHelper->log($message, $type, $data);
 
         return $this;
@@ -303,7 +303,7 @@ class Jobs
             }
 
             if ($addAdminNotifications) {
-                $addAdminNotifications = "*If you enabled debug mode Yotpo - Loyalty Settings, you should see the details in the log file (var/log/system.log)" . $addAdminNotifications;
+                $addAdminNotifications = "*If you enabled debug mode Yotpo - Loyalty Settings, you should see the details in the log file (var/log/yotpo_loyalty.log)" . $addAdminNotifications;
                 $this->addAdminNotification("Yopto - An error occurred during the automated sync process! (module: Yotpo_Loyalty)", $addAdminNotifications, 'critical');
             }
 
@@ -370,7 +370,7 @@ class Jobs
             $this->_processOutput("Jobs::removeOldSyncRecords() - [DONE]", "info");
         } catch (\Exception $e) {
             $this->_processOutput('[ERROR] ' . $e->getMessage(), 'error', [$e]);
-            $this->addAdminNotification("Yopto - An error occurred during the automated removeOldSyncRecords process!", "*If you enabled debug mode Yotpo - Loyalty Settings, you should see the details in the log file (var/log/system.log)", 'critical');
+            $this->addAdminNotification("Yopto - An error occurred during the automated removeOldSyncRecords process!", "*If you enabled debug mode Yotpo - Loyalty Settings, you should see the details in the log file (var/log/yotpo_loyalty.log)", 'critical');
         }
 
         return $this;

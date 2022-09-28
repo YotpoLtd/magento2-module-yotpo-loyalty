@@ -6,7 +6,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 class CustomerSaveBefore implements ObserverInterface
 {
-
     /**
      * @var \Yotpo\Loyalty\Helper\Data
      */
@@ -34,16 +33,16 @@ class CustomerSaveBefore implements ObserverInterface
     {
         if ($this->_yotpoHelper->isEnabled()) {
             try {
-                if (!$this->_registry->registry("swell/customer/before")) {
-                    $this->_registry->register('swell/customer/before', true);
-                    $customer = $observer->getEvent()->getCustomer();
-                    if ($customer->isObjectNew()) {
-                        $this->_registry->register('swell/customer/created', true);
-                    } else {
-                        $customerId = $customer->getId();
-                        $this->_registry->register('swell/customer/original/email/id' . $customerId, $customer->getOrigData("email"));
-                        $this->_registry->register('swell/customer/original/group_id/id' . $customerId, $customer->getOrigData("group_id"));
-                    }
+                $customer = $observer->getEvent()->getCustomer();
+                if ($customer->isObjectNew()) {
+                    $this->_registry->register('swell/customer/created', true, true);
+                } elseif (
+                    ($customerId = $customer->getId()) &&
+                    !$this->_registry->registry('swell/customer/before/id' . $customerId)
+                ) {
+                    $this->_registry->register('swell/customer/before/id' . $customerId, true);
+                    $this->_registry->register('swell/customer/original/email/id' . $customerId, $customer->getOrigData("email"));
+                    $this->_registry->register('swell/customer/original/group_id/id' . $customerId, $customer->getOrigData("group_id"));
                 }
             } catch (\Exception $e) {
                 $this->_yotpoHelper->log("[Yotpo - CustomerSaveBefore - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
