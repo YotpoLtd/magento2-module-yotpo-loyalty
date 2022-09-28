@@ -6,7 +6,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 class CustomerSaveAfter implements ObserverInterface
 {
-
     /**
      * @var \Yotpo\Loyalty\Helper\Data
      */
@@ -74,9 +73,6 @@ class CustomerSaveAfter implements ObserverInterface
                         ->save();
                 }
 
-                if ($this->_registry->registry('swell/customer/before')) {
-                    $this->_registry->unregister('swell/customer/before');
-                }
                 if ($customerCreated) {
                     $this->_registry->unregister('swell/customer/created');
                 }
