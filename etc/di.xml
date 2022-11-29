@@ -62,4 +62,6 @@
 		</arguments>
 	</type>
 	<!--/ Logger-->
+
+	<preference for="Magento\Quote\Model\Quote\Item" type="Yotpo\Loyalty\Model\Quote\Item" />
 </config>
