@@ -17,6 +17,8 @@ class Curl extends \Magento\Framework\HTTP\Client\Curl
     {
         $this->_ch = curl_init();
 
+        $this->_headers['Expect'] = '';
+
         $this->curlOption(CURLOPT_URL, $uri);
         if ($method === 'POST') {
             $this->curlOption(CURLOPT_POST, 1);
