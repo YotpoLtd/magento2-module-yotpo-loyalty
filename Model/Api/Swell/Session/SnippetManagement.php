@@ -175,7 +175,7 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
                     }
                     $response["snippet"] .= '
                         ></div>
-                        <script type="text/javascript" async src="https://cdn.swellrewards.com/loader/' . $swellGuid . '.js"></script>
+                        <script type="text/javascript" async src="https://cdn-loyalty.yotpo.com/loader/' . $swellGuid . '.js"></script>
                         <!--/ Yotpo Loyalty - Swell JS Snippet -->
                     ';
                 }
