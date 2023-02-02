@@ -62,11 +62,11 @@ class OrdersManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell
             $collection->addAttributeToFilter('state', ["in" => $orderStates]);
         }
 
-        $createdAtFrom = strtotime($this->_yotpoHelper->getRequest()->getParam('created_at_from'));
+        $createdAtFrom = strtotime($this->_yotpoHelper->getRequest()->getParam('created_at_from', ''));
         if (!empty($createdAtFrom)) {
             $collection->addAttributeToFilter('created_at', ["gteq" => $this->_dateTimeFactory->create()->gmtDate('Y-m-d H:i:s', $createdAtFrom)]);
         }
-        $createdAtTo = strtotime($this->_yotpoHelper->getRequest()->getParam('created_at_to'));
+        $createdAtTo = strtotime($this->_yotpoHelper->getRequest()->getParam('created_at_to', ''));
         if (!empty($createdAtTo)) {
             $collection->addAttributeToFilter('created_at', ["lteq" => $this->_dateTimeFactory->create()->gmtDate('Y-m-d H:i:s', $createdAtTo)]);
         }
