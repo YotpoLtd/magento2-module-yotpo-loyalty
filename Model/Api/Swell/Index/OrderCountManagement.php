@@ -53,13 +53,13 @@ class OrderCountManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\S
             $collection->addAttributeToFilter('state', ["in" => $orderStates]);
         }
 
-        $createdAtFrom = strtotime($this->_yotpoHelper->getRequest()->getParam('created_at_from', ''));
+        $createdAtFrom = $this->_yotpoHelper->getRequest()->getParam('created_at_from', '');
         if (!empty($createdAtFrom)) {
-            $collection->addAttributeToFilter('created_at', ["gteq" => $this->_dateTimeFactory->create()->gmtDate('Y-m-d H:i:s', $createdAtFrom)]);
+            $collection->addAttributeToFilter('created_at', ["gteq" => $this->_dateTimeFactory->create()->gmtDate('Y-m-d H:i:s', strtotime($createdAtFrom))]);
         }
-        $createdAtTo = strtotime($this->_yotpoHelper->getRequest()->getParam('created_at_to', ''));
+        $createdAtTo = $this->_yotpoHelper->getRequest()->getParam('created_at_to', '');
         if (!empty($createdAtTo)) {
-            $collection->addAttributeToFilter('created_at', ["lteq" => $this->_dateTimeFactory->create()->gmtDate('Y-m-d H:i:s', $createdAtTo)]);
+            $collection->addAttributeToFilter('created_at', ["lteq" => $this->_dateTimeFactory->create()->gmtDate('Y-m-d H:i:s', strtotime($createdAtTo))]);
         }
 
         return $this->_yotpoHelper->jsonEncode([
