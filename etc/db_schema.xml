@@ -6,7 +6,7 @@
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="true" default="0" comment="Entity ID"/>
         <column xsi:type="varchar" name="entity_status" length="30" nullable="true" comment="Entity Status"/>
         <column xsi:type="int" name="store_id" unsigned="true" nullable="true" default="0" comment="Store ID"/>
-        <column xsi:type="text" name="prepared_schema" nullable="true" comment="Prepared Schema"/>
+        <column xsi:type="mediumtext" name="prepared_schema" nullable="true" comment="Prepared Schema"/>
         <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="datetime" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
         <column xsi:type="smallint" name="sent" unsigned="true" nullable="false" default="0" comment="Sent"/>
