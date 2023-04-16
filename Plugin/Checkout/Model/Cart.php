@@ -13,6 +13,10 @@ class Cart
     {
         foreach ($data as $itemId => &$itemInfo) {
             $item = $subject->getQuote()->getItemById($itemId);
+            if (!$item) {
+                continue;
+            }
+
             if ($item->getSwellAddedItem() && !($item->getCustomPrice()*1) && (isset($itemInfo['qty']) && $itemInfo['qty'] > 1)) {
                 $itemInfo['qty'] = 1;
             }
