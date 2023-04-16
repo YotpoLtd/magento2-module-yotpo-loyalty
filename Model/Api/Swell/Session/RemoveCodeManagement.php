@@ -48,7 +48,7 @@ class RemoveCodeManagement implements \Yotpo\Loyalty\Api\Swell\Session\RemoveCod
                 $codesToRemove = $this->_yotpoHelper->getRequest()->getParam('swell_coupon_code_cancel', '');
                 $existingCodes = (string) $quote->getData("coupon_code");
                 $couponCodes = [];
-                if (isset($codesToRemove) && isset($existingCodes)) {
+                if ($codesToRemove && $existingCodes) {
                     $codesToRemove = (is_array($codesToRemove)) ? $codesToRemove : explode(",", strtoupper($codesToRemove));
                     $existingCodes = explode(",", strtoupper($existingCodes));
                     foreach ($existingCodes as $existingCode) {
