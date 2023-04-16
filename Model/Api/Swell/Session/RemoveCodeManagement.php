@@ -45,19 +45,11 @@ class RemoveCodeManagement implements \Yotpo\Loyalty\Api\Swell\Session\RemoveCod
             }
             $quote = $this->_checkoutSession->getQuote();
             if ($quote->getId()) {
-                $codesToRemove = $this->_yotpoHelper->getRequest()->getParam('swell_coupon_code_cancel', '');
-                $existingCodes = (string) $quote->getData("coupon_code");
-                $couponCodes = [];
-                if ($codesToRemove && $existingCodes) {
-                    $codesToRemove = (is_array($codesToRemove)) ? $codesToRemove : explode(",", strtoupper($codesToRemove));
-                    $existingCodes = explode(",", strtoupper($existingCodes));
-                    foreach ($existingCodes as $existingCode) {
-                        if (!in_array($existingCode, $codesToRemove)) {
-                            $couponCodes[] = $existingCode;
-                        }
-                    }
-                }
-                $couponCode = implode(",", $couponCodes);
+                $couponCode = $this->_yotpoHelper->prepareCouponCodeValue(
+                    (string) $quote->getCouponCode(), // Existing quote coupon(s)
+                    (string) $this->_yotpoHelper->getRequest()->getParam('swell_coupon_code_cancel', ''), // Coupon(s) to remove
+                    '' // Coupon(s) to add
+                );
                 $quote->setCouponCode($couponCode)->setTotalsCollectedFlag(false)->collectTotals()->save();
             }
         } catch (\Exception $e) {

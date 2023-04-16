@@ -504,6 +504,39 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $prefix . str_replace('_', '', ucwords($str, '_')) . $suffix;
     }
 
+    /**
+     * Prepare value for setCouponCode() based on request params (with multiple coupons support)
+     * @method prepareCouponCodeValue
+     * @param  string|array             $existingCodes  Existing quote coupon(s)
+     * @param  string|array             $codesToRemove  Coupon(s) to remove
+     * @param  string|array             $codesToAdd     Coupon(s) to add
+     * @return string
+     */
+    public function prepareCouponCodeValue($existingCodes = '', $codesToRemove = '', $codesToAdd = '')
+    {
+        $preparedCouponCodes = [];
+
+        if ($codesToRemove && $existingCodes) {
+            $codesToRemove = is_array($codesToRemove) ? $codesToRemove : explode(',', strtoupper($codesToRemove));
+            $existingCodes = is_array($existingCodes) ? $existingCodes : explode(',', $existingCodes);
+            foreach ($existingCodes as $existingCode) {
+                if (!in_array(strtoupper($existingCode), $codesToRemove)) {
+                    $preparedCouponCodes[] = $existingCode;
+                }
+            }
+        }
+
+        if ($codesToAdd) {
+            $codesToAdd = is_array($codesToAdd) ? $codesToAdd : explode(',', $codesToAdd);
+            foreach ($codesToAdd as $codeToAdd) {
+                $preparedCouponCodes[] = $codeToAdd;
+            }
+
+        }
+
+        return implode(',', $preparedCouponCodes);
+    }
+
     //= App Environment Emulation =//
 
     /**
