@@ -50,7 +50,7 @@ class CouponManagement implements \Yotpo\Loyalty\Api\Swell\Session\CouponManagem
                 $existingCodes = (string) $quote->getData("coupon_code");
                 $couponCodes = [$code];
 
-                if (isset($codesToRemove) && isset($existingCodes)) {
+                if ($codesToRemove && $existingCodes) {
                     $codesToRemove = (is_array($codesToRemove)) ? $codesToRemove : explode(",", strtoupper($codesToRemove));
                     $existingCodes = explode(",", strtoupper($existingCodes));
                     foreach ($existingCodes as $existingCode) {
