@@ -16,7 +16,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Yotpo\Loyalty\Model\Logger as YotpoLogger;
 
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
     public const MODULE_NAME = 'Yotpo_Loyalty';
 
@@ -38,6 +38,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public const XML_PATH_SECURE_BASE_URL = "web/secure/base_url";
     public const XML_PATH_UNSECURE_BASE_URL = "web/unsecure/base_url";
     public const XML_PATH_USE_SECURE_IN_FRONTEND = "web/secure/use_in_frontend";
+
+    public const COUPON_CODE_QUERY_PARAM = "yotpo_loyalty_coupon_code";
 
     protected $_initializedRequestParams;
 
