@@ -9,12 +9,14 @@ class TestManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\I
     /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
+     * @param \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper
      */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
-        \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
+        \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
+        \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper
     ) {
-        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper, $appEmulationHelper);
     }
 
     /**

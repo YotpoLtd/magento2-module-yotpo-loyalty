@@ -34,6 +34,7 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
     /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
+     * @param \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
@@ -43,6 +44,7 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
+        \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper,
         \Magento\SalesRule\Model\Rule $ruleModel,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
@@ -54,7 +56,7 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
         $this->_couponFactory = $couponFactory;
         $this->_quoteFactory = $quoteFactory;
         $this->_customerGroupCollection = $customerGroupCollection;
-        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper, $appEmulationHelper);
     }
 
     /**

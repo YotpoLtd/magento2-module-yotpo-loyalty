@@ -24,15 +24,17 @@ class DeleteRuleManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\S
     /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
+     * @param \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
+        \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory
     ) {
         $this->_ruleFactory = $ruleFactory;
-        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper, $appEmulationHelper);
     }
 
     /**

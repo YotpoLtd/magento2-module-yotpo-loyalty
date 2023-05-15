@@ -15,18 +15,26 @@ class AbstractSwell
      */
     protected $_yotpoSchemaHelper;
 
+    /**
+     * @var \Yotpo\Loyalty\Helper\AppEmulation
+     */
+    protected $_appEmulationHelper;
+
     protected $_storesId;
 
     /**
-     * @param \Yotpo\Loyalty\Helper\Data   $yotpoHelper
+     * @param \Yotpo\Loyalty\Helper\Data  $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
+     * @param \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper
      */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
-        \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
+        \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
+        \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper
     ) {
         $this->_yotpoHelper = $yotpoHelper;
         $this->_yotpoSchemaHelper = $yotpoSchemaHelper;
+        $this->_appEmulationHelper = $appEmulationHelper;
     }
 
     /**
@@ -36,7 +44,7 @@ class AbstractSwell
     protected function isAuthorized()
     {
         if (($this->_storesId = $this->_yotpoHelper->getStoreIdBySwellApiKey($this->_yotpoHelper->getRequest()->getParam("shared_secret")))) {
-            $this->_yotpoHelper->startEnvironmentEmulation($this->_storesId, \Magento\Framework\App\Area::AREA_FRONTEND, true);
+            $this->_appEmulationHelper->emulateFrontendArea($this->_storesId);
             return true;
         }
         return false;

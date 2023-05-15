@@ -19,18 +19,20 @@ class OrderCountManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\S
     /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
+     * @param \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper
      * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateTimeFactory
      */
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
+        \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper,
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateTimeFactory
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_dateTimeFactory = $dateTimeFactory;
-        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper, $appEmulationHelper);
     }
 
     /**

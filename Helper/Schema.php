@@ -69,8 +69,7 @@ class Schema extends \Magento\Framework\App\Helper\AbstractHelper
         $orderData = (array) array_filter($order->getData(), function ($v) {
             return (!(is_array($v) || is_object($v)));
         });
-        $orderData["api_key"] = $this->_yotpoHelper->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $order->getStoreId());
-        $orderData["guid"] = $this->_yotpoHelper->getSwellGuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $order->getStoreId());
+        // Note: "api_key" & "guid" should be added dynamically before sending.
         $orderData["entity_type"] = "order";
         if ($entityStatus !== null) {
             $orderData["entity_status"] = $entityStatus;
@@ -89,7 +88,7 @@ class Schema extends \Magento\Framework\App\Helper\AbstractHelper
                 foreach ($creditMemo->getAllItems() as $creditMemoItem) { //get all credit memo items if needed
                     $_creditMemoData['items'] = $creditMemoItem->getData();
                 }
-                $creditMemoData[] = $_creditMemoData;            
+                $creditMemoData[] = $_creditMemoData;
             }
         } catch (\Exception $e) {
             //Ignore errors
@@ -180,8 +179,7 @@ class Schema extends \Magento\Framework\App\Helper\AbstractHelper
     public function customerSchemaPrepare(\Magento\Customer\Model\Customer $customer, string $entityStatus = "created")
     {
         return [
-            "api_key" => $this->_yotpoHelper->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $customer->getStoreId()),
-            "guid" => $this->_yotpoHelper->getSwellGuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $customer->getStoreId()),
+            // Note: "api_key" & "guid" should be added dynamically before sending.
             "entity_id" => $customer->getId(),
             "entity_type" => "customer",
             "entity_status" => $entityStatus,

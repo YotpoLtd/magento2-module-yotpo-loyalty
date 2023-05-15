@@ -24,6 +24,7 @@ class CreateSubscriberManagement extends AbstractSwell implements \Yotpo\Loyalty
     /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
+     * @param \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param \Magento\Newsletter\Model\Subscriber $subscriberModel
@@ -31,6 +32,7 @@ class CreateSubscriberManagement extends AbstractSwell implements \Yotpo\Loyalty
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
+        \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper,
         \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerCollectionFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         \Magento\Newsletter\Model\Subscriber $subscriberModel
@@ -40,7 +42,7 @@ class CreateSubscriberManagement extends AbstractSwell implements \Yotpo\Loyalty
         $this->_customerCollectionFactory = $customerCollectionFactory;
         $this->_subscriberFactory = $subscriberFactory;
         $this->_subscriberModel = $subscriberModel;
-        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper, $appEmulationHelper);
     }
 
     /**

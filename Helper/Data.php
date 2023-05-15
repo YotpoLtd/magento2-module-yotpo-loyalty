@@ -6,7 +6,6 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\App\Emulation;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory as ConfigCollectionFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
@@ -59,11 +58,6 @@ class Data extends AbstractHelper
     protected $_logger;
 
     /**
-     * @var Emulation
-     */
-    protected $_appEmulation;
-
-    /**
      * @var Request
      */
     protected $_request;
@@ -108,7 +102,6 @@ class Data extends AbstractHelper
      * @param  Context                  $context
      * @param  ObjectManagerInterface   $objectManager
      * @param  StoreManagerInterface    $storeManager
-     * @param  Emulation                $appEmulation
      * @param  Request                  $request
      * @param  ConfigCollectionFactory  $configCollectionFactory
      * @param  EncryptorInterface       $encryptor
@@ -122,7 +115,6 @@ class Data extends AbstractHelper
         Context $context,
         ObjectManagerInterface $objectManager,
         StoreManagerInterface $storeManager,
-        Emulation $appEmulation,
         Request $request,
         ConfigCollectionFactory $configCollectionFactory,
         EncryptorInterface $encryptor,
@@ -136,7 +128,6 @@ class Data extends AbstractHelper
         $this->_objectManager = $objectManager;
         $this->_storeManager = $storeManager;
         $this->_logger = $context->getLogger();
-        $this->_appEmulation = $appEmulation;
         $this->_request = $request;
         $this->_configCollectionFactory = $configCollectionFactory;
         $this->_encryptor = $encryptor;
@@ -164,11 +155,6 @@ class Data extends AbstractHelper
     public function getLogger()
     {
         return $this->_logger;
-    }
-
-    public function getAppEmulation()
-    {
-        return $this->_appEmulation;
     }
 
     public function getRequest()
@@ -427,6 +413,17 @@ class Data extends AbstractHelper
         return array_values($return);
     }
 
+    public function getEnabledStoreIds($withDefault = false)
+    {
+        $return = [];
+        foreach ($this->getStoreManager()->getStores($withDefault) as $key => $store) {
+            if ($this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) {
+                $return[] = $store->getId();
+            }
+        }
+        return $return;
+    }
+
     public function getMagentoVersion()
     {
         return $this->_magentoFrameworkProductMetadata->getVersion();
@@ -538,50 +535,4 @@ class Data extends AbstractHelper
 
         return implode(',', $preparedCouponCodes);
     }
-
-    //= App Environment Emulation =//
-
-    /**
-     * Start environment emulation of the specified store
-     *
-     * Function returns information about initial store environment and emulates environment of another store
-     *
-     * @param integer $storeId
-     * @param string $area
-     * @param bool $force A true value will ensure that environment is always emulated, regardless of current store
-     * @return $this
-     */
-    public function startEnvironmentEmulation($storeId, $area = \Magento\Framework\App\Area::AREA_FRONTEND, $force = false)
-    {
-        $this->getAppEmulation()->startEnvironmentEmulation($storeId, $area, $force);
-        return $this;
-    }
-
-    /**
-     * Stop environment emulation
-     *
-     * Function restores initial store environment
-     *
-     * @return $this
-     */
-    public function stopEnvironmentEmulation()
-    {
-        $this->getAppEmulation()->stopEnvironmentEmulation();
-        return $this;
-    }
-
-    public function emulateFrontendArea($storeId, $force = false)
-    {
-        $this->startEnvironmentEmulation($storeId, \Magento\Framework\App\Area::AREA_FRONTEND, $force);
-        return $this;
-    }
-
-    public function emulateAdminArea($storeId = null, $force = false)
-    {
-        $storeId = ($storeId === null) ? $this->getDefaultStoreId() : $storeId;
-        $this->startEnvironmentEmulation($storeId, \Magento\Framework\App\Area::AREA_ADMINHTML, $force);
-        return $this;
-    }
-
-    //=====================================================================================================//
 }
