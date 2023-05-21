@@ -3,6 +3,7 @@
     <body>
         <referenceContainer name="before.body.end">
             <block class="Yotpo\Loyalty\Block\Snippet" name="yotpo.loyalty.snippet" as="yotpo_loyalty_snippet" after="-" template="Yotpo_Loyalty::snippet.phtml" ifconfig="yotpo_loyalty/general_settings/active" />
+            <block class="Yotpo\Loyalty\Block\UrlCouponCodeJs" name="yotpo.loyalty.url_coupon_code_js_body" as="yotpo_loyalty_url_coupon_code_js_body" after="-" template="Yotpo_Loyalty::url_coupon_code_js_body.phtml" ifconfig="yotpo_loyalty/general_settings/active" />
         </referenceContainer>
     </body>
 </page>

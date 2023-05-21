@@ -1,0 +1,48 @@
+<?php
+
+use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
+
+/**
+ * @var $block \Yotpo\Loyalty\Block\UrlCouponCodeJs
+ */
+?>
+<?php if (!$block->isEnabled()) {
+    return;
+} ?>
+<!-- Yotpo Loyalty - Frontend URL coupon processor -->
+<script>
+    (function  () {
+        var yotpoLoyaltyCouponCodeUrl = localStorage.getItem('<?= $block->escapeHtmlAttr(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM) ?>_url');
+        console.log(yotpoLoyaltyCouponCodeUrl);
+        if (!yotpoLoyaltyCouponCodeUrl) {
+            return;
+        }
+        require([
+            "jquery",
+            'mage/storage'
+        ],function($, storage) {
+            $(document).ready(function() {
+                try {
+                    storage.get(yotpoLoyaltyCouponCodeUrl)
+                    .done(function (response) {
+                        console.log(response);
+                        if (response.error) {
+                            throw response;
+                        } else if (response.success) {
+                            localStorage.removeItem('<?= $block->escapeHtmlAttr(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM) ?>_url');
+                        }
+                    }).fail(function (response) {
+                        throw response;
+                    });
+                } catch (e) {
+                    <?php if ($block->isDebugMode()): ?>
+                        console.error(e);
+                    <?php else: ?>
+                        console.error("Yotpo Loyalty Error - Enable debug mode in order to see more details...");
+                    <?php endif; ?>
+                }
+            });
+        });
+    })();
+</script>
+<!--/ Yotpo Loyalty - Frontend URL coupon processor -->

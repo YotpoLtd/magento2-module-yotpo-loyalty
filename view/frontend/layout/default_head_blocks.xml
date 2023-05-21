@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Yotpo\Loyalty\Block\UrlCouponCodeJs" name="yotpo.loyalty.url_coupon_code_js_head" as="yotpo_loyalty_url_coupon_code_js_head" after="-" template="Yotpo_Loyalty::url_coupon_code_js_head.phtml" ifconfig="yotpo_loyalty/general_settings/active" />
+        </referenceBlock>
+    </body>
+</page>

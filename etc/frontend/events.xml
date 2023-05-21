@@ -6,4 +6,10 @@
     <event name="controller_front_send_response_before">
         <observer name="yotpo_loyalty_controller_front_send_response_before" instance="Yotpo\Loyalty\Observer\ControllerSendResponseBefore" />
     </event>
+    <event name="checkout_cart_save_before">
+        <observer name="yotpo_loyalty_checkout_cart_save_before" instance="Yotpo\Loyalty\Observer\CheckoutCartSaveBefore" />
+    </event>
+    <event name="checkout_cart_save_after">
+        <observer name="yotpo_loyalty_checkout_cart_save_after" instance="Yotpo\Loyalty\Observer\CheckoutCartSaveAfter" />
+    </event>
 </config>
