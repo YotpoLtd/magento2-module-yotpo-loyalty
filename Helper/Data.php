@@ -7,6 +7,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Config\Model\ResourceModel\Config\Data\Collection as ConfigCollection;
 use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory as ConfigCollectionFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\App\ProductMetadataInterface;
@@ -75,7 +76,7 @@ class Data extends AbstractHelper
     /**
      * @var ProductMetadataInterface
      */
-    protected $_magentoFrameworkProductMetadata;
+    protected $_magentoMetadata;
 
     /**
      * @var ModuleListInterface
@@ -105,7 +106,7 @@ class Data extends AbstractHelper
      * @param  Request                  $request
      * @param  ConfigCollectionFactory  $configCollectionFactory
      * @param  EncryptorInterface       $encryptor
-     * @param  ProductMetadataInterface $magentoFrameworkProductMetadata
+     * @param  ProductMetadataInterface $magentoMetadata
      * @param  ModuleListInterface      $moduleList
      * @param  DateTimeFactory          $datetimeFactory
      * @param  JsonHelper               $jsonHelper
@@ -118,7 +119,7 @@ class Data extends AbstractHelper
         Request $request,
         ConfigCollectionFactory $configCollectionFactory,
         EncryptorInterface $encryptor,
-        ProductMetadataInterface $magentoFrameworkProductMetadata,
+        ProductMetadataInterface $magentoMetadata,
         ModuleListInterface $moduleList,
         DateTimeFactory $datetimeFactory,
         JsonHelper $jsonHelper,
@@ -131,7 +132,7 @@ class Data extends AbstractHelper
         $this->_request = $request;
         $this->_configCollectionFactory = $configCollectionFactory;
         $this->_encryptor = $encryptor;
-        $this->_magentoFrameworkProductMetadata = $magentoFrameworkProductMetadata;
+        $this->_magentoMetadata = $magentoMetadata;
         $this->_moduleList = $moduleList;
         $this->_datetimeFactory = $datetimeFactory;
         $this->_jsonHelper = $jsonHelper;
@@ -203,9 +204,22 @@ class Data extends AbstractHelper
         }
     }
 
+    /**
+     * Get all yotpo_loyalty* configurations for current store (array)
+     * @return array
+     */
     public function getAllConfig($scope = null, $scopeId = null, $skipCahce = false)
     {
         return $this->getConfig(self::XML_PATH_ALL, $scope, $scopeId, $skipCahce);
+    }
+
+    /**
+     * Get all yotpo_loyalty* values from config table (actual collection)
+     * @return ConfigCollection
+     */
+    public function getAllScopesConfig()
+    {
+        return $this->_configCollectionFactory->create()->addFieldToFilter('path', ['like' => self::XML_PATH_ALL . '%']);
     }
 
     public function isEnabled($scope = null, $scopeId = null, $skipCahce = false)
@@ -424,9 +438,11 @@ class Data extends AbstractHelper
         return $return;
     }
 
-    public function getMagentoVersion()
+    public function getMagentoVersion($full = false)
     {
-        return $this->_magentoFrameworkProductMetadata->getVersion();
+        return $full ?
+            "{$this->_magentoMetadata->getName()} {$this->_magentoMetadata->getEdition()} {$this->_magentoMetadata->getVersion()}" :
+            $this->_magentoMetadata->getVersion();
     }
 
     public function getModuleVersion()
@@ -530,7 +546,6 @@ class Data extends AbstractHelper
             foreach ($codesToAdd as $codeToAdd) {
                 $preparedCouponCodes[] = $codeToAdd;
             }
-
         }
 
         return implode(',', $preparedCouponCodes);
