@@ -60,10 +60,8 @@ class CheckoutCartSaveAfter implements ObserverInterface
     {
         if ($this->yotpoHelper->isEnabled()) {
             try {
-                $this->yotpoHelper->log("[CheckoutCartSaveAfter] START", "debug");
                 $couponCode = trim((string)$this->customerSession->getData(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM));
                 $quote = $observer->getEvent()->getCart()->getQuote();
-                $this->yotpoHelper->log("[CheckoutCartSaveAfter] COUPON " . $couponCode, "debug");
                 if (
                     $couponCode &&
                     $quote &&
@@ -71,8 +69,11 @@ class CheckoutCartSaveAfter implements ObserverInterface
                     $quote->getItemsCount() > 0 &&
                     $quote->getCouponCode() === $couponCode
                 ) {
-                    $this->yotpoHelper->log("[CheckoutCartSaveAfter] COUPON ADDED AUTOMATICALLY: " . $couponCode, "debug");
                     $this->customerSession->unsetData(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM);
+                    $this->yotpoHelper->log("[CheckoutCartSaveAfter] COUPON ADDED AUTOMATICALLY" . $couponCode, "debug", [
+                        "quote_id" => $quote->getId(),
+                        "coupon_code" => $couponCode,
+                    ]);
                 }
             } catch (\Exception $e) {
                 $this->yotpoHelper->log("[CheckoutCartSaveAfter - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");

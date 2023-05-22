@@ -42,12 +42,9 @@ class CustomerSessionInit implements ObserverInterface
     {
         if ($this->yotpoHelper->isEnabled()) {
             try {
-                $this->yotpoHelper->log("[CustomerSessionInit] URI: " . $this->request->getRequestUri(), "debug");
-                $this->yotpoHelper->log("[CustomerSessionInit] COUPON: " . $this->request->getParam(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM), "debug");
                 if (($couponCode = $this->request->getParam(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM))) {
                     $customerSession = $observer->getEvent()->getCustomerSession();
                     $customerSession->setData(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM, $couponCode);
-                    $this->yotpoHelper->log("[CustomerSessionInit] COUPON IN CUSTOMER SESSION: " . trim((string)$customerSession->getData(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM)), "debug");
                 }
             } catch (\Exception $e) {
                 $this->yotpoHelper->log("[CustomerSessionInit - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");

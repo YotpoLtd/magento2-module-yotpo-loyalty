@@ -62,22 +62,14 @@ class CheckoutCartSaveBefore implements ObserverInterface
             try {
                 $couponCode = trim((string)$this->request->getParam(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM)) ?:
                     trim((string)$this->customerSession->getData(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM));
-                $this->yotpoHelper->log("[CheckoutCartSaveBefore] COUPON: " . $couponCode, "debug");
                 if ($couponCode) {
                     $this->customerSession->setData(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM, $couponCode);
                     $quote = $observer->getEvent()->getCart()->getQuote();
                     if ($quote && $quote->getCouponCode() !== $couponCode) {
                         $quote->setCouponCode($couponCode)->setTotalsCollectedFlag(false);
-                        $this->yotpoHelper->log("[CheckoutCartSaveBefore] COUPON SET: " . $couponCode, "debug");
                     }
                 } else {
                     $quote = $observer->getEvent()->getCart()->getQuote();
-                    $this->yotpoHelper->log("[CheckoutCartSaveBefore] COUPON NOT ADDED: " . $couponCode, "debug", [
-                        $quote,
-                        $quote->getId(),
-                        $quote->getCouponCode(),
-                        $couponCode
-                    ]);
                 }
             } catch (\Exception $e) {
                 $this->yotpoHelper->log("[CheckoutCartSaveBefore - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
