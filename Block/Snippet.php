@@ -2,6 +2,8 @@
 
 namespace Yotpo\Loyalty\Block;
 
-class Snippet extends \Yotpo\Loyalty\Block\AbstractBlock
+use Yotpo\Loyalty\Block\AbstractBlock;
+
+class Snippet extends AbstractBlock
 {
 }

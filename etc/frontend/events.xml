@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_session_init">
+        <observer name="yotpo_loyalty_customer_session_init" instance="Yotpo\Loyalty\Observer\CustomerSessionInit" />
+    </event>
+    <event name="controller_front_send_response_before">
+        <observer name="yotpo_loyalty_controller_front_send_response_before" instance="Yotpo\Loyalty\Observer\ControllerSendResponseBefore" />
+    </event>
+    <event name="checkout_cart_save_before">
+        <observer name="yotpo_loyalty_checkout_cart_save_before" instance="Yotpo\Loyalty\Observer\CheckoutCartSaveBefore" />
+    </event>
+    <event name="checkout_cart_save_after">
+        <observer name="yotpo_loyalty_checkout_cart_save_after" instance="Yotpo\Loyalty\Observer\CheckoutCartSaveAfter" />
+    </event>
+</config>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
-    <router id="standard">
+    <router id="admin">
         <route id="yotpo_loyalty_swell" frontName="swell">
             <module name="Yotpo_Loyalty" />
         </route>

@@ -34,6 +34,7 @@ class AddManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Ca
     /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
+     * @param \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -43,6 +44,7 @@ class AddManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Ca
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
+        \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -54,7 +56,7 @@ class AddManagement extends AbstractSwell implements \Yotpo\Loyalty\Api\Swell\Ca
         $this->_productRepository = $productRepository;
         $this->_customerFactory = $customerFactory;
         $this->_itemFactory = $itemFactory;
-        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper, $appEmulationHelper);
     }
 
     /**

@@ -1,0 +1,16 @@
+<?php
+
+use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
+
+/**
+ * @var $block \Yotpo\Loyalty\Block\UrlCouponCodeJs
+ */
+?>
+<?php if (!$block->isEnabled() || !($couponCodeUrl = $block->getUrlCouponCodeUrl())) {
+    return;
+} ?>
+<!-- Yotpo Loyalty - Frontend URL coupon processor -->
+<script>
+    localStorage.setItem('<?= $block->escapeHtmlAttr(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM) ?>_url', '<?= $block->escapeJs($couponCodeUrl) ?>');
+</script>
+<!--/ Yotpo Loyalty - Frontend URL coupon processor -->

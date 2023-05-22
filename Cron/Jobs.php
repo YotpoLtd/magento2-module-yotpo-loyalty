@@ -2,6 +2,7 @@
 
 namespace Yotpo\Loyalty\Cron;
 
+use Magento\Store\Model\ScopeInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Jobs
@@ -255,6 +256,21 @@ class Jobs
     }
 
     /**
+     * @method _setCollectionLimit
+     * @param  \Yotpo\Loyalty\Model\Queue $queueItem
+     * @return object|null
+     */
+    protected function getPreparedSchemaWithCredentials(\Yotpo\Loyalty\Model\Queue $queueItem)
+    {
+        $preparedSchema = $queueItem->getPreparedSchema();
+        if ($preparedSchema && is_object($preparedSchema)) {
+            $preparedSchema->api_key = $this->_yotpoHelper->getSwellApiKey(ScopeInterface::SCOPE_STORE, $queueItem->getStoreId());
+            $preparedSchema->guid = $this->_yotpoHelper->getSwellGuid(ScopeInterface::SCOPE_STORE, $queueItem->getStoreId());
+        }
+        return $preparedSchema;
+    }
+
+    /**
      * Process Sync Queue.
      * @method syncOrdersPrepare
      * @return $this
@@ -265,14 +281,16 @@ class Jobs
             $this->_processOutput("Jobs::processSyncQueue() - [STARTED]", "info");
             $this->setCrontabAreaCode();
 
-            $collection = $this->getYotpoQueueCollection()->addFieldToSelect('*')->addFieldToFilter('sent', 0);
-
+            $collection = $this->getYotpoQueueCollection()
+                ->addFieldToSelect('*')
+                ->addFieldToFilter('sent', 0)
+                ->addFieldToFilter('store_id', ['in' => $this->_yotpoHelper->getEnabledStoreIds()]);
             $this->_setCollectionTryoutsFilter($collection);
-            $collection->setOrder('created_at', 'asc');
+            $collection->getSelect()->order(['created_at ASC']);
             $this->_setCollectionLimit($collection);
 
             $collectionCount = $collection->count();
-            $this->_processOutput("Found {$collectionCount} queued items.", 'comment');
+            $this->_processOutput("Found {$collectionCount} queued items (on stores: " . implode(',', $this->_yotpoHelper->getEnabledStoreIds()) . ").", 'comment');
 
             $addAdminNotifications = "";
             $i = 0;
@@ -282,7 +300,7 @@ class Jobs
 
                 try {
                     $this->_processOutput('*** Entity Type: ' . $item->getEntityType() . "\n" . '*** Entity ID: ' . $item->getEntityId() . "\n" . '*** Entity Status: ' . $item->getEntityStatus() . "\n" . '*** Store ID: ' . $item->getStoreId(), 'comment');
-                    $response = $this->_apiRequestHelper->webhooksRequest($item->getPreparedSchema());
+                    $response = $this->_apiRequestHelper->webhooksRequest($this->getPreparedSchemaWithCredentials($item));
                     $item->setResponse($response->getResponse())->setTryouts($item->getTryouts()+1);
                     if ($response->getError()) {
                         $this->_processOutput('== [ERROR] ' . $response->getMessage(), 'error', [$response]);

@@ -6,8 +6,8 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\App\Emulation;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Config\Model\ResourceModel\Config\Data\Collection as ConfigCollection;
 use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory as ConfigCollectionFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\App\ProductMetadataInterface;
@@ -16,7 +16,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Yotpo\Loyalty\Model\Logger as YotpoLogger;
 
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
     public const MODULE_NAME = 'Yotpo_Loyalty';
 
@@ -39,6 +39,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public const XML_PATH_UNSECURE_BASE_URL = "web/unsecure/base_url";
     public const XML_PATH_USE_SECURE_IN_FRONTEND = "web/secure/use_in_frontend";
 
+    public const COUPON_CODE_QUERY_PARAM = "yotpo_loyalty_coupon_code";
+
     protected $_initializedRequestParams;
 
     /**
@@ -55,11 +57,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var LoggerInterface
      */
     protected $_logger;
-
-    /**
-     * @var Emulation
-     */
-    protected $_appEmulation;
 
     /**
      * @var Request
@@ -79,7 +76,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var ProductMetadataInterface
      */
-    protected $_magentoFrameworkProductMetadata;
+    protected $_magentoMetadata;
 
     /**
      * @var ModuleListInterface
@@ -106,11 +103,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  Context                  $context
      * @param  ObjectManagerInterface   $objectManager
      * @param  StoreManagerInterface    $storeManager
-     * @param  Emulation                $appEmulation
      * @param  Request                  $request
      * @param  ConfigCollectionFactory  $configCollectionFactory
      * @param  EncryptorInterface       $encryptor
-     * @param  ProductMetadataInterface $magentoFrameworkProductMetadata
+     * @param  ProductMetadataInterface $magentoMetadata
      * @param  ModuleListInterface      $moduleList
      * @param  DateTimeFactory          $datetimeFactory
      * @param  JsonHelper               $jsonHelper
@@ -120,11 +116,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         Context $context,
         ObjectManagerInterface $objectManager,
         StoreManagerInterface $storeManager,
-        Emulation $appEmulation,
         Request $request,
         ConfigCollectionFactory $configCollectionFactory,
         EncryptorInterface $encryptor,
-        ProductMetadataInterface $magentoFrameworkProductMetadata,
+        ProductMetadataInterface $magentoMetadata,
         ModuleListInterface $moduleList,
         DateTimeFactory $datetimeFactory,
         JsonHelper $jsonHelper,
@@ -134,11 +129,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_objectManager = $objectManager;
         $this->_storeManager = $storeManager;
         $this->_logger = $context->getLogger();
-        $this->_appEmulation = $appEmulation;
         $this->_request = $request;
         $this->_configCollectionFactory = $configCollectionFactory;
         $this->_encryptor = $encryptor;
-        $this->_magentoFrameworkProductMetadata = $magentoFrameworkProductMetadata;
+        $this->_magentoMetadata = $magentoMetadata;
         $this->_moduleList = $moduleList;
         $this->_datetimeFactory = $datetimeFactory;
         $this->_jsonHelper = $jsonHelper;
@@ -162,11 +156,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getLogger()
     {
         return $this->_logger;
-    }
-
-    public function getAppEmulation()
-    {
-        return $this->_appEmulation;
     }
 
     public function getRequest()
@@ -215,9 +204,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
     }
 
+    /**
+     * Get all yotpo_loyalty* configurations for current store (array)
+     * @return array
+     */
     public function getAllConfig($scope = null, $scopeId = null, $skipCahce = false)
     {
         return $this->getConfig(self::XML_PATH_ALL, $scope, $scopeId, $skipCahce);
+    }
+
+    /**
+     * Get all yotpo_loyalty* values from config table (actual collection)
+     * @return ConfigCollection
+     */
+    public function getAllScopesConfig()
+    {
+        return $this->_configCollectionFactory->create()->addFieldToFilter('path', ['like' => self::XML_PATH_ALL . '%']);
     }
 
     public function isEnabled($scope = null, $scopeId = null, $skipCahce = false)
@@ -425,9 +427,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return array_values($return);
     }
 
-    public function getMagentoVersion()
+    public function getEnabledStoreIds($withDefault = false)
     {
-        return $this->_magentoFrameworkProductMetadata->getVersion();
+        $return = [];
+        foreach ($this->getStoreManager()->getStores($withDefault) as $key => $store) {
+            if ($this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) {
+                $return[] = $store->getId();
+            }
+        }
+        return $return;
+    }
+
+    public function getMagentoVersion($full = false)
+    {
+        return $full ?
+            "{$this->_magentoMetadata->getName()} {$this->_magentoMetadata->getEdition()} {$this->_magentoMetadata->getVersion()}" :
+            $this->_magentoMetadata->getVersion();
     }
 
     public function getModuleVersion()
@@ -531,55 +546,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             foreach ($codesToAdd as $codeToAdd) {
                 $preparedCouponCodes[] = $codeToAdd;
             }
-
         }
 
         return implode(',', $preparedCouponCodes);
     }
-
-    //= App Environment Emulation =//
-
-    /**
-     * Start environment emulation of the specified store
-     *
-     * Function returns information about initial store environment and emulates environment of another store
-     *
-     * @param integer $storeId
-     * @param string $area
-     * @param bool $force A true value will ensure that environment is always emulated, regardless of current store
-     * @return $this
-     */
-    public function startEnvironmentEmulation($storeId, $area = \Magento\Framework\App\Area::AREA_FRONTEND, $force = false)
-    {
-        $this->getAppEmulation()->startEnvironmentEmulation($storeId, $area, $force);
-        return $this;
-    }
-
-    /**
-     * Stop environment emulation
-     *
-     * Function restores initial store environment
-     *
-     * @return $this
-     */
-    public function stopEnvironmentEmulation()
-    {
-        $this->getAppEmulation()->stopEnvironmentEmulation();
-        return $this;
-    }
-
-    public function emulateFrontendArea($storeId, $force = false)
-    {
-        $this->startEnvironmentEmulation($storeId, \Magento\Framework\App\Area::AREA_FRONTEND, $force);
-        return $this;
-    }
-
-    public function emulateAdminArea($storeId = null, $force = false)
-    {
-        $storeId = ($storeId === null) ? $this->getDefaultStoreId() : $storeId;
-        $this->startEnvironmentEmulation($storeId, \Magento\Framework\App\Area::AREA_ADMINHTML, $force);
-        return $this;
-    }
-
-    //=====================================================================================================//
 }

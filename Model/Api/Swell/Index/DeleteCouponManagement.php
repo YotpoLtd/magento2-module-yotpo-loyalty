@@ -39,6 +39,7 @@ class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
     /**
      * @param \Yotpo\Loyalty\Helper\Data $yotpoHelper
      * @param \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper
+     * @param \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\Quote\Api\CartRepositoryInterface $_cartRepositoryInterface
@@ -47,6 +48,7 @@ class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
     public function __construct(
         \Yotpo\Loyalty\Helper\Data $yotpoHelper,
         \Yotpo\Loyalty\Helper\Schema $yotpoSchemaHelper,
+        \Yotpo\Loyalty\Helper\AppEmulation $appEmulationHelper,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
         \Magento\Quote\Api\CartRepositoryInterface $_cartRepositoryInterface,
@@ -56,7 +58,7 @@ class DeleteCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
         $this->_ruleFactory = $ruleFactory;
         $this->_cartRepositoryInterface = $_cartRepositoryInterface;
         $this->_searchCriteriaBuilder = $_searchCriteriaBuilder;
-        parent::__construct($yotpoHelper, $yotpoSchemaHelper);
+        parent::__construct($yotpoHelper, $yotpoSchemaHelper, $appEmulationHelper);
     }
 
     /**
