@@ -13,7 +13,6 @@ use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
 <script>
     (function  () {
         var yotpoLoyaltyCouponCodeUrl = localStorage.getItem('<?= $block->escapeHtmlAttr(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM) ?>_url');
-        console.log(yotpoLoyaltyCouponCodeUrl);
         if (!yotpoLoyaltyCouponCodeUrl) {
             return;
         }
@@ -25,7 +24,6 @@ use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
                 try {
                     storage.get(yotpoLoyaltyCouponCodeUrl)
                     .done(function (response) {
-                        console.log(response);
                         if (response.error) {
                             throw response;
                         } else if (response.success) {
