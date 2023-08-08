@@ -299,7 +299,7 @@ class Jobs
                 $this->_processOutput('== Processing ID: ' . $item->getId() . ' (' . $i . '/' . $collectionCount . ') ...', 'comment');
 
                 try {
-                    $this->_processOutput('*** Entity Type: ' . $item->getEntityType() . "\n" . '*** Entity ID: ' . $item->getEntityId() . "\n" . '*** Entity Status: ' . $item->getEntityStatus() . "\n" . '*** Store ID: ' . $item->getStoreId(), 'comment');
+                    $this->_processOutput('*** Entity Type: ' . $item->getEntityType() . ' | Entity ID: ' . $item->getEntityId() . ' | Entity Status: ' . $item->getEntityStatus() . ' | Store ID: ' . $item->getStoreId() . ' | Try: ' . ($item->getTryouts()+1), 'comment');
                     $response = $this->_apiRequestHelper->webhooksRequest($this->getPreparedSchemaWithCredentials($item));
                     $item->setResponse($response->getResponse())->setTryouts($item->getTryouts()+1);
                     if ($response->getError()) {
