@@ -3,6 +3,7 @@
 namespace Yotpo\Loyalty\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class OrderSaveBefore implements ObserverInterface
 {
@@ -31,9 +32,10 @@ class OrderSaveBefore implements ObserverInterface
 
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->_yotpoHelper->isEnabled()) {
-            try {
-                $order = $observer->getEvent()->getOrder();
+        try {
+            $order = $observer->getEvent()->getOrder();
+            $storeId = $order->getStoreId() ?: $this->_yotpoHelper->getCurrentStoreId();
+            if ($this->_yotpoHelper->isEnabled(ScopeInterface::SCOPE_STORE, $storeId)) {
                 if ($order->isObjectNew()) {
                     $this->_registry->register('swell/order/created', true, true);
                     if (!$order->getData('swell_user_agent')) {
@@ -48,9 +50,9 @@ class OrderSaveBefore implements ObserverInterface
                     $this->_registry->register('swell/order/original/status/id' . $orderId, $order->getOrigData("status"));
                     $this->_registry->register('swell/order/original/base_total_refunded/id' . $orderId, $order->getOrigData("base_total_refunded"));
                 }
-            } catch (\Exception $e) {
-                $this->_yotpoHelper->log("[Yotpo - OrderSaveBefore - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             }
+        } catch (\Exception $e) {
+            $this->_yotpoHelper->log("[Yotpo - OrderSaveBefore - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace Yotpo\Loyalty\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class CustomerSaveBefore implements ObserverInterface
 {
@@ -31,9 +32,10 @@ class CustomerSaveBefore implements ObserverInterface
 
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->_yotpoHelper->isEnabled()) {
-            try {
-                $customer = $observer->getEvent()->getCustomer();
+        try {
+            $customer = $observer->getEvent()->getCustomer();
+            $storeId = $customer->getData('store_id') ?: $this->_yotpoHelper->getCurrentStoreId();
+            if ($this->_yotpoHelper->isEnabled(ScopeInterface::SCOPE_STORE, $storeId)) {
                 if ($customer->isObjectNew()) {
                     $this->_registry->register('swell/customer/created', true, true);
                 } elseif (
@@ -44,9 +46,9 @@ class CustomerSaveBefore implements ObserverInterface
                     $this->_registry->register('swell/customer/original/email/id' . $customerId, $customer->getOrigData("email"));
                     $this->_registry->register('swell/customer/original/group_id/id' . $customerId, $customer->getOrigData("group_id"));
                 }
-            } catch (\Exception $e) {
-                $this->_yotpoHelper->log("[Yotpo - CustomerSaveBefore - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             }
+        } catch (\Exception $e) {
+            $this->_yotpoHelper->log("[Yotpo - CustomerSaveBefore - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
         }
     }
 }

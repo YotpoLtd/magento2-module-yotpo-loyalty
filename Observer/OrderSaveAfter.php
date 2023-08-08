@@ -3,6 +3,7 @@
 namespace Yotpo\Loyalty\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class OrderSaveAfter implements ObserverInterface
 {
@@ -47,11 +48,11 @@ class OrderSaveAfter implements ObserverInterface
 
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->_yotpoHelper->isEnabled()) {
-            try {
-                $order = $observer->getEvent()->getOrder();
+        try {
+            $order = $observer->getEvent()->getOrder();
+            $storeId = $order->getStoreId() ?: $this->_yotpoHelper->getCurrentStoreId();
+            if ($this->_yotpoHelper->isEnabled(ScopeInterface::SCOPE_STORE, $storeId)) {
                 $orderId = $order->getId();
-
                 $originalState = $this->_registry->registry('swell/order/original/state/id' . $orderId);
                 $originalStatus = $this->_registry->registry('swell/order/original/status/id' . $orderId);
                 $originalTotalRefunded = $this->_registry->registry('swell/order/original/base_total_refunded/id' . $orderId);
@@ -81,7 +82,7 @@ class OrderSaveAfter implements ObserverInterface
                         ->setEntityType("order")
                         ->setEntityId($order->getId())
                         ->setEntityStatus($entityStatus)
-                        ->setStoreId($this->_yotpoHelper->getCurrentStoreId())
+                        ->setStoreId($storeId)
                         ->setCreatedAt($this->_yotpoHelper->getCurrentDate())
                         ->setPreparedSchema($preparedData)
                         ->save();
@@ -100,9 +101,9 @@ class OrderSaveAfter implements ObserverInterface
                     $this->_registry->register('swell/order/original/state/id' . $orderId, $newState);
                     $this->_registry->register('swell/order/original/status/id' . $orderId, $newStatus);
                 }
-            } catch (\Exception $e) {
-                $this->_yotpoHelper->log("[Yotpo - OrderSaveAfter - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             }
+        } catch (\Exception $e) {
+            $this->_yotpoHelper->log("[Yotpo - OrderSaveAfter - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
         }
     }
 }
