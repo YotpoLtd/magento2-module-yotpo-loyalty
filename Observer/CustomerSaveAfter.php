@@ -3,6 +3,7 @@
 namespace Yotpo\Loyalty\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class CustomerSaveAfter implements ObserverInterface
 {
@@ -47,10 +48,10 @@ class CustomerSaveAfter implements ObserverInterface
 
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->_yotpoHelper->isEnabled()) {
-            try {
-                $customer = $observer->getEvent()->getCustomer();
-
+        try {
+            $customer = $observer->getEvent()->getCustomer();
+            $storeId = $customer->getData('store_id') ?: $this->_yotpoHelper->getCurrentStoreId();
+            if ($this->_yotpoHelper->isEnabled(ScopeInterface::SCOPE_STORE, $storeId)) {
                 $customerId = $customer->getId();
                 $newEmail = $customer->getData("email");
                 $newGroup = $customer->getData("group_id");
@@ -67,7 +68,7 @@ class CustomerSaveAfter implements ObserverInterface
                         ->setEntityType("customer")
                         ->setEntityId($customer->getId())
                         ->setEntityStatus($entityStatus)
-                        ->setStoreId($this->_yotpoHelper->getCurrentStoreId())
+                        ->setStoreId($storeId)
                         ->setCreatedAt($this->_yotpoHelper->getCurrentDate())
                         ->setPreparedSchema($preparedData)
                         ->save();
@@ -82,9 +83,9 @@ class CustomerSaveAfter implements ObserverInterface
                     $this->_registry->register('swell/customer/original/email', $newEmail);
                     $this->_registry->register('swell/customer/original/group_id', $newGroup);
                 }
-            } catch (\Exception $e) {
-                $this->_yotpoHelper->log("[Yotpo - CustomerSaveAfter - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
             }
+        } catch (\Exception $e) {
+            $this->_yotpoHelper->log("[Yotpo - CustomerSaveAfter - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
         }
     }
 }
