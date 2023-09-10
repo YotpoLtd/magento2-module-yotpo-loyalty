@@ -1,0 +1,15 @@
+<?php
+/**
+ * @var $block \Yotpo\Loyalty\Block\CheckoutWidget
+ */
+?>
+<?php if (!$block->isEnabled()) {
+    return;
+} ?>
+<!-- Yotpo Loyalty - Checkout Widget Js -->
+<script>
+    window.swellIsEnabled = true;
+    window.swellGuid = '<?php echo $block->getSwellGuid(); ?>';
+    window.swellInstanceId = '<?php echo $block->getSwellInstanceId(); ?>';
+</script>
+<!--/ Yotpo Loyalty - Checkout Widget Js -->

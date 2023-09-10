@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <referenceContainer name="content">
-        <block class="Yotpo\Loyalty\Block\Checkout\Js" name="admin_fi" template="Yotpo_Loyalty::js.phtml" />
+        <block class="Yotpo\Loyalty\Block\CheckoutWidget" name="yotpo_loyalty.checkout_widget_js_vars" template="Yotpo_Loyalty::checkout_widget_js_vars.phtml" ifconfig="yotpo_loyalty/general_settings/active"/>
     </referenceContainer>
     <body>
         <referenceBlock name="checkout.root">
@@ -16,8 +16,8 @@
                                             <item name="children" xsi:type="array">
                                                 <item name="itemsBefore" xsi:type="array">
                                                     <item name="children" xsi:type="array">
-                                                        <item name="testcustom" xsi:type="array">
-                                                            <item name="component" xsi:type="string">Yotpo_Loyalty/js/view/summary/custom</item>
+                                                        <item name="yotpo_loyalty_checkout_widget" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Yotpo_Loyalty/js/view/summary/checkout_widget_loader</item>
                                                         </item>
                                                     </item>
                                                 </item>
