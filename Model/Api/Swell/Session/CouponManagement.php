@@ -48,7 +48,7 @@ class CouponManagement implements \Yotpo\Loyalty\Api\Swell\Session\CouponManagem
                 $couponCode = $this->_yotpoHelper->prepareCouponCodeValue(
                     (string) $quote->getCouponCode(), // Existing quote coupon(s)
                     (string) $this->_yotpoHelper->getRequest()->getParam('swell_coupon_codes', ''), // Coupon(s) to remove
-                    (string) $this->_yotpoHelper->getRequest()->getParam('coupon_code', ''),  // Coupon(s) to add
+                    (string) $this->_yotpoHelper->getRequest()->getParam('coupon_code', '')  // Coupon(s) to add
                 );
                 $quote->setCouponCode($couponCode)->setTotalsCollectedFlag(false)->collectTotals()->save();
             }
