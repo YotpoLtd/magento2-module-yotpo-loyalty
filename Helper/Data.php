@@ -33,6 +33,7 @@ class Data extends AbstractHelper
     //= Advanced
     public const XML_PATH_SWELL_INSTANCE_ID = "yotpo_loyalty/advanced/swell_instance_id";
     public const XML_PATH_DELETE_USED_COUPONS = "yotpo_loyalty/advanced/delete_used_coupons";
+    public const XML_PATH_USE_YOTPO_JS_SDK = "yotpo_loyalty/advanced/use_yotpo_js_sdk";
     //= Others
     public const XML_PATH_CURRENCY_OPTIONS_DEFAULT = "currency/options/default";
     public const XML_PATH_SECURE_BASE_URL = "web/secure/base_url";
@@ -265,6 +266,11 @@ class Data extends AbstractHelper
     public function getDeleteUsedCoupons($scope = null, $scopeId = null, $skipCahce = false)
     {
         return (int) $this->getConfig(self::XML_PATH_DELETE_USED_COUPONS, $scope, $scopeId, $skipCahce);
+    }
+
+    public function getUseYotpoJsSdk($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        return (bool) $this->getConfig(self::XML_PATH_USE_YOTPO_JS_SDK, $scope, $scopeId, $skipCahce);
     }
 
     public function getDefaultCurrency($scope = null, $scopeId = null, $skipCahce = false)

@@ -55,6 +55,11 @@
 					<label>Delete used coupons and price rules</label>
 					<source_model>Yotpo\Loyalty\Model\Adminhtml\Source\DeleteUsedCoupons</source_model>
 				</field>
+				<field id="use_yotpo_js_sdk" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+					<label>Use Yotpo JS SDK</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<comment><![CDATA[When set to 'Yes', <b>https://cdn-loyalty.yotpo.com/loader/{GUID}.js</b> would be loaded on all pages.]]></comment>
+				</field>
 				<field id="swell_merchant_info_confirm" translate="label" type="button" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
 					<frontend_model>Yotpo\Loyalty\Block\Adminhtml\System\Config\MerchantInfoConfirm</frontend_model>
 				</field>
