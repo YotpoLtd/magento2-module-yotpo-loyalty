@@ -11,6 +11,9 @@
                 <swell_sync_max_tryouts>5</swell_sync_max_tryouts>
                 <keep_yotpo_sync_queue>1_month</keep_yotpo_sync_queue>
             </sync_settings>
+            <advanced>
+                <use_yotpo_js_sdk>0</use_yotpo_js_sdk>
+            </advanced>
         </yotpo_loyalty>
         <csp>
             <mode>

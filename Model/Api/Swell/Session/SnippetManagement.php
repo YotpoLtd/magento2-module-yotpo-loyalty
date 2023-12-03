@@ -4,7 +4,6 @@ namespace Yotpo\Loyalty\Model\Api\Swell\Session;
 
 class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManagementInterface
 {
-
     /**
      * @var \Yotpo\Loyalty\Helper\Data
      */
@@ -60,6 +59,11 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
     public function getSwellApiKey()
     {
         return $this->_yotpoHelper->getSwellApiKey();
+    }
+
+    public function getUseYotpoJsSdk()
+    {
+        return $this->_yotpoHelper->getUseYotpoJsSdk();
     }
 
     protected function isCustomerLoggedIn()
@@ -159,7 +163,7 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
                 }
                 if (($swellGuid = $this->getSwellGuid()) && ($swellApiKey = $this->getSwellApiKey())) {
                     $response["snippet"] .= '
-                        <!-- Yotpo Loyalty - Swell JS Snippet -->
+                        <!-- Yotpo Loyalty - Swell Snippet -->
                         <div id="swell-customer-identification" style="display:none !important;"
                     ';
                     if (($identificationData = $this->getCustomerIdentificationData())) {
@@ -173,10 +177,19 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
                             $response["snippet"] .= 'data-tags="[&#34;' . $groupCode . '&#34;]"';
                         }
                     }
+
                     $response["snippet"] .= '
                         ></div>
-                        <script type="text/javascript" async src="https://cdn-loyalty.yotpo.com/loader/' . $swellGuid . '.js"></script>
-                        <!--/ Yotpo Loyalty - Swell JS Snippet -->
+                    ';
+
+                    if ($this->getUseYotpoJsSdk()) {
+                        $response["snippet"] .= '
+                            <script type="text/javascript" async src="https://cdn-loyalty.yotpo.com/loader/' . $swellGuid . '.js"></script>
+                        ';
+                    }
+
+                    $response["snippet"] .= '
+                        <!--/ Yotpo Loyalty - Swell Snippet -->
                     ';
                 }
             }
