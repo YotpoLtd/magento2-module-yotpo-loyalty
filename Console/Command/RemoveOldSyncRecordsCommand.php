@@ -14,11 +14,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RemoveOldSyncRecordsCommand extends Command
 {
-
     /**#@+
      * Keys and shortcuts for input arguments and options
      */
-    const FORCE = 'force';
+    public const FORCE = 'force';
     /**#@- */
 
     /**
@@ -83,6 +82,9 @@ class RemoveOldSyncRecordsCommand extends Command
             $output->writeln('<info>' . 'Done :)' . '</info>');
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            return 1;
         }
+
+        return 0;
     }
 }

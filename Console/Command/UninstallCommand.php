@@ -12,10 +12,10 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class UninstallCommand extends Command
 {
-    const CONFIRM_MESSAGE = "<question>Are you sure you want to uninstall Yotpo? (y/n)[n]\n*This will remove all Yotpo attributes & data from DB.\n*This process is irreversible! You should backup first.</question>\n";
-    const RESET_CONFIG_CONFIRM_MESSAGE = "<question>Do you want to also remove all Yotpo configurations (reset to default)? (y/n)[n]</question>\n";
+    public const CONFIRM_MESSAGE = "<question>Are you sure you want to uninstall Yotpo? (y/n)[n]\n*This will remove all Yotpo attributes & data from DB.\n*This process is irreversible! You should backup first.</question>\n";
+    public const RESET_CONFIG_CONFIRM_MESSAGE = "<question>Do you want to also remove all Yotpo configurations (reset to default)? (y/n)[n]</question>\n";
 
-    const SQL_QUERIES = [
+    public const SQL_QUERIES = [
         "default" => [
             "DELETE FROM `setup_module` WHERE `setup_module`.`module` = 'Yotpo_Loyalty'",
         ],
@@ -116,7 +116,10 @@ class UninstallCommand extends Command
             $output->writeln('<info>' . 'Done :(' . '</info>');
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            return 1;
         }
+
+        return 0;
     }
 
     /**

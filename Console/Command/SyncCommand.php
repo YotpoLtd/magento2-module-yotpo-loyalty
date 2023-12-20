@@ -13,12 +13,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SyncCommand extends Command
 {
-
     /**#@+
      * Keys and shortcuts for input arguments and options
      */
-    const FORCE = 'force';
-    const LIMIT = 'limit';
+    public const FORCE = 'force';
+    public const LIMIT = 'limit';
     /**#@- */
 
     /**
@@ -90,6 +89,9 @@ class SyncCommand extends Command
             $output->writeln('<info>' . 'Done :)' . '</info>');
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            return 1;
         }
+
+        return 0;
     }
 }
