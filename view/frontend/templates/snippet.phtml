@@ -3,7 +3,7 @@
  * @var $block \Yotpo\Loyalty\Block\Snippet
  */
 ?>
-<?php if (!$block->isEnabled()) {
+<?php if (!$block->shouldLoadSnippet()) {
     return;
 } ?>
 <!-- Yotpo Loyalty - Snippet Loader -->
@@ -11,7 +11,7 @@
     (function  () {
         require([
             "jquery",
-            'mage/storage'    
+            'mage/storage'
         ],function($, storage) {
             $(document).ready(function() {
                 try {
