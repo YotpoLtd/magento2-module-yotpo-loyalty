@@ -7,7 +7,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 class Save implements ObserverInterface
 {
-
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */

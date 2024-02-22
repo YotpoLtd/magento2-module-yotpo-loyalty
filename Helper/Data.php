@@ -34,6 +34,10 @@ class Data extends AbstractHelper
     public const XML_PATH_SWELL_INSTANCE_ID = "yotpo_loyalty/advanced/swell_instance_id";
     public const XML_PATH_DELETE_USED_COUPONS = "yotpo_loyalty/advanced/delete_used_coupons";
     public const XML_PATH_USE_YOTPO_JS_SDK = "yotpo_loyalty/advanced/use_yotpo_js_sdk";
+    public const XML_PATH_LOAD_YOTPO_SNIPPET = "yotpo_loyalty/advanced/load_yotpo_snippet";
+    public const XML_PATH_CART_PAGE_FULL_ACTION_NAME = "yotpo_loyalty/advanced/cart_page_full_action_name";
+    public const XML_PATH_CHECKOUT_PAGE_FULL_ACTION_NAME = "yotpo_loyalty/advanced/checkout_page_full_action_name";
+    public const XML_PATH_LOAD_YOTPO_SNIPPET_PATH_PATTERNS = "yotpo_loyalty/advanced/load_yotpo_snippet_path_patterns";
     //= Others
     public const XML_PATH_CURRENCY_OPTIONS_DEFAULT = "currency/options/default";
     public const XML_PATH_SECURE_BASE_URL = "web/secure/base_url";
@@ -271,6 +275,33 @@ class Data extends AbstractHelper
     public function getUseYotpoJsSdk($scope = null, $scopeId = null, $skipCahce = false)
     {
         return (bool) $this->getConfig(self::XML_PATH_USE_YOTPO_JS_SDK, $scope, $scopeId, $skipCahce);
+    }
+
+    public function getLoadYotpoSnippet($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        return (string) $this->getConfig(self::XML_PATH_LOAD_YOTPO_SNIPPET, $scope, $scopeId, $skipCahce);
+    }
+
+    public function getCartPageFullActionName($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        return (string) $this->getConfig(self::XML_PATH_CART_PAGE_FULL_ACTION_NAME, $scope, $scopeId, $skipCahce) ?: 'checkout_cart_index';
+    }
+
+    public function getCheckoutPageFullActionName($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        return (string) $this->getConfig(self::XML_PATH_CHECKOUT_PAGE_FULL_ACTION_NAME, $scope, $scopeId, $skipCahce) ?: 'checkout_index_index';
+    }
+
+    public function getLoadYotpoSnippetPathPatterns($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        return (string) $this->getConfig(self::XML_PATH_LOAD_YOTPO_SNIPPET_PATH_PATTERNS, $scope, $scopeId, $skipCahce);
+    }
+
+    public function getLoadYotpoSnippetPathPatternsArray($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        $patterns = (array) explode(PHP_EOL, $this->getLoadYotpoSnippetPathPatterns($scope, $scopeId, $skipCahce));
+        $patterns = array_map('trim', $patterns);
+        return array_filter($patterns);
     }
 
     public function getDefaultCurrency($scope = null, $scopeId = null, $skipCahce = false)

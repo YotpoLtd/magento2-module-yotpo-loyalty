@@ -13,6 +13,10 @@
             </sync_settings>
             <advanced>
                 <use_yotpo_js_sdk>0</use_yotpo_js_sdk>
+                <load_yotpo_snippet>all</load_yotpo_snippet>
+                <cart_page_full_action_name>checkout_cart_index</cart_page_full_action_name>
+                <checkout_page_full_action_name>checkout_index_index</checkout_page_full_action_name>
+                <load_yotpo_snippet_path_patterns>#/checkout/?(index/?|\?|$)#</load_yotpo_snippet_path_patterns>
             </advanced>
         </yotpo_loyalty>
         <csp>

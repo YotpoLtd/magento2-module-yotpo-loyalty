@@ -60,6 +60,35 @@
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 					<comment><![CDATA[When set to 'Yes', <b>https://cdn-loyalty.yotpo.com/loader/{GUID}.js</b> would be loaded on all pages.]]></comment>
 				</field>
+				<field id="load_yotpo_snippet" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+					<label>Load Yotpo Snippet</label>
+					<source_model>Yotpo\Loyalty\Model\Adminhtml\Source\LoadJsSnippet</source_model>
+					<comment>Select where to load Yotpo's snippet and the "customer-identification" div (using an AJAX call to the module's session/snippet API endpoint).</comment>
+					<depends>
+                        <field id="use_yotpo_js_sdk">0</field>
+                    </depends>
+				</field>
+				<field id="cart_page_full_action_name" translate="label comment" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+					<label>Cart Page - Full Action Name</label>
+					<comment>If your site is using a custom cart page that has a different full-action-name than "checkout_cart_index", please define it here.</comment>
+					<depends>
+                        <field id="load_yotpo_snippet">checkout_cart</field>
+                    </depends>
+				</field>
+				<field id="checkout_page_full_action_name" translate="label comment" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+					<label>Checkout Page - Full Action Name</label>
+					<comment>If your site is using a custom checkout page that has a different full-action-name than "checkout_index_index", please define it here.</comment>
+					<depends>
+                        <field id="load_yotpo_snippet" separator="|">checkout_cart|checkout</field>
+                    </depends>
+				</field>
+				<field id="load_yotpo_snippet_path_patterns" translate="label comment" type="textarea" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+					<label>Yotpo Snippet - Allowed URL Path patterns</label>
+					<comment><![CDATA[Add one or more Regex patterns (separated by new lines), that will be used for determining on which URL paths (Request URIs) the snippet will be loaded (include delimiters of your choice).<br><b>This is an advanced option. Be sure you know what you're doing.</b><br>*With the predefined example the snippet will be loaded on the default checkout page.]]></comment>
+					<depends>
+                        <field id="load_yotpo_snippet">url_path_patterns</field>
+                    </depends>
+				</field>
 				<field id="swell_merchant_info_confirm" translate="label" type="button" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
 					<frontend_model>Yotpo\Loyalty\Block\Adminhtml\System\Config\MerchantInfoConfirm</frontend_model>
 				</field>
