@@ -334,6 +334,47 @@ class Jobs
     }
 
     /**
+     * Send Store Information Webhooks.
+     * @method sendStoreInformationWebhooks
+     * @return $this
+     */
+    public function sendStoreInformationWebhooks()
+    {
+        try {
+            if (!$this->_yotpoHelper->isStoreInformationWebhhoksEnabled() && !$this->_force) {
+                return;
+            }
+            $this->_processOutput("Jobs::sendStoreInformationWebhooks() - [STARTED]", "info");
+            $this->setCrontabAreaCode();
+
+            $enabledAccounts = $this->_yotpoHelper->getEnabledAccounts();
+            $this->_processOutput("Found " . count($enabledAccounts) . " enabled accounts.", 'comment');
+
+            foreach ($enabledAccounts as $guid => $info) {
+                try {
+                    $this->_processOutput("== Sending store information webhook for account: " . $guid . " [Store ID: " . $info['store_id'] . ' | Root API URL: ' . $info['root_api_url'] . "].", 'comment');
+                    $response = $this->_apiRequestHelper->storeInformationWebhookRequest($info['store_id'], \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+                    if ($response->getError()) {
+                        $this->_processOutput('== [ERROR] ' . $response->getMessage(), 'error', [$response]);
+                    } else {
+                        $this->_processOutput('== [SUCCESS] ' . $response->getMessage(), 'comment');
+                    }
+                } catch (\Exception $e) {
+                    $this->_processOutput('== [ERROR] ' . $e->getMessage(), 'error', [$e]);
+                }
+
+                $this->_processOutput('== Moving forward...', 'comment');
+            }
+
+            $this->_processOutput("Jobs::sendStoreInformationWebhooks() - [DONE]", "info");
+        } catch (\Exception $e) {
+            $this->_processOutput('Jobs::sendStoreInformationWebhooks() - [ERROR] ' . $e->getMessage(), 'error', [$e]);
+        }
+
+        return $this;
+    }
+
+    /**
      * Remove Old Sent/Failed Sync Records.
      * @method removeOldSyncRecords
      * @return $this

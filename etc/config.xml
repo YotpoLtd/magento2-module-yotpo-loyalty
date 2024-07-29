@@ -17,6 +17,7 @@
                 <cart_page_full_action_name>checkout_cart_index</cart_page_full_action_name>
                 <checkout_page_full_action_name>checkout_index_index</checkout_page_full_action_name>
                 <load_yotpo_snippet_path_patterns>#/checkout/?(index/?|\?|$)#</load_yotpo_snippet_path_patterns>
+                <store_information_webhhoks_enabled>1</store_information_webhhoks_enabled>
             </advanced>
         </yotpo_loyalty>
         <csp>
