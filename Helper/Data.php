@@ -38,6 +38,7 @@ class Data extends AbstractHelper
     public const XML_PATH_CART_PAGE_FULL_ACTION_NAME = "yotpo_loyalty/advanced/cart_page_full_action_name";
     public const XML_PATH_CHECKOUT_PAGE_FULL_ACTION_NAME = "yotpo_loyalty/advanced/checkout_page_full_action_name";
     public const XML_PATH_LOAD_YOTPO_SNIPPET_PATH_PATTERNS = "yotpo_loyalty/advanced/load_yotpo_snippet_path_patterns";
+    public const XML_PATH_STORE_INFORMATION_WEBHOOKS_ENABLED = "yotpo_loyalty/advanced/store_information_webhhoks_enabled";
     //= Others
     public const XML_PATH_CURRENCY_OPTIONS_DEFAULT = "currency/options/default";
     public const XML_PATH_SECURE_BASE_URL = "web/secure/base_url";
@@ -282,6 +283,11 @@ class Data extends AbstractHelper
         return (string) $this->getConfig(self::XML_PATH_LOAD_YOTPO_SNIPPET, $scope, $scopeId, $skipCahce);
     }
 
+    public function isStoreInformationWebhhoksEnabled($scope = null, $scopeId = null, $skipCahce = false)
+    {
+        return $this->getConfig(self::XML_PATH_STORE_INFORMATION_WEBHOOKS_ENABLED, $scope, $scopeId, $skipCahce) ? true : false;
+    }
+
     public function getCartPageFullActionName($scope = null, $scopeId = null, $skipCahce = false)
     {
         return (string) $this->getConfig(self::XML_PATH_CART_PAGE_FULL_ACTION_NAME, $scope, $scopeId, $skipCahce) ?: 'checkout_cart_index';
@@ -470,6 +476,27 @@ class Data extends AbstractHelper
         foreach ($this->getStoreManager()->getStores($withDefault) as $key => $store) {
             if ($this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) {
                 $return[] = $store->getId();
+            }
+        }
+        return $return;
+    }
+
+    public function getEnabledAccounts($withDefault = false)
+    {
+        $return = [];
+        foreach ($this->getStoreManager()->getStores($withDefault) as $key => $store) {
+            if (
+                $this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()) &&
+                 ($swellGuid = $this->getSwellGuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) &&
+                 ($swellApiKey = $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()))
+            ) {
+                $return[$swellGuid] = [
+                    "store_id" => $store->getId(),
+                    "guid" => $swellGuid,
+                    "api_key" => $swellApiKey,
+                    "base_url" => $this->getBaseUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()),
+                    "root_api_url" => rtrim($this->getBaseUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()), "/") . "/rest/V1",
+                ];
             }
         }
         return $return;

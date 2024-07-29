@@ -3,4 +3,7 @@
     <event name="admin_system_config_changed_section_yotpo_loyalty">
         <observer name="yotpo_loyalty_admin_system_config_changed_section_yotpo_loyalty" instance="Yotpo\Loyalty\Observer\Config\Save" />
     </event>
+    <event name="admin_system_config_changed_section_web">
+        <observer name="yotpo_loyalty_admin_system_config_changed_section_web" instance="Yotpo\Loyalty\Observer\Config\BaseUrlChanged" />
+    </event>
 </config>
