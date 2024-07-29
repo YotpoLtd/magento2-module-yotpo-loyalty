@@ -24,6 +24,7 @@
 		<arguments>
 			<argument name="commands" xsi:type="array">
 				<item name="yotpo_loyalty_remove_old_sync_records" xsi:type="object">Yotpo\Loyalty\Console\Command\RemoveOldSyncRecordsCommand</item>
+				<item name="yotpo_loyalty_send_store_information" xsi:type="object">Yotpo\Loyalty\Console\Command\SendStoreInformationCommand</item>
 				<item name="yotpo_loyalty_sync" xsi:type="object">Yotpo\Loyalty\Console\Command\SyncCommand</item>
 				<item name="yotpo_loyalty_uninstall" xsi:type="object">Yotpo\Loyalty\Console\Command\UninstallCommand</item>
 			</argument>

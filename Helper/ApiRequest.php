@@ -81,4 +81,17 @@ class ApiRequest extends AbstractApi
 
         return $processedResponse;
     }
+
+    public function storeInformationWebhookRequest($scopeId = null, $scope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+    {
+        return $this->webhooksRequest(
+            [
+                "api_key" => $this->_yotpoHelper->getSwellApiKey($scope, $scopeId),
+                "topic" => "store/information/updated",
+                "store" => [
+                    "root_api_url" => rtrim($this->_yotpoHelper->getBaseUrl($scope, $scopeId), "/") . "/rest/V1",
+                ],
+            ]
+        );
+    }
 }

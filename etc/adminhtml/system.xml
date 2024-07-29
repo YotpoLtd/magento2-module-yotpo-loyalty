@@ -89,6 +89,11 @@
                         <field id="load_yotpo_snippet">url_path_patterns</field>
                     </depends>
 				</field>
+				<field id="store_information_webhhoks_enabled" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+					<label>Enable Store Information Webhooks</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<comment>By default, the module will sync your current base URL with Yotpo to ensure it is correctly reflected in your account. You may disable this feature in development or staging environments.</comment>
+				</field>
 				<field id="swell_merchant_info_confirm" translate="label" type="button" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
 					<frontend_model>Yotpo\Loyalty\Block\Adminhtml\System\Config\MerchantInfoConfirm</frontend_model>
 				</field>
