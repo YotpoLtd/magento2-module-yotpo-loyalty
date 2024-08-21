@@ -16,7 +16,7 @@
             $(document).ready(function() {
                 try {
                     storage.get(
-                        '<?php echo $block->getUrl('rest/V1/swell/session/snippet') ?>'
+                        '<?= $block->getSnippetLoaderUrl() ?>' + '?timestamp=' + new Date().getTime()
                     ).done(function (response) {
                         response = JSON.parse(response);
                         if(!response.error && response.snippet){

@@ -6,6 +6,11 @@ use Yotpo\Loyalty\Block\AbstractBlock;
 
 class Snippet extends AbstractBlock
 {
+    public function getSnippetLoaderUrl()
+    {
+        return $this->getUrl('rest/V1/swell/session/snippet');
+    }
+
     public function getFullActionName()
     {
         return $this->getRequest()->getFullActionName();

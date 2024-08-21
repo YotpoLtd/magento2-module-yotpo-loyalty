@@ -22,7 +22,7 @@ use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
         ],function($, storage) {
             $(document).ready(function() {
                 try {
-                    storage.get(yotpoLoyaltyCouponCodeUrl)
+                    storage.get(yotpoLoyaltyCouponCodeUrl + '&timestamp=' + new Date().getTime())
                     .done(function (response) {
                         if (response.error) {
                             throw response;

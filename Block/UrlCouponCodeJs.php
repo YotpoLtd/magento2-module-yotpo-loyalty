@@ -25,8 +25,10 @@ class UrlCouponCodeJs extends AbstractBlock
         if(!($couponCode = $this->getUrlCouponCode())){
             return '';
         }
-        return $this->getUrl('yotpo_loyalty/session/urlcouponcode') . '?' . http_build_query([
-            YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM => $couponCode
+        return $this->getUrl('yotpo_loyalty/session/urlcouponcode', [
+            '_query' => [
+                YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM => $couponCode
+            ]
         ]);
     }
 }
