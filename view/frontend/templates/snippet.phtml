@@ -7,34 +7,51 @@
     return;
 } ?>
 <!-- Yotpo Loyalty - Snippet Loader -->
-<script>
-    (function  () {
-        require([
-            "jquery",
-            'mage/storage'
-        ],function($, storage) {
-            $(document).ready(function() {
-                try {
-                    storage.get(
-                        '<?= $block->getSnippetLoaderUrl() ?>' + '?timestamp=' + new Date().getTime()
-                    ).done(function (response) {
-                        response = JSON.parse(response);
-                        if(!response.error && response.snippet){
-                            $("body").append(response.snippet);
-                        }else{
-                            throw response;
+<script data-yotpo-loyalty="<?= /* @noEscape */ $block->getModuleVersion() ?>">
+    (function() {
+        document.addEventListener("DOMContentLoaded", function() {
+            try {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '<?= $block->getSnippetLoaderUrl() ?>' + '?timestamp=' + new Date().getTime(), true);
+                xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                xhr.setRequestHeader('Pragma', 'no-cache');
+                xhr.setRequestHeader('Expires', '0');
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            var response;
+                            try {
+                                response = JSON.parse(JSON.parse(xhr.responseText));
+                            } catch (e) {
+                                throw new Error('Failed to parse JSON response: ' + e.message);
+                            }
+
+                            if (!response.error && response.snippet) {
+                                var snippet = document.createElement('div');
+                                snippet.innerHTML = response.snippet;
+                                document.body.appendChild(snippet);
+                            } else {
+                                throw response || 'Unknown error occurred';
+                            }
+                        } else {
+                            throw new Error('HTTP error occurred: ' + xhr.status + ' ' + xhr.statusText + ' - ' + xhr.responseText);
                         }
-                    }).fail(function (response) {
-                        throw response;
-                    });
-                } catch (e) {
-                    <?php if ($block->isDebugMode()) : ?>
-                        console.error(e);
-                    <?php else : ?>
-                        console.error("Yotpo Loyalty Error - Enable debug mode in order to see more details...");
-                    <?php endif; ?>
-                }
-            });
+                    }
+                };
+
+                xhr.onerror = function() {
+                    throw new Error('Request failed due to a network error');
+                };
+
+                xhr.send();
+            } catch (e) {
+                <?php if ($block->isDebugMode()) : ?>
+                    console.error(e);
+                <?php else : ?>
+                    console.error("Yotpo Loyalty Error - Enable debug mode in order to see more details...");
+                <?php endif; ?>
+            }
         });
     })();
 </script>
