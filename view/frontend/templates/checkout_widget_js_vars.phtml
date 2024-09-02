@@ -7,7 +7,7 @@
     return;
 } ?>
 <!-- Yotpo Loyalty - Checkout Widget Js -->
-<script>
+<script data-yotpo-loyalty="<?= /* @noEscape */ $block->getModuleVersion() ?>">
     window.swellIsEnabled = true;
     window.swellGuid = '<?php echo $block->getSwellGuid(); ?>';
     window.swellInstanceId = '<?php echo $block->getSwellInstanceId(); ?>';

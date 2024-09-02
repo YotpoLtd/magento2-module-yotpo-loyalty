@@ -10,7 +10,7 @@ use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
     return;
 } ?>
 <!-- Yotpo Loyalty - Frontend URL coupon processor -->
-<script>
+<script data-yotpo-loyalty="<?= /* @noEscape */ $block->getModuleVersion() ?>">
     localStorage.setItem('<?= $block->escapeHtmlAttr(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM) ?>_url', '<?= $block->escapeJs($couponCodeUrl) ?>');
 </script>
 <!--/ Yotpo Loyalty - Frontend URL coupon processor -->

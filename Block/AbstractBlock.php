@@ -37,4 +37,9 @@ class AbstractBlock extends \Magento\Framework\View\Element\Template
     {
         return $this->_yotpoHelper->isDebugMode();
     }
+
+    public function getModuleVersion()
+    {
+        return $this->_yotpoHelper->getModuleVersion();
+    }
 }
