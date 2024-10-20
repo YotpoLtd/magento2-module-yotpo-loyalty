@@ -1,15 +1,27 @@
 <?php
 /**
  * @var $block \Yotpo\Loyalty\Block\CheckoutWidget
+ * @var $secureRenderer \Magento\Framework\View\Helper\SecureHtmlRenderer|null
  */
 ?>
 <?php if (!$block->isEnabled()) {
     return;
 } ?>
+
+<?php
+$scriptContent = "
+window.swellIsEnabled = true;
+window.swellGuid = '" . $block->escapeJs($block->getSwellGuid()) . "';
+window.swellInstanceId = '" . $block->escapeJs($block->getSwellInstanceId()) . "';
+";
+?>
+
 <!-- Yotpo Loyalty - Checkout Widget Js -->
-<script data-yotpo-loyalty="<?= /* @noEscape */ $block->getModuleVersion() ?>">
-    window.swellIsEnabled = true;
-    window.swellGuid = '<?php echo $block->getSwellGuid(); ?>';
-    window.swellInstanceId = '<?php echo $block->getSwellInstanceId(); ?>';
-</script>
+<?php if (isset($secureRenderer)): ?>
+    <?= $secureRenderer->renderTag('script', ['data-yotpo-loyalty' => $block->getModuleVersion()], $scriptContent, false) ?>
+<?php else: /* NOTE: Backwards compatibility */ ?>
+    <script data-yotpo-loyalty="<?= $block->escapeHtml($block->getModuleVersion()) ?>">
+        <?= $scriptContent ?>
+    </script>
+<?php endif; ?>
 <!--/ Yotpo Loyalty - Checkout Widget Js -->

@@ -4,13 +4,25 @@ use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
 
 /**
  * @var $block \Yotpo\Loyalty\Block\UrlCouponCodeJs
+ * @var $secureRenderer \Magento\Framework\View\Helper\SecureHtmlRenderer|null
  */
 ?>
 <?php if (!$block->isEnabled() || !($couponCodeUrl = $block->getUrlCouponCodeUrl())) {
     return;
 } ?>
+
+<?php
+$scriptContent = "
+localStorage.setItem('" . YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM . "_url', '" . $block->escapeJs($couponCodeUrl) . "');
+";
+?>
+
 <!-- Yotpo Loyalty - Frontend URL coupon processor -->
-<script data-yotpo-loyalty="<?= /* @noEscape */ $block->getModuleVersion() ?>">
-    localStorage.setItem('<?= $block->escapeHtmlAttr(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM) ?>_url', '<?= $block->escapeJs($couponCodeUrl) ?>');
-</script>
+<?php if (isset($secureRenderer)): ?>
+    <?= $secureRenderer->renderTag('script', ['data-yotpo-loyalty' => $block->getModuleVersion()], $scriptContent, false) ?>
+<?php else: /* NOTE: Backwards compatibility */ ?>
+    <script data-yotpo-loyalty="<?= $block->escapeHtml($block->getModuleVersion()) ?>">
+        <?= $scriptContent ?>
+    </script>
+<?php endif; ?>
 <!--/ Yotpo Loyalty - Frontend URL coupon processor -->
