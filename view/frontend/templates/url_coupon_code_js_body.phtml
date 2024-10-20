@@ -4,61 +4,69 @@ use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
 
 /**
  * @var $block \Yotpo\Loyalty\Block\UrlCouponCodeJs
+ * @var $secureRenderer \Magento\Framework\View\Helper\SecureHtmlRenderer|null
  */
 ?>
 <?php if (!$block->isEnabled()) {
     return;
 } ?>
-<!-- Yotpo Loyalty - Frontend URL coupon processor -->
-<script data-yotpo-loyalty="<?= /* @noEscape */ $block->getModuleVersion() ?>">
-    (function() {
-        var yotpoLoyaltyCouponCodeUrl = localStorage.getItem('<?= $block->escapeHtmlAttr(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM) ?>_url');
-        if (!yotpoLoyaltyCouponCodeUrl) {
-            return;
-        }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            try {
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', yotpoLoyaltyCouponCodeUrl + '&timestamp=' + new Date().getTime(), true);
-                xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-                xhr.setRequestHeader('Pragma', 'no-cache');
-                xhr.setRequestHeader('Expires', '0');
+<?php
+$scriptContent = "
+(function() {
+    var yotpoLoyaltyCouponCodeUrl = localStorage.getItem('" . YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM . "_url');
+    if (!yotpoLoyaltyCouponCodeUrl) {
+        return;
+    }
 
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status >= 200 && xhr.status < 300) {
-                            var response;
-                            try {
-                                response = JSON.parse(xhr.responseText);
-                            } catch (e) {
-                                throw new Error('Failed to parse JSON response: ' + e.message);
-                            }
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', yotpoLoyaltyCouponCodeUrl + '&timestamp=' + new Date().getTime(), true);
+            xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            xhr.setRequestHeader('Pragma', 'no-cache');
+            xhr.setRequestHeader('Expires', '0');
 
-                            if (response.error) {
-                                throw response || 'Unknown error occurred';
-                            } else if (response.success) {
-                                localStorage.removeItem('<?= $block->escapeHtmlAttr(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM) ?>_url');
-                            }
-                        } else {
-                            throw new Error('HTTP error occurred: ' + xhr.status + ' ' + xhr.statusText + ' - ' + xhr.responseText);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        var response;
+                        try {
+                            response = JSON.parse(xhr.responseText);
+                        } catch (e) {
+                            throw new Error('Failed to parse JSON response: ' + e.message);
                         }
+
+                        if (response.error) {
+                            throw response || 'Unknown error occurred';
+                        } else if (response.success) {
+                            localStorage.removeItem('" . YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM . "_url');
+                        }
+                    } else {
+                        throw new Error('HTTP error occurred: ' + xhr.status + ' ' + xhr.statusText + ' - ' + xhr.responseText);
                     }
-                };
+                }
+            };
 
-                xhr.onerror = function() {
-                    throw new Error('Request failed due to a network error');
-                };
+            xhr.onerror = function() {
+                throw new Error('Request failed due to a network error');
+            };
 
-                xhr.send();
-            } catch (e) {
-                <?php if ($block->isDebugMode()): ?>
-                    console.error(e);
-                <?php else: ?>
-                    console.error("Yotpo Loyalty Error - Enable debug mode in order to see more details...");
-                <?php endif; ?>
-            }
-        });
-    })();
-</script>
+            xhr.send();
+        } catch (e) {
+            " . ($block->isDebugMode() ? "console.error(e);" : "console.error('Yotpo Loyalty Error - Enable debug mode in order to see more details...');") . "
+        }
+    });
+})();
+";
+?>
+
+<!-- Yotpo Loyalty - Frontend URL coupon processor -->
+<?php if (isset($secureRenderer)): ?>
+    <?= $secureRenderer->renderTag('script', ['data-yotpo-loyalty' => $block->getModuleVersion()], $scriptContent, false) ?>
+<?php else: /* NOTE: Backwards compatibility */ ?>
+    <script data-yotpo-loyalty="<?= $block->escapeHtml($block->getModuleVersion()) ?>">
+        <?= $scriptContent ?>
+    </script>
+<?php endif; ?>
 <!--/ Yotpo Loyalty - Frontend URL coupon processor -->
