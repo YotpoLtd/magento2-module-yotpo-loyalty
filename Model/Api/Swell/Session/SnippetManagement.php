@@ -142,25 +142,17 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
         $response = [
             "error" => 0,
             "snippet" => "",
+            "invalidate_customer_cart" => false,
+            "scripts" => [],
         ];
         try {
             if ($this->isEnabled()) {
+
                 if ($this->isForceCartReload()) {
                     $this->setForceCartReload(0);
-                    $response["snippet"] .= '
-                        <!-- Yotpo Loyalty - Reload customerData cart -->
-                        <script>
-                            (function  () {
-                                require([
-                                    "Magento_Customer/js/customer-data"
-                                ],function(customerData) {
-                                    customerData.invalidate(["cart"]);
-                                });
-                            })();
-                        </script>
-                        <!--/ Yotpo Loyalty - Reload customerData cart -->
-                    ';
+                    $response["invalidate_customer_cart"] = true;
                 }
+
                 if (($swellGuid = $this->getSwellGuid()) && ($swellApiKey = $this->getSwellApiKey())) {
                     $response["snippet"] .= '
                         <!-- Yotpo Loyalty - Swell Snippet -->
@@ -182,15 +174,17 @@ class SnippetManagement implements \Yotpo\Loyalty\Api\Swell\Session\SnippetManag
                         ></div>
                     ';
 
-                    if ($this->getUseYotpoJsSdk()) {
-                        $response["snippet"] .= '
-                            <script type="text/javascript" async src="https://cdn-loyalty.yotpo.com/loader/' . $swellGuid . '.js"></script>
-                        ';
-                    }
-
                     $response["snippet"] .= '
                         <!--/ Yotpo Loyalty - Swell Snippet -->
                     ';
+
+                    // Additional scripts to load
+                    if ($this->getUseYotpoJsSdk()) {
+                        $response["scripts"][] = [
+                            'src' => 'https://cdn-loyalty.yotpo.com/loader/' . $swellGuid . '.js',
+                            'async' => true,
+                        ];
+                    }
                 }
             }
         } catch (\Exception $e) {
