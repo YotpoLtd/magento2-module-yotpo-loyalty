@@ -29,10 +29,33 @@ $scriptContent = "
                             throw new Error('Failed to parse JSON response: ' + e.message);
                         }
 
-                        if (!response.error && response.snippet) {
-                            var snippet = document.createElement('div');
-                            snippet.innerHTML = response.snippet;
-                            document.body.appendChild(snippet);
+                        if (!response.error) {
+                            if (
+                              typeof require !== 'undefined' && typeof requirejs !== 'undefined' &&
+                              response.invalidate_customer_cart
+                            ) {
+                                require(['Magento_Customer/js/customer-data'], function(customerData) {
+                                    customerData.invalidate(['cart']);
+                                });
+                            }
+
+                            if (response.snippet) {
+                                var snippet = document.createElement('div');
+                                snippet.innerHTML = response.snippet;
+                                document.body.appendChild(snippet);
+                            }
+
+                            if (response.scripts && Array.isArray(response.scripts)) {
+                                response.scripts.forEach(function(scriptObj) {
+                                    if (scriptObj.src) {
+                                        var script = document.createElement('script');
+                                        script.type = 'text/javascript';
+                                        script.async = !!scriptObj.async;
+                                        script.src = scriptObj.src;
+                                        document.head.appendChild(script);
+                                    }
+                                });
+                            }
                         } else {
                             throw response || 'Unknown error occurred';
                         }
