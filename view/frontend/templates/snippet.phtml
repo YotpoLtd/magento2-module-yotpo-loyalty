@@ -14,7 +14,7 @@ $scriptContent = "
     document.addEventListener('DOMContentLoaded', function() {
         try {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', '" . $block->getSnippetLoaderUrl() . "' + '?timestamp=' + new Date().getTime(), true);
+            xhr.open('GET', '" . $escaper->escapeJs($block->getSnippetLoaderUrl()) . "' + '?timestamp=' + new Date().getTime(), true);
             xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
             xhr.setRequestHeader('Pragma', 'no-cache');
             xhr.setRequestHeader('Expires', '0');
@@ -80,10 +80,10 @@ $scriptContent = "
 
 <!-- Yotpo Loyalty - Snippet Loader -->
 <?php if (isset($secureRenderer)): ?>
-    <?= $secureRenderer->renderTag('script', ['data-yotpo-loyalty' => $block->getModuleVersion()], $scriptContent, false) ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', ['data-yotpo-loyalty' => $block->getModuleVersion()], $scriptContent, false) ?>
 <?php else: /* NOTE: Backwards compatibility */ ?>
-    <script data-yotpo-loyalty="<?= $escaper->escapeHtml($block->getModuleVersion()) ?>">
-        <?= $scriptContent ?>
+    <script data-yotpo-loyalty="<?= $escaper->escapeHtmlAttr($block->getModuleVersion()) ?>">
+        <?= /* @noEscape */ $scriptContent ?>
     </script>
 <?php endif; ?>
 <!--/ Yotpo Loyalty - Snippet Loader -->
