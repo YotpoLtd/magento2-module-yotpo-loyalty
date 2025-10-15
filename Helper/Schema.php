@@ -60,10 +60,10 @@ class Schema extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @method orderSchemaPrepare
      * @param  \Magento\Sales\Model\Order $order
-     * @param  string $entityStatus
+     * @param  string|null $entityStatus
      * @return array
      */
-    public function orderSchemaPrepare(\Magento\Sales\Model\Order $order, string $entityStatus = null)
+    public function orderSchemaPrepare(\Magento\Sales\Model\Order $order, $entityStatus = null)
     {
         $orderData = (array) array_filter($order->getData(), function ($v) {
             return (!(is_array($v) || is_object($v)));
