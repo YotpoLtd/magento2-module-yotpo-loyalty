@@ -14,7 +14,7 @@ use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
 <?php
 $scriptContent = "
 (function() {
-    var yotpoLoyaltyCouponCodeUrl = localStorage.getItem('" . YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM . "_url');
+    var yotpoLoyaltyCouponCodeUrl = localStorage.getItem('" . $escaper->escapeJs(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM) . "_url');
     if (!yotpoLoyaltyCouponCodeUrl) {
         return;
     }
@@ -40,7 +40,7 @@ $scriptContent = "
                         if (response.error) {
                             throw response || 'Unknown error occurred';
                         } else if (response.success) {
-                            localStorage.removeItem('" . YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM . "_url');
+                            localStorage.removeItem('" . $escaper->escapeJs(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM) . "_url');
                         }
                     } else {
                         throw new Error('HTTP error occurred: ' + xhr.status + ' ' + xhr.statusText + ' - ' + xhr.responseText);
@@ -63,10 +63,10 @@ $scriptContent = "
 
 <!-- Yotpo Loyalty - Frontend URL coupon processor -->
 <?php if (isset($secureRenderer)): ?>
-    <?= $secureRenderer->renderTag('script', ['data-yotpo-loyalty' => $block->getModuleVersion()], $scriptContent, false) ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', ['data-yotpo-loyalty' => $block->getModuleVersion()], $scriptContent, false) ?>
 <?php else: /* NOTE: Backwards compatibility */ ?>
-    <script data-yotpo-loyalty="<?= $escaper->escapeHtml($block->getModuleVersion()) ?>">
-        <?= $scriptContent ?>
+    <script data-yotpo-loyalty="<?= $escaper->escapeHtmlAttr($block->getModuleVersion()) ?>">
+        <?= /* @noEscape */ $scriptContent ?>
     </script>
 <?php endif; ?>
 <!--/ Yotpo Loyalty - Frontend URL coupon processor -->

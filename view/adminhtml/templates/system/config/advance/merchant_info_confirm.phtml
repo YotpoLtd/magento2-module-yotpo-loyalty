@@ -17,7 +17,7 @@
                     .addEventListener("click", function(event){
                         event.preventDefault();
                         event.stopImmediatePropagation();
-                        var saved_guid = '<?= $block->getSwellGuid() ?>';
+                        var saved_guid = '<?= $escaper->escapeJs($block->getSwellGuid()) ?>';
                         var guid = $('input#yotpo_loyalty_general_settings_swell_guid').val();
                         var api_key = $('input#yotpo_loyalty_general_settings_swell_api_key').val();
                         if(
@@ -30,11 +30,11 @@
                         try {
                             jQuery("body").trigger('processStart');
                             $.getJSON(
-                                '<?= $block->getMerchantInfoApiUrl() ?>',
+                                '<?= $escaper->escapeJs($block->getMerchantInfoApiUrl()) ?>',
                                 {
                                     api_key: api_key,
                                     guid: guid,
-                                    root_api_url: '<?= $block->getRootApiUrl() ?>',
+                                    root_api_url: '<?= $escaper->escapeJs($block->getRootApiUrl()) ?>',
                                 })
                                 .done(function( data ) {
                                     $("body").trigger('processStop');
