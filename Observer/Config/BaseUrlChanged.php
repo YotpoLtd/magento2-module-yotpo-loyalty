@@ -51,21 +51,18 @@ class BaseUrlChanged implements ObserverInterface
             if (!$scopeId) {
                 $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT;
             }
-            if (
-                $this->_yotpoHelper->isEnabled($scope, $scopeId) &&
+            if ($this->_yotpoHelper->isEnabled($scope, $scopeId) &&
                 $this->_yotpoHelper->isStoreInformationWebhhoksEnabled($scope, $scopeId)
             ) {
                 $response = $this->_apiRequestHelper->storeInformationWebhookRequest($scopeId, $scope);
-            }
-            if ($response->getError()) {
-                throw new \Exception($response->getMessage());
-            } else {
-                $this->_yotpoHelper->log("[Observer\Config\BaseUrlChanged] Successfully sent store information webhhok.", "info");
+                if ($response->getError()) {
+                    throw new \Exception($response->getMessage());
+                } else {
+                    $this->_yotpoHelper->log("[Observer\Config\BaseUrlChanged] Successfully sent store information webhhok.", "info");
+                }
             }
         } catch (\Exception $e) {
             $this->_yotpoHelper->log("[Observer\Config\BaseUrlChanged - ERROR] " . $e->getMessage() . "\n" . $e->getTraceAsString(), "error");
         }
-
-
     }
 }

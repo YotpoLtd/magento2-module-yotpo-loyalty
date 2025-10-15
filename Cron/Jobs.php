@@ -248,7 +248,7 @@ class Jobs
     protected function _setCollectionLimit(\Magento\Framework\Data\Collection $collection)
     {
         $limit = ($this->_limit !== null) ? (int)$this->_limit : $this->_swellSyncLimit;
-        $this->_processOutput("Limit is set to: " . (($limit>0) ? $limit : '0 (no-limit)'), 'comment');
+        $this->_processOutput("Limit is set to: " . (($limit > 0) ? $limit : '0 (no-limit)'), 'comment');
         if ($limit) {
             $collection->setPageSize($limit);
         }
@@ -299,9 +299,9 @@ class Jobs
                 $this->_processOutput('== Processing ID: ' . $item->getId() . ' (' . $i . '/' . $collectionCount . ') ...', 'comment');
 
                 try {
-                    $this->_processOutput('*** Entity Type: ' . $item->getEntityType() . ' | Entity ID: ' . $item->getEntityId() . ' | Entity Status: ' . $item->getEntityStatus() . ' | Store ID: ' . $item->getStoreId() . ' | Try: ' . ($item->getTryouts()+1), 'comment');
+                    $this->_processOutput('*** Entity Type: ' . $item->getEntityType() . ' | Entity ID: ' . $item->getEntityId() . ' | Entity Status: ' . $item->getEntityStatus() . ' | Store ID: ' . $item->getStoreId() . ' | Try: ' . ($item->getTryouts() + 1), 'comment');
                     $response = $this->_apiRequestHelper->webhooksRequest($this->getPreparedSchemaWithCredentials($item));
-                    $item->setResponse($response->getResponse())->setTryouts($item->getTryouts()+1);
+                    $item->setResponse($response->getResponse())->setTryouts($item->getTryouts() + 1);
                     if ($response->getError()) {
                         $this->_processOutput('== [ERROR] ' . $response->getMessage(), 'error', [$response]);
                         $item->setHasErrors(1);
@@ -390,22 +390,22 @@ class Jobs
             if (($keep = $this->_yotpoHelper->getKeepYotpoSyncQueue()) !== 'forever' || $this->_force) {
                 if (!$this->_force) {
                     switch ($keep) {
-                            case '1_day':
-                                $interval = "-1 day";
-                                break;
-                            case '1_week':
-                                $interval = "-1 week";
-                                break;
-                            case '1_month':
-                                $interval = "-1 month";
-                                break;
-                            case '1_year':
-                                $interval = "-1 year";
-                                break;
-                            default:
-                                return $this;
+                        case '1_day':
+                            $interval = "-1 day";
                             break;
-                        }
+                        case '1_week':
+                            $interval = "-1 week";
+                            break;
+                        case '1_month':
+                            $interval = "-1 month";
+                            break;
+                        case '1_year':
+                            $interval = "-1 year";
+                            break;
+                        default:
+                            return $this;
+                            break;
+                    }
                 }
 
                 $collection = $this->getYotpoQueueCollection()

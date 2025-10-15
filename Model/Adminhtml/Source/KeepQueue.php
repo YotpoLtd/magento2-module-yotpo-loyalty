@@ -7,8 +7,6 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * Yotpo Loyalty KeepQueue source model.
  *
- * @category Loyalty
- * @package  Loyalty_Loyalty
  */
 class KeepQueue implements ArrayInterface
 {

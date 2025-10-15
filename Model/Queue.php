@@ -4,7 +4,7 @@ namespace Yotpo\Loyalty\Model;
 
 class Queue extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
-    const CACHE_TAG = 'yotpo_loyalty_queue';
+    public const CACHE_TAG = 'yotpo_loyalty_queue';
 
     protected $_cacheTag = 'yotpo_loyalty_queue';
 

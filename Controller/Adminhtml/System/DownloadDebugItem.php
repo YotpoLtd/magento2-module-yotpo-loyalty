@@ -76,8 +76,7 @@ class DownloadDebugItem extends Action
     public function execute()
     {
         switch ($this->getRequest()->getParam('type')) {
-            //== Download yotpo_loyalty.log ==//
-            case 'log_file':
+            case 'log_file': /* Download yotpo_loyalty.log */
                 $yotpoLoyaltyLogPath = $this->directoryList->getPath(DirectoryList::LOG) . DIRECTORY_SEPARATOR . 'yotpo_loyalty.log';
                 if ($this->driverFile->isExists($yotpoLoyaltyLogPath)) {
                     $packageContent = [
@@ -99,23 +98,21 @@ class DownloadDebugItem extends Action
 
                 break;
 
-            //== Download Debug Info Package ==//
-            case 'debug_info':
-
+            case 'debug_info': /* Download Debug Info Package */
                 $package = [];
 
-                //Prepare system info
+                // Prepare system info
                 $package['system_info'] = [
                     'magento_version' => $this->yotpoHelper->getMagentoVersion(true),
                     'yotpo_loyalty_module_version' => $this->yotpoHelper->getModuleVersion(),
                     'php_version' => phpversion(),
                 ];
 
-                //Prepare module configuration
+                // Prepare module configuration
                 $package['module_configuration'] = $this->yotpoHelper->getAllScopesConfig()
                     ->toArray();
 
-                //Prepare yotpo_sync_queue data
+                // Prepare yotpo_sync_queue data
                 $package['yotpo_sync_queue'] = [];
                 $queueUnsentItems = $this->yotpoQueueFactory->create()->getCollection()
                     ->addFieldToSelect('*')
@@ -124,7 +121,7 @@ class DownloadDebugItem extends Action
                 $queueUnsentItems->setPageSize(1000);
                 $package['yotpo_sync_queue']['last_1000_unsent'] = $queueUnsentItems->toArray();
 
-                //Prepare module configuration
+                // Prepare module configuration
                 $queueSentItems = $this->yotpoQueueFactory->create()->getCollection()
                     ->addFieldToSelect('*')
                     ->addFieldToFilter('sent', 1);
@@ -145,8 +142,8 @@ class DownloadDebugItem extends Action
 
                 break;
 
-            //== Unsupported type - Redirect back ==//
-            default:
+
+            default: /* Unsupported type - Redirect back */
                 return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)
                     ->setUrl($this->_redirect->getRefererUrl());
                 break;

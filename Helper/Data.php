@@ -416,7 +416,7 @@ class Data extends AbstractHelper
 
     public function getCurrentUrl()
     {
-        return 'http' . ((isset($_SERVER['HTTPS']) && !empty($s['HTTPS']) && $s['HTTPS']=='on') ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        return 'http' . ((isset($_SERVER['HTTPS']) && !empty($s['HTTPS']) && $s['HTTPS'] == 'on') ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
     public function getCurrentDate()
@@ -445,7 +445,10 @@ class Data extends AbstractHelper
         $swellApiKey = ($swellApiKey === null) ? $this->getRequest()->getParam("shared_secret") : (string)$swellApiKey;
         $stores = $this->getStoreManager()->getStores($withDefault);
         foreach ($stores as $key => $store) {
-            if ($this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()) && $swellApiKey === $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) {
+            if (
+                $this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()) &&
+                $swellApiKey === $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())
+            ) {
                 $return[] = $store->getId();
             }
         }
@@ -463,7 +466,10 @@ class Data extends AbstractHelper
         $swellApiKey = ($swellApiKey === null) ? $this->getRequest()->getParam("shared_secret") : (string)$swellApiKey;
         $stores = $this->getStoreManager()->getStores($withDefault);
         foreach ($stores as $key => $store) {
-            if ($this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()) && $swellApiKey === $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) {
+            if (
+                $this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()) &&
+                $swellApiKey === $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())
+            ) {
                 $return["_" . $store->getWebsiteId()] = $store->getWebsiteId();
             }
         }
@@ -487,8 +493,8 @@ class Data extends AbstractHelper
         foreach ($this->getStoreManager()->getStores($withDefault) as $key => $store) {
             if (
                 $this->isEnabled(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()) &&
-                 ($swellGuid = $this->getSwellGuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) &&
-                 ($swellApiKey = $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()))
+                ($swellGuid = $this->getSwellGuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId())) &&
+                ($swellApiKey = $this->getSwellApiKey(\Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getId()))
             ) {
                 $return[$swellGuid] = [
                     "store_id" => $store->getId(),

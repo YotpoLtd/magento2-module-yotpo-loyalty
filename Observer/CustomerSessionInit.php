@@ -7,9 +7,6 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\Request\Http;
 use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
 
-/**
- * CustomerSessionInit
- */
 class CustomerSessionInit implements ObserverInterface
 {
     /**

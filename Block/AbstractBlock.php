@@ -4,7 +4,6 @@ namespace Yotpo\Loyalty\Block;
 
 class AbstractBlock extends \Magento\Framework\View\Element\Template
 {
-
     /**
      * @var \Yotpo\Loyalty\Helper\Data
      */

@@ -4,7 +4,6 @@ namespace Yotpo\Loyalty\Model\Api\Swell;
 
 class AbstractSwell
 {
-
     /**
      * @var \Yotpo\Loyalty\Helper\Data
      */
