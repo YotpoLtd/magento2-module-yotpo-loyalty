@@ -13,7 +13,7 @@ use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
 
 <?php
 $scriptContent = "
-localStorage.setItem('" . YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM . "_url', '" . $block->escapeJs($couponCodeUrl) . "');
+localStorage.setItem('" . YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM . "_url', '" . $escaper->escapeJs($couponCodeUrl) . "');
 ";
 ?>
 
@@ -21,7 +21,7 @@ localStorage.setItem('" . YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM . "_url', 
 <?php if (isset($secureRenderer)): ?>
     <?= $secureRenderer->renderTag('script', ['data-yotpo-loyalty' => $block->getModuleVersion()], $scriptContent, false) ?>
 <?php else: /* NOTE: Backwards compatibility */ ?>
-    <script data-yotpo-loyalty="<?= $block->escapeHtml($block->getModuleVersion()) ?>">
+    <script data-yotpo-loyalty="<?= $escaper->escapeHtml($block->getModuleVersion()) ?>">
         <?= $scriptContent ?>
     </script>
 <?php endif; ?>

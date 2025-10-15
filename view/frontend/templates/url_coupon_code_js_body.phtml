@@ -65,7 +65,7 @@ $scriptContent = "
 <?php if (isset($secureRenderer)): ?>
     <?= $secureRenderer->renderTag('script', ['data-yotpo-loyalty' => $block->getModuleVersion()], $scriptContent, false) ?>
 <?php else: /* NOTE: Backwards compatibility */ ?>
-    <script data-yotpo-loyalty="<?= $block->escapeHtml($block->getModuleVersion()) ?>">
+    <script data-yotpo-loyalty="<?= $escaper->escapeHtml($block->getModuleVersion()) ?>">
         <?= $scriptContent ?>
     </script>
 <?php endif; ?>

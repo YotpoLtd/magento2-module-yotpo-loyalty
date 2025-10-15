@@ -11,8 +11,8 @@
 <?php
 $scriptContent = "
 window.swellIsEnabled = true;
-window.swellGuid = '" . $block->escapeJs($block->getSwellGuid()) . "';
-window.swellInstanceId = '" . $block->escapeJs($block->getSwellInstanceId()) . "';
+window.swellGuid = '" . $escaper->escapeJs($block->getSwellGuid()) . "';
+window.swellInstanceId = '" . $escaper->escapeJs($block->getSwellInstanceId()) . "';
 ";
 ?>
 
@@ -20,7 +20,7 @@ window.swellInstanceId = '" . $block->escapeJs($block->getSwellInstanceId()) . "
 <?php if (isset($secureRenderer)): ?>
     <?= $secureRenderer->renderTag('script', ['data-yotpo-loyalty' => $block->getModuleVersion()], $scriptContent, false) ?>
 <?php else: /* NOTE: Backwards compatibility */ ?>
-    <script data-yotpo-loyalty="<?= $block->escapeHtml($block->getModuleVersion()) ?>">
+    <script data-yotpo-loyalty="<?= $escaper->escapeHtml($block->getModuleVersion()) ?>">
         <?= $scriptContent ?>
     </script>
 <?php endif; ?>

@@ -22,7 +22,7 @@ class UrlCouponCodeJs extends AbstractBlock
      */
     public function getUrlCouponCodeUrl()
     {
-        if(!($couponCode = $this->getUrlCouponCode())){
+        if (!($couponCode = $this->getUrlCouponCode())) {
             return '';
         }
         return $this->getUrl('yotpo_loyalty/session/urlcouponcode', [

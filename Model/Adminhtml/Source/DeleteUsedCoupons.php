@@ -7,8 +7,6 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * Yotpo Loyalty DeleteUsedCoupons source model.
  *
- * @category Loyalty
- * @package  Loyalty_Loyalty
  */
 class DeleteUsedCoupons implements ArrayInterface
 {

@@ -9,9 +9,6 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
 
-/**
- * ControllerSendResponseBefore
- */
 class ControllerSendResponseBefore implements ObserverInterface
 {
     /**

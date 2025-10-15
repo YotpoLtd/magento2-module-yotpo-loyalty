@@ -7,8 +7,6 @@ use Magento\Framework\Option\ArrayInterface;
 /**
  * Yotpo Loyalty LoadJsSnippet source model.
  *
- * @category Loyalty
- * @package  Loyalty_Loyalty
  */
 class LoadJsSnippet implements ArrayInterface
 {

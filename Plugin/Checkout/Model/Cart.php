@@ -5,9 +5,6 @@ namespace Yotpo\Loyalty\Plugin\Checkout\Model;
 use Magento\Checkout\Model\Cart as CheckoutCartModel;
 use Yotpo\Loyalty\Helper\Data as YotpoLoyaltyHelper;
 
-/**
- * Class Cart
- */
 class Cart
 {
     /**
@@ -41,7 +38,7 @@ class Cart
                         continue;
                     }
 
-                    if ($item->getSwellAddedItem() && !($item->getCustomPrice()*1) && (isset($itemInfo['qty']) && $itemInfo['qty'] > 1)) {
+                    if ($item->getSwellAddedItem() && !($item->getCustomPrice() * 1) && (isset($itemInfo['qty']) && $itemInfo['qty'] > 1)) {
                         $itemInfo['qty'] = 1;
                     }
                 }

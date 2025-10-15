@@ -182,13 +182,13 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
                         ];
                         foreach ($appliesToAttributes as $index => $appliesToAttribute) {
                             $appliesToValue = $appliesToValues[$index];
-                            $conditions["1--1--" . ($index+1)] = [
+                            $conditions["1--1--" . ($index + 1)] = [
                                 "type" => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                                 "attribute" => $appliesToAttribute,
                                 "operator" => "==",
                                 "value" => $appliesToValue
                             ];
-                            $actions["1--" . ($index+1)] = [
+                            $actions["1--" . ($index + 1)] = [
                                 "type" => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                                 "attribute" => $appliesToAttribute,
                                 "operator" => "==",
@@ -199,7 +199,7 @@ class CreateCouponManagement extends AbstractSwell implements \Yotpo\Loyalty\Api
 
                     if ($cartGreaterThan !== null) {
                         $index = 1;
-                        for ($i=1; $i < 200; $i++) {
+                        for ($i = 1; $i < 200; $i++) {
                             if (!isset($conditions["1--" . $i])) {
                                 $conditions["1--" . $i] = [
                                     "type" => \Magento\SalesRule\Model\Rule\Condition\Address::class,

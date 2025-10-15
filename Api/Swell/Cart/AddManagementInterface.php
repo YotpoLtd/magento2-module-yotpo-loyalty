@@ -4,7 +4,6 @@ namespace Yotpo\Loyalty\Api\Swell\Cart;
 
 interface AddManagementInterface
 {
-
     /**
      * GET for Add api
      * @return string

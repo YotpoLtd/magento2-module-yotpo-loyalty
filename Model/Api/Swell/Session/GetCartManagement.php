@@ -4,7 +4,6 @@ namespace Yotpo\Loyalty\Model\Api\Swell\Session;
 
 class GetCartManagement implements \Yotpo\Loyalty\Api\Swell\Session\GetCartManagementInterface
 {
-
     /**
      * @var \Yotpo\Loyalty\Helper\Data
      */

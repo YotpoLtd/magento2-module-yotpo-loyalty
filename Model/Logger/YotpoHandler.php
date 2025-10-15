@@ -1,4 +1,5 @@
 <?php
+
 namespace Yotpo\Loyalty\Model\Logger;
 
 use Monolog\Logger;

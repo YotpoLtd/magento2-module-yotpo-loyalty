@@ -73,10 +73,10 @@ class UrlCouponCode extends Action
         $result = $this->resultJsonFactory->create();
         if ($this->yotpoHelper->isEnabled()) {
             try {
-                if(
+                if (
                     ($couponCode = trim((string)$this->request->getParam(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM))) &&
                     !$this->customerSession->getData(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM)
-                ){
+                ) {
                     $this->customerSession->setData(YotpoLoyaltyHelper::COUPON_CODE_QUERY_PARAM, $couponCode);
                     if (($quote = $this->checkoutSession->getQuote())) {
                         $quote->setCouponCode($couponCode)->setTotalsCollectedFlag(false)->collectTotals()->save();

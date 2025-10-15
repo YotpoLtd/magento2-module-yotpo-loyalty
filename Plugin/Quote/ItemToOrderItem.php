@@ -2,9 +2,6 @@
 
 namespace Yotpo\Loyalty\Plugin\Quote;
 
-/**
- * Class ItemToOrderItem
- */
 class ItemToOrderItem
 {
     public function aroundConvert(

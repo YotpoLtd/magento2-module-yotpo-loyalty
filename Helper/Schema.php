@@ -4,7 +4,6 @@ namespace Yotpo\Loyalty\Helper;
 
 class Schema extends \Magento\Framework\App\Helper\AbstractHelper
 {
-
     /**
      * @var \Yotpo\Loyalty\Helper\Data
      */
