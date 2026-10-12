@@ -71,13 +71,13 @@ class UninstallCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->_resourceConnection = $this->_objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $this->_eavSetupFactory = $this->_objectManager->get(\Magento\Eav\Setup\EavSetupFactory::class);
 
         if (!$this->confirmQuestion(self::CONFIRM_MESSAGE, $input, $output)) {
-            return;
+            return 0;
         }
 
         /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
