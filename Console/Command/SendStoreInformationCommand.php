@@ -66,7 +66,7 @@ class SendStoreInformationCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->_jobs = $this->_objectManager->get(\Yotpo\Loyalty\Cron\Jobs::class);
         $this->_yotpoHelper = $this->_objectManager->get(\Yotpo\Loyalty\Helper\Data::class);
